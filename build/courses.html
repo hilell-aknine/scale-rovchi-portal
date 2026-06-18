@@ -325,6 +325,107 @@
       html.js .reveal:not(.in) { opacity: 1 !important; transform: none !important; }
     }
 
+    /* ── Tools section ─────────────────────────────────────── */
+    .tools-section {
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto var(--s-8);
+      padding-inline: var(--pad-inline-mobile);
+    }
+    @media (min-width: 768px) {
+      .tools-section { padding-inline: var(--pad-inline-desktop); }
+    }
+
+    .tools-section h2 {
+      font-family: var(--font-heading);
+      font-weight: var(--fw-black);
+      font-size: var(--fs-h2);
+      color: var(--navy);
+      line-height: var(--lh-heading);
+      margin-bottom: var(--s-5);
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--s-4);
+    }
+    @media (min-width: 480px) {
+      .tools-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .tool-card {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-3);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: var(--s-5);
+      text-decoration: none;
+      color: var(--ink);
+      box-shadow: var(--shadow);
+      transition:
+        transform var(--dur-hover) var(--smooth),
+        box-shadow var(--dur-hover) ease;
+      overflow: hidden;
+      position: relative;
+    }
+    .tool-card::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform var(--dur-hover) var(--smooth);
+    }
+    .tool-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+    .tool-card:hover::before { transform: scaleX(1); }
+    .tool-card:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+    .tool-card--game::before  { background: var(--grad-brand); }
+    .tool-card--tutor::before { background: linear-gradient(120deg, #e53e3e, #fc8181); }
+    .tool-card--lb::before    { background: linear-gradient(120deg, #d69e2e, #f6e05e); }
+
+    .tool-icon {
+      width: 48px; height: 48px; flex-shrink: 0;
+      border-radius: var(--radius-md);
+      display: grid; place-items: center;
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+    .tool-icon--blue { background: var(--blue-fill); }
+    .tool-icon--red  { background: #fed7d7; }
+    .tool-icon--gold { background: rgba(12,37,66,.10); }
+
+    .tool-title {
+      font-family: var(--font-heading);
+      font-weight: var(--fw-bold);
+      font-size: var(--fs-h4);
+      color: var(--navy);
+      line-height: var(--lh-heading);
+    }
+    .tool-desc {
+      font-size: var(--fs-small);
+      color: var(--muted);
+      line-height: var(--lh-body);
+      flex: 1;
+    }
+    .tool-cta {
+      display: inline-flex; align-items: center; gap: var(--s-2);
+      font-size: var(--fs-small); font-weight: var(--fw-bold);
+      color: var(--blue); margin-top: var(--s-1);
+      transition: gap var(--dur-hover);
+    }
+    .tool-card--tutor .tool-cta { color: #c53030; }
+    .tool-card--lb    .tool-cta { color: #b7791f; }
+    .tool-card:hover .tool-cta { gap: var(--s-3); }
+    .tool-cta svg {
+      width: 14px; height: 14px; stroke: currentColor;
+      stroke-width: 2; fill: none; flex-shrink: 0;
+    }
+
     /* ── Footer ─────────────────────────────────────────────── */
     footer.site-footer {
       background: var(--navy);
@@ -349,7 +450,7 @@
   <header class="site-header">
     <div class="wrap">
       <a class="brand-lockup" href="index.html" aria-label="סקייל רווחי">
-        <img src="../מותג/ScaleRivhi-LogoPack-NewColors/אתרים,אונליין,ווב,אפליקציות-SVG/Vector_Horizontal_Gold.svg"
+        <img src="../מותג/logos/logo-horizontal.svg"
              alt="סקייל רווחי">
       </a>
       <span class="header-user" id="header-email" aria-label="מייל משתמש מחובר"></span>
@@ -414,11 +515,58 @@
     <div id="courses-container" class="lessons-grid stagger"></div>
   </main>
 
+  <!-- ── Tools section ───────────────────────────────────────── -->
+  <section class="tools-section" id="tools-section" aria-label="הכלים שלך" style="display:none;">
+    <span class="section-eyebrow reveal">
+      <span class="dot" aria-hidden="true"></span>הכלים שלך
+    </span>
+    <h2 class="reveal">הכלים שלך 🧰</h2>
+    <div class="tools-grid stagger" role="list">
+
+      <!-- כרטיס 1: משחק תרגול -->
+      <a class="tool-card tool-card--game reveal" href="features/game/index.html?order=1"
+         role="listitem" aria-label="משחק תרגול">
+        <div class="tool-icon tool-icon--blue" aria-hidden="true">🎮</div>
+        <span class="tool-title">משחק תרגול</span>
+        <p class="tool-desc">תרגל את מה שלמדת, צבור XP ועלה ברמות.</p>
+        <span class="tool-cta" aria-hidden="true">
+          בוא נשחק
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <!-- כרטיס 2: המורה האישי -->
+      <a class="tool-card tool-card--tutor reveal" href="profile.html"
+         role="listitem" aria-label="המורה האישי שלך">
+        <div class="tool-icon tool-icon--red" aria-hidden="true">🎓</div>
+        <span class="tool-title">המורה האישי שלך</span>
+        <p class="tool-desc">שאל כל שאלה על הקורס, זמין 24/7.</p>
+        <span class="tool-cta" aria-hidden="true">
+          שאל שאלה
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <!-- כרטיס 3: לוח מובילים -->
+      <a class="tool-card tool-card--lb reveal" href="features/leaderboard/index.html"
+         role="listitem" aria-label="לוח המובילים">
+        <div class="tool-icon tool-icon--gold" aria-hidden="true">🏆</div>
+        <span class="tool-title">לוח המובילים</span>
+        <p class="tool-desc">ראה איפה אתה ביחס לאחרים.</p>
+        <span class="tool-cta" aria-hidden="true">
+          לצפייה
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+    </div>
+  </section>
+
   <!-- ── Footer ─────────────────────────────────────────────── -->
   <footer class="site-footer">
     <div class="wrap">
       <a class="brand-lockup" href="index.html" aria-label="סקייל רווחי">
-        <img src="../מותג/ScaleRivhi-LogoPack-NewColors/אתרים,אונליין,ווב,אפליקציות-SVG/Vector_Horizontal_Gold.svg"
+        <img src="../מותג/logos/logo-horizontal.svg"
              alt="סקייל רווחי" style="height:30px;width:auto;">
       </a>
       <span class="built">נבנה ע"י <b>הלל</b></span>
@@ -467,8 +615,9 @@
 
     /* ---------- empty state ---------- */
     if (!lessons || lessons.length === 0) {
-      el('loading-state').style.display = 'none';
-      el('main-content').style.display  = '';
+      el('loading-state').style.display  = 'none';
+      el('main-content').style.display   = '';
+      el('tools-section').style.display  = '';
       el('courses-container').innerHTML =
         '<div class="empty-state">' +
           '<p>אין שיעורים זמינים כרגע.</p>' +
@@ -535,8 +684,9 @@
     });
 
     /* ---------- show content ---------- */
-    el('loading-state').style.display = 'none';
-    el('main-content').style.display  = '';
+    el('loading-state').style.display  = 'none';
+    el('main-content').style.display   = '';
+    el('tools-section').style.display  = '';
 
     /* ---------- scroll-reveal ---------- */
     (function() {

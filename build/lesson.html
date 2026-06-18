@@ -389,6 +389,46 @@
     }
     footer.site-footer b { color: rgba(245,248,252,.9); font-weight: var(--fw-bold); }
 
+    /* ── AI Tutor card ───────────────────────────────────── */
+    .tutor-section {
+      margin-top: var(--s-5);
+    }
+    .tutor-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: var(--s-6);
+      box-shadow: var(--shadow);
+      border-inline-end: 4px solid var(--blue);
+    }
+    .tutor-card-header {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+      margin-bottom: var(--s-4);
+    }
+    .tutor-card-icon {
+      flex: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--blue-fill);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      line-height: 1;
+    }
+    .tutor-card-title {
+      font-family: var(--font-heading);
+      font-size: var(--fs-body-l);
+      font-weight: var(--fw-bold);
+      color: var(--ink);
+    }
+    .tutor-card-sub {
+      font-size: var(--fs-small);
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
     /* ── Reduced motion ──────────────────────────────────── */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
@@ -464,6 +504,20 @@
           <div id="complete-msg" class="complete-msg" role="status">השיעור סומן כהושלם!</div>
         </div>
       </div>
+
+      <!-- AI Tutor -->
+      <section class="tutor-section" aria-label="שאל את המורה">
+        <div class="tutor-card">
+          <div class="tutor-card-header">
+            <div class="tutor-card-icon" aria-hidden="true">🎓</div>
+            <div>
+              <div class="tutor-card-title">שאל את המורה על השיעור</div>
+              <div class="tutor-card-sub">מורה AI מעוגן על תוכן השיעור הנוכחי</div>
+            </div>
+          </div>
+          <div id="tutor-mount"></div>
+        </div>
+      </section>
 
     </div><!-- /lesson-content -->
   </div><!-- /wrap -->
@@ -766,6 +820,51 @@
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
+  }
+})();
+</script>
+
+<!-- ── AI Tutor (מורה מעוגן על השיעור) ──────────────────── -->
+<script src="features/ai-assistant/ai-assistant.js"></script>
+<script>
+(function () {
+  /* lessonOrder ו-recParam נקראים מ-URL — זהה לסקריפט הראשי */
+  var params     = new URLSearchParams(location.search);
+  var recParam   = params.get('rec');
+  var orderRaw   = parseInt(params.get('order') || '1', 10);
+  var lessonOrder = (!isNaN(orderRaw) && orderRaw >= 1) ? orderRaw : 1;
+
+  /* אם זה מסלול ?rec= — אין order מספרי, מורה כללי */
+  var order = recParam ? null : lessonOrder;
+
+  /* ממתין שה-SRContent יסיים לטעון (אם עדיין טוען) */
+  function mountTutor() {
+    if (window.SRTutor && typeof window.SRTutor.mount === 'function') {
+      window.SRTutor.mount({
+        el: document.getElementById('tutor-mount'),
+        lessonOrder: order
+      });
+    }
+  }
+
+  /* מחכה לטעינת lesson-content (הוצג אחרי init()) */
+  var contentEl = document.getElementById('lesson-content');
+  if (contentEl && contentEl.style.display !== 'none') {
+    mountTutor();
+  } else {
+    /* MutationObserver על style.display של lesson-content */
+    var observer = new MutationObserver(function (mutations) {
+      for (var i = 0; i < mutations.length; i++) {
+        if (contentEl.style.display !== 'none') {
+          observer.disconnect();
+          mountTutor();
+          break;
+        }
+      }
+    });
+    if (contentEl) {
+      observer.observe(contentEl, { attributes: true, attributeFilter: ['style'] });
+    }
   }
 })();
 </script>
