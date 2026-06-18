@@ -366,19 +366,33 @@
           return;
         }
 
-        var progress = await window.portalData.getProgress(viewer);
+        // getProgress מחזיר מערך של lesson_ids שהושלמו
+        var completedIds = await window.portalData.getProgress(viewer);
+        var completed = Array.isArray(completedIds) ? completedIds.length : 0;
 
-        if (progress && typeof progress.total === 'number' && progress.total > 0) {
-          var pct = Math.round((progress.completed / progress.total) * 100);
+        // חשב total מ-SRContent (אם זמין), אחרת fallback ל-7
+        var total = 7;
+        if (window.SRContent && typeof window.SRContent.ready !== 'undefined') {
+          try {
+            await window.SRContent.ready;
+            var lessons = window.SRContent.getLessons();
+            if (Array.isArray(lessons) && lessons.length > 0) {
+              total = lessons.length;
+            }
+          } catch (_) { /* fallback */ }
+        }
+
+        if (completed > 0) {
+          var pct = Math.min(100, Math.round((completed / total) * 100));
           barEl.style.width = pct + '%';
           barWrap.setAttribute('aria-valuenow', pct);
           pctEl.textContent = pct + '%';
-          labelEl.textContent =
-            progress.completed + ' מתוך ' + progress.total + ' שיעורים הושלמו';
+          labelEl.textContent = completed + ' מתוך ' + total + ' שיעורים הושלמו';
         } else {
-          labelEl.textContent = 'טרם השלמת שיעורים — בוא נתחיל!';
-          pctEl.textContent = '0%';
           barEl.style.width = '0%';
+          barWrap.setAttribute('aria-valuenow', 0);
+          pctEl.textContent = '0%';
+          labelEl.textContent = 'עוד לא השלמת שיעורים — בוא נתחיל 🚀';
         }
       } catch (err) {
         errorEl.style.display = 'block';

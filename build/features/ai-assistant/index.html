@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+<!--sr-funnel-gate--><script>(function(){try{if(location.search.indexOf("dev=1")>-1)return;var e=localStorage.getItem("sr_user_email");var p=localStorage.getItem("sr_concern")||localStorage.getItem("sr_lesson_id")||localStorage.getItem("sr_access_token");if(!e){location.replace("../../index.html");return;}if(!p){location.replace("../../survey.html");return;}}catch(_){}})();</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>סקייל רווחי — עוזר AI אישי</title>
-  <link rel="stylesheet" href="../../../מותג/brand-system.css">
+  <link rel="stylesheet" href="../../ds/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Heebo:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
@@ -26,7 +27,7 @@
 </head>
 <body>
 <header>
-  <img src="../../../מותג/ScaleRivhi-LogoPack-NewColors/אתרים,אונליין,ווב,אפליקציות-SVG/Vector_Horizontal_Black.svg" alt="סקייל רווחי">
+  <img src="../../assets/logo-horizontal.png" alt="סקייל רווחי">
   <span class="mode-pill" id="mode-pill">MOCK</span>
 </header>
 
@@ -41,7 +42,7 @@
 
   <div class="hint">
     <b>נסה את העוזר 👇</b> — לחץ על "שאל את המורה" בפינה השמאלית התחתונה ושאל אותו על השיעור.
-    הוא יודע על מה השיעור ויענה לפי התוכן. (במצב הדגמה התשובות מקומיות; בפורטל החי הוא יתחבר ל-LLM אמיתי.)
+    הוא יודע על מה השיעור ויענה לפי התוכן — מחובר לשרת.
   </div>
 </main>
 
@@ -49,24 +50,17 @@
 
 <script src="ai-assistant.js"></script>
 <script>
-  document.getElementById('mode-pill').textContent = 'MOCK';
+  document.getElementById('mode-pill').textContent = 'LIVE';
+  document.getElementById('mode-pill').style.color = '#16a34a';
 
-  // הקשר השיעור שמוזרק לעוזר. בפורטל החי ה-summary/transcript יגיעו מ-Supabase.
+  // הקשר השיעור — מטא-דאטה לוקאלי (title, suggestions).
+  // תוכן השיעור האמיתי (transcript/summary) מגיע מ-Supabase בצד השרת דרך ה-Edge Function.
   var lesson = {
-    id: 'lsn-1',
     title: 'מאיפה באמת מגיעים לידים',
-    summary: 'הבסיס למנוע לידים יציב הוא הגדרת הלקוח האידיאלי, ושמירה על איכות לפני כמות לאורך מסע הליד.',
-    example: 'דוגמה: יועץ עסקי שהגדיר שהלקוח שלו הוא "בעל עסק עם מחזור 50-200 אלף בחודש" — פתאום המסרים שלו דיברו רק אליהם, והלידים שנכנסו היו הרבה יותר רלוונטיים וקלים לסגירה.',
-    firstStep: 'הצעד הראשון: כתוב על דף מי הלקוח האידיאלי שלך — תחום, גודל עסק, והכאב המרכזי שלו. זה לבד יחדד לך את כל המסרים השיווקיים.',
-    suggestions: ['תן לי תקציר של השיעור', 'תן דוגמה מהחיים', 'מה הצעד הראשון שאני עושה?', 'למה איכות חשובה מכמות?'],
-    knowledge: [
-      { keywords: ['איכות','כמות','רלוונטי'], a: 'איכות חשובה מכמות כי ליד לא רלוונטי שורף לך זמן יקר בשיחות מכירה שלא יסגרו. עדיף 10 לידים מדויקים מ-100 אקראיים.' },
-      { keywords: ['לקוח אידיאלי','אווטאר','קהל','למי'], a: 'הלקוח האידיאלי הוא האדם הספציפי שהפתרון שלך הכי מתאים לו. ככל שתגדיר אותו חד יותר (תחום, גודל, כאב), כך המסרים שלך ימשכו בדיוק אותו.' },
-      { keywords: ['מסע','שלבים','משפך','חשיפה'], a: 'מסע הליד: קודם חשיפה (הוא נתקל בך), אז עניין (משהו תפס אותו), אז פנייה (הוא מרים יד), ורק בסוף שיחת מכירה. כל שלב בונה את הבא.' }
-    ]
+    suggestions: ['תן לי תקציר של השיעור', 'תן דוגמה מהחיים', 'מה הצעד הראשון שאני עושה?', 'למה איכות חשובה מכמות?']
   };
 
-  new window.SRAssistant({ lesson: lesson, mode: 'MOCK' });
+  window.SRTutor.mount({ lesson: lesson, lessonOrder: 1 });
 </script>
 </body>
 </html>
