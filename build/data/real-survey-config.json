@@ -1,8 +1,9 @@
 {
   "_source": "Base44 lib/surveyConfig.js — ANALYSES + RECOMMENDED_LESSONS. נשאב 18.06.2026.",
   "_resolved_18_06": "כל 4 הניתוחים (title/body/goal/recommendation) מולאו מילה-במילה מ-Base44 ANALYSES. no_leads + hard_to_sell video_url אמיתיים מ-Base44 loom_url. תיקון: no_leads האמיתי = 1190415307 (לא 1193178199 שניחשתי לפי כותרת).",
+  "_verified_playable": "no_leads (1190415307), paid (1190416923), no_paid (1192963645) — אומתו מתנגנים ב-oEmbed ציבורי. paid+no_paid: כותרת ה-Vimeo תואמת מילולית להמלצה, ביטחון גבוה.",
   "_pending": [
-    "irrelevant_leads_paid + irrelevant_leads_no_paid: ה-video_url כרגע מועמד לפי התאמת כותרת (funnel 6 / funnel 3). לאמת loom_url אמיתי מ-Base44 ל-lesson_id 69fdb0d061b1d68cdc1682b0 ו-6a0ad15fd255b29c89482e43."
+    "hard_to_sell: ה-loom_url מ-Base44 (1190414349?h=308c90967b) מחזיר 404 ב-oEmbed ציבורי — hash ישן או וידאו מוגבל. לאמת מול רותם/בדומיין הפרודקשן. הטקסט (title/body/goal/recommendation) אמיתי ומלא."
   ],
   "recommendedLessonMap": {
     "no_leads":                 { "lesson_id": "69fb172226f8a8dc7a299c0f", "title": "Personal Brand 2026", "vimeo_id": "1190415307", "video_url": "https://player.vimeo.com/video/1190415307?h=7778b877a5", "source": "Base44 loom_url" },
