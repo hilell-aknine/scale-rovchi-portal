@@ -1,6 +1,6 @@
 {
   "_source": "Base44 lib/surveyConfig.js — ANALYSES + RECOMMENDED_LESSONS. נשאב 18.06.2026.",
-  "_resolved_18_06": "כל 4 הניתוחים (title/body/goal/recommendation) מולאו מילה-במילה מ-Base44 ANALYSES. no_leads + hard_to_sell video_url אמיתיים מ-Base44 loom_url. תיקון: no_leads האמיתי = 1190415307 (לא 1193178199 שניחשתי לפי כותרת).",
+  "_resolved_18_06": "כל 4 הניתוחים (title/body/goal/recommendation) מולאו מילה-במילה מ-Base44 ANALYSES. no_leads + hard_to_sell video_url אמיתיים מ-Base44 loom_url. תיקון 18.6 (ערב): no_leads = 1193178199 (בחשבון רותם, embed=public). 1190415307 של Base44 בחשבון אחר → 403 בדפדפן.",
   "_verified_playable": "כל 4 הוידאו אומתו מתנגנים ב-oEmbed ציבורי: no_leads 1190415307, paid 1190416923, no_paid 1192963645, hard_to_sell 1190363652.",
   "_note_hard_to_sell": "קישור Base44 המקורי (1190414349) מת/404. דרך טוקן Vimeo של רותם נמצא הסרטון החי 1190363652 'שיעור 3 - איך אנשים מקבלים החלטות?' — התמלול תואם מילולית למסלול הקונפליקט (פתיחה: 'מה מונע מאנשים לקבל החלטה'). embed ציבורי, בלי hash. כדאי אישור-מבט אחרון של רותם שזו הגרסה הנכונה.",
   "recommendedLessonMap": {
