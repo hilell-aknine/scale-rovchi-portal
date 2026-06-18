@@ -837,35 +837,21 @@
   /* אם זה מסלול ?rec= — אין order מספרי, מורה כללי */
   var order = recParam ? null : lessonOrder;
 
-  /* ממתין שה-SRContent יסיים לטעון (אם עדיין טוען) */
+  /* mount עמיד: ממתין ש-#tutor-mount ייווצר ויהיה גלוי (התוכן נטען אסינכרונית) */
   function mountTutor() {
-    if (window.SRTutor && typeof window.SRTutor.mount === 'function') {
-      window.SRTutor.mount({
-        el: document.getElementById('tutor-mount'),
-        lessonOrder: order
-      });
+    var el = document.getElementById('tutor-mount');
+    if (el && !el.getAttribute('data-tutor-mounted') && window.SRTutor && typeof window.SRTutor.mount === 'function') {
+      el.setAttribute('data-tutor-mounted', '1');
+      window.SRTutor.mount({ el: el, lessonOrder: order });
+      return true;
     }
+    return false;
   }
-
-  /* מחכה לטעינת lesson-content (הוצג אחרי init()) */
-  var contentEl = document.getElementById('lesson-content');
-  if (contentEl && contentEl.style.display !== 'none') {
-    mountTutor();
-  } else {
-    /* MutationObserver על style.display של lesson-content */
-    var observer = new MutationObserver(function (mutations) {
-      for (var i = 0; i < mutations.length; i++) {
-        if (contentEl.style.display !== 'none') {
-          observer.disconnect();
-          mountTutor();
-          break;
-        }
-      }
-    });
-    if (contentEl) {
-      observer.observe(contentEl, { attributes: true, attributeFilter: ['style'] });
-    }
-  }
+  (function poll(n) {
+    var el = document.getElementById('tutor-mount');
+    if (el && el.offsetParent !== null && mountTutor()) return;
+    if (n > 0) setTimeout(function () { poll(n - 1); }, 250);
+  })(40);
 })();
 </script>
 </body>
