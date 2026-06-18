@@ -93,7 +93,7 @@ var analysisContent = {
    video_url = PENDING עד שנשלוף מ-Base44 לפי id.
    ⚠️ no_leads + hard_to_sell — לאמת שקיימים ב-7 שיעורי המשפך שנשלפו. */
 var lessonMap = {
-  no_leads:                 { lesson_id: '69fb172226f8a8dc7a299c0f', title: 'Personal Brand 2026',                  video_url: 'https://player.vimeo.com/video/1190415307?h=7778b877a5' },
+  no_leads:                 { lesson_id: '69fb172226f8a8dc7a299c0f', title: 'Personal Brand 2026',                  video_url: 'https://player.vimeo.com/video/1193178199?h=fff7b763e5' },
   irrelevant_leads_paid:    { lesson_id: '69fdb0d061b1d68cdc1682b0', title: 'איך ליצור מודעות ממומנות / מודעה מנצחת', video_url: 'https://player.vimeo.com/video/1190416923?h=8e1169cbea', candidate: true },
   irrelevant_leads_no_paid: { lesson_id: '6a0ad15fd255b29c89482e43', title: 'פורמט להנגשת תוכן',                   video_url: 'https://player.vimeo.com/video/1192963645?h=b6a16e08bc', candidate: true },
   hard_to_sell:             { lesson_id: '69fb172226f8a8dc7a299c0c', title: 'שיעור הקונפליקט',                     video_url: 'https://player.vimeo.com/video/1190363652?h=65168726c6' }
