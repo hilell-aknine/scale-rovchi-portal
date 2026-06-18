@@ -1,0 +1,8 @@
+/* ════════════════════════════════════════════════════════════
+   FONTS — סקייל רווחי
+   Body/UI: Heebo (alt Assistant) · Display headlines: Frank Ruhl Libre.
+   The official brand font ships as outlines in the logo (name unknown);
+   this Hebrew stack is the locked default chosen in the master spec —
+   NOT a placeholder substitution.
+   ════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Assistant:wght@400;500;600;700;800&family=Frank+Ruhl+Libre:wght@500;700;800;900&display=swap');

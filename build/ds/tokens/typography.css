@@ -1,0 +1,46 @@
+/* ════════════════════════════════════════════════════════════
+   TYPOGRAPHY — סקייל רווחי
+   Max two families per page. Frank Ruhl Libre ONLY for display
+   (above H2) and giant stats — never body. Hierarchy via weight+size,
+   never via color. RTL, Hebrew never uppercase (eyebrow latin only).
+   ════════════════════════════════════════════════════════════ */
+:root {
+  /* ---- Families ---- */
+  --font-display: 'Frank Ruhl Libre', 'Heebo', Georgia, serif;  /* hero/quotes/giant numbers */
+  --font-heading: 'Heebo', 'Assistant', system-ui, sans-serif;  /* H1–H4 */
+  --font-body:    'Heebo', 'Assistant', system-ui, sans-serif;  /* paragraphs, UI */
+
+  /* ---- Type scale (16px root) ---- */
+  --fs-display: clamp(2.5rem, 6vw, 4rem);     /* @kind font */     /* 40-64 hero */
+  --fs-stat:    clamp(2.5rem, 5vw, 3.5rem);   /* @kind font */     /* 40-56 giant number */
+  --fs-h1:      2.25rem;   /* 36 @kind font */
+  --fs-h2:      1.75rem;   /* 28 @kind font */
+  --fs-h3:      1.375rem;  /* 22 @kind font */
+  --fs-h4:      1.125rem;  /* 18 — also eyebrow @kind font */
+  --fs-body-l:  1.125rem;  /* 18 @kind font */
+  --fs-body:    1rem;      /* 16 @kind font */
+  --fs-small:   0.875rem;  /* 14 @kind font */
+  --fs-micro:   0.75rem;   /* 12 — labels @kind font */
+
+  /* ---- Weights ---- */
+  --fw-regular: 400;  /* @kind font */
+  --fw-medium:  500;  /* @kind font */
+  --fw-semibold:600;  /* @kind font */
+  --fw-bold:    700;  /* @kind font */
+  --fw-black:   800;  /* @kind font */
+
+  /* ---- Line heights ---- */
+  --lh-tight:   1.05;   /* @kind font */
+  --lh-heading: 1.2;    /* @kind font */
+  --lh-body:    1.65;   /* @kind font */
+  --lh-relaxed: 1.7;    /* @kind font */
+
+  /* ---- Letter spacing ---- */
+  --ls-display: -0.02em;  /* @kind font */
+  --ls-heading: -0.01em;  /* @kind font */
+  --ls-eyebrow: 0.08em;   /* latin eyebrow only @kind font */
+  --ls-label:   0.04em;   /* @kind font */
+
+  /* ---- Optimal measure ---- */
+  --measure: 68ch;  /* @kind other */
+}

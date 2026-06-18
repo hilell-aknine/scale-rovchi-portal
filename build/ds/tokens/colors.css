@@ -1,0 +1,56 @@
+/* ════════════════════════════════════════════════════════════
+   COLORS — סקייל רווחי · SSOT
+   Extracted from the official logo pack (LogoPack-NewColors).
+   Direction: "Deep Blue · Growth Energy". NO GOLD. Never hand-code a hex.
+   ════════════════════════════════════════════════════════════ */
+:root {
+  /* ---- Core ---- */
+  --navy:        #0c2542;   /* primary · headings · dark surfaces */
+  --navy-soft:   #1a3a5c;   /* hover on navy */
+  --ink:         #22221e;   /* near-black body text on light */
+
+  /* ---- Blue accent (left half of the emblem) ---- */
+  --blue:        #0992c2;   /* primary action · energy */
+  --blue-light:  #5b99c3;   /* hover/accent — light backgrounds NOT allowed */
+
+  /* ---- Red accent (right half of the emblem) ---- */
+  --red:         #bf092f;   /* urgency · hot CTA · key number */
+  --red-dark:    #911220;   /* hover on red */
+
+  /* ---- Surfaces & neutrals ---- */
+  --bg:          #f5f8fc;   /* light page background */
+  --surface:     #ffffff;   /* cards */
+  --muted:       #5a6b7a;   /* secondary text */
+  --line:        rgba(12, 37, 66, 0.12);   /* borders · dividers */
+
+  /* ---- Feedback ---- */
+  --success:     #10b981;
+  --error:       #f43f5e;
+  --warning:     #f59e0b;
+
+  /* ---- Gradients ---- */
+  --grad-blue:   linear-gradient(160deg, #0992c2, #5b99c3);  /* @kind color */
+  --grad-red:    linear-gradient(160deg, #bf092f, #911220);  /* @kind color */
+  /* THE brand signature — blue → red, like the bicolor emblem. Use 1–2× per page. */
+  --grad-brand:  linear-gradient(120deg, #0992c2 0%, #5b99c3 45%, #bf092f 75%, #911220 100%);  /* @kind color */
+
+  /* ---- Tinted fills (derived from accents via alpha) ---- */
+  --blue-fill:    rgba(9, 146, 194, 0.10);
+  --blue-ring:    rgba(9, 146, 194, 0.25);
+  --red-fill:     rgba(191, 9, 47, 0.10);
+  --success-fill: rgba(16, 185, 129, 0.12);
+
+  /* ---- Dark-section surfaces (cards on navy) ---- */
+  --on-dark-surface: rgba(255, 255, 255, 0.06);
+  --on-dark-line:    rgba(255, 255, 255, 0.14);
+  --on-dark-text:    #f5f8fc;
+
+  /* ---- Semantic aliases ---- */
+  --text-heading:   var(--navy);
+  --text-body:      var(--ink);
+  --text-muted:     var(--muted);
+  --action:         var(--blue);
+  --action-hot:     var(--red);
+  --surface-page:   var(--bg);
+  --surface-card:   var(--surface);
+}

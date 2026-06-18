@@ -1,244 +1,462 @@
+<!-- @dsCard group="Portal" viewport="1280x900" name="Landing — דף נחיתה" subtitle="Flagship redesign · lead funnel · preserves registerLead flow" -->
+<!-- @startingPoint section="Portal" subtitle="Hero · mechanism · value cards · conversion form" viewport="1280x900" -->
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>סקייל רווחי — קורס חינמי מותאם אישית</title>
-  <link rel="icon" href="../מותג/logos/logo-icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../מותג/brand-system.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>סקייל רווחי — קורס חינמי</title>
+  <link rel="stylesheet" href="ds/styles.css">
   <style>
-    *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
-    body{ background:var(--bg); color:var(--navy); font-family:var(--font-body); line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
-    .wrap{ width:100%; max-width:1080px; margin:0 auto; padding:0 1.4rem; }
-    h1,h2,h3{ font-family:var(--font-display); line-height:1.15; font-weight:800; }
+    /* ── Landing-local layout (tokens from styles.css) ───────────────── */
+    /* בחירת הלל: Heebo גם לכותרות (override ל-display של מערכת העיצוב) */
+    :root { --font-display: 'Heebo', 'Assistant', system-ui, sans-serif; }
+    body { background: var(--bg); color: var(--ink); overflow-x: hidden; }
+    .wrap { max-width: var(--container); margin: 0 auto; padding-inline: var(--pad-inline-mobile); }
+    @media (min-width: 768px) { .wrap { padding-inline: var(--pad-inline-desktop); } }
 
-    /* ===== Header ===== */
-    .site-head{ position:absolute; top:0; inset-inline:0; z-index:20; padding:1.1rem 0; }
-    .site-head .wrap{ display:flex; align-items:center; justify-content:space-between; }
-    .site-head img{ height:42px; width:auto; filter:brightness(0) invert(1); }
-    .head-cta{ color:#fff; font-weight:700; font-size:.92rem; text-decoration:none; opacity:.85; border-bottom:1px solid transparent; transition:opacity .2s; }
-    .head-cta:hover{ opacity:1; }
+    /* Header */
+    .site-header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(12,37,66,.92); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--on-dark-line);
+    }
+    .site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .brand-lockup { display: inline-flex; align-items: center; }
+    .brand-lockup img { height: 38px; width: auto; display: block; }
+    .header-link { color: rgba(255,255,255,.8); font-weight: 600; font-size: var(--fs-small); min-height: 44px; display: inline-flex; align-items: center; }
+    .header-link:hover { color: #fff; }
 
-    /* ===== Hero ===== */
-    .hero{ position:relative; background:var(--navy); color:#fff; padding:7.5rem 0 4.5rem; overflow:hidden; }
-    .hero::before{ content:""; position:absolute; width:60vw; height:60vw; max-width:680px; max-height:680px; top:-22%; inset-inline-start:-12%;
-      background:radial-gradient(circle, rgba(9,146,194,.32), transparent 62%); pointer-events:none; }
-    .hero::after{ content:""; position:absolute; width:48vw; height:48vw; max-width:560px; max-height:560px; bottom:-26%; inset-inline-end:-14%;
-      background:radial-gradient(circle, rgba(191,9,47,.24), transparent 62%); pointer-events:none; }
-    .hero-grid{ position:relative; z-index:2; display:grid; grid-template-columns:1.15fr .85fr; gap:3rem; align-items:center; }
-    @media(max-width:860px){ .hero{ padding:6.5rem 0 3.5rem; } .hero-grid{ grid-template-columns:1fr; gap:2.2rem; } }
+    /* Hero (navy, dramatic) */
+    .hero { position: relative; background: var(--navy); color: #fff; overflow: hidden; padding-block: var(--s-9) var(--s-8); }
+    .hero .glow-a { width: 520px; height: 520px; top: -220px; right: -120px; }
+    .hero .glow-b { width: 420px; height: 420px; bottom: -260px; left: -100px; opacity: .12; }
+    .hero .wrap { position: relative; z-index: 2; }
+    .hero-grid { display: grid; grid-template-columns: 1fr; gap: var(--s-7); align-items: center; }
+    @media (min-width: 980px) { .hero-grid { grid-template-columns: 1.15fr .85fr; gap: var(--s-8); } }
 
-    .eyebrow{ display:inline-flex; align-items:center; gap:.5rem; font-size:.82rem; font-weight:700; letter-spacing:.02em;
-      background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); padding:.45rem 1rem; border-radius:99px; margin-bottom:1.3rem; }
-    .eyebrow .dot{ width:8px; height:8px; border-radius:50%; background:var(--grad-brand); }
-    .hero h1{ font-size:clamp(2rem,5.2vw,3.4rem); color:#fff; margin-bottom:1.1rem; }
-    .hero h1 .accent{ background:var(--grad-brand); -webkit-background-clip:text; background-clip:text; color:transparent; }
-    .hero .sub{ font-size:clamp(1.05rem,2.4vw,1.3rem); color:#cdddea; max-width:34ch; margin-bottom:1.5rem; }
-    .hero .micro{ display:flex; flex-wrap:wrap; gap:1.1rem; font-size:.9rem; color:#9fb6c8; }
-    .hero .micro span{ display:inline-flex; align-items:center; gap:.4rem; }
-    .hero .micro .ic{ color:var(--blue-light); font-weight:900; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: var(--s-2);
+      font-size: var(--fs-small); font-weight: 700; color: var(--blue-light);
+      letter-spacing: .02em; margin-bottom: var(--s-5);
+    }
+    .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--grad-brand); }
 
-    /* energy line — חתימת המותג */
-    .energy{ position:relative; height:4px; width:100%; margin:1.9rem 0; border-radius:99px; overflow:hidden; background:rgba(255,255,255,.08); }
-    .energy i{ position:absolute; inset:0; background:var(--grad-brand); transform-origin:right; animation:flow 3.2s ease-in-out infinite; }
-    @keyframes flow{ 0%{ transform:scaleX(.25); opacity:.7;} 50%{ transform:scaleX(1); opacity:1;} 100%{ transform:scaleX(.25); opacity:.7;} }
+    .hero h1 {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: var(--fs-display); line-height: var(--lh-tight); letter-spacing: var(--ls-display);
+      color: #fff; margin-bottom: var(--s-5);
+      transform: translateY(14px);
+      animation: hero-rise 800ms var(--smooth) 150ms forwards;
+    }
+    .hero h1 .grad { background: var(--grad-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    @keyframes hero-rise { to { filter: blur(0); transform: none; } }
 
-    /* ===== Form card ===== */
-    .form-card{ background:var(--surface); color:var(--navy); border-radius:var(--radius); padding:1.9rem; box-shadow:0 24px 60px rgba(0,0,0,.35); }
-    .form-card .fc-title{ font-family:var(--font-display); font-weight:800; font-size:1.25rem; margin-bottom:.3rem; }
-    .form-card .fc-note{ font-size:.86rem; color:var(--muted); margin-bottom:1.3rem; }
-    .field{ margin-bottom:1rem; }
-    .field label{ display:block; font-size:.85rem; font-weight:700; margin-bottom:.4rem; }
-    .field input{ width:100%; padding:.85rem 1rem; border:1.5px solid var(--line); border-radius:var(--radius-sm); font-size:1rem; font-family:inherit;
-      background:#fff; color:var(--navy); direction:ltr; text-align:right; transition:border-color .15s, box-shadow .15s; }
-    .field input:focus{ outline:none; border-color:var(--blue); box-shadow:0 0 0 3px rgba(9,146,194,.16); }
-    .cta{ width:100%; padding:1rem; font-size:1.08rem; font-weight:800; font-family:var(--font-display); border:0; border-radius:var(--radius-sm);
-      cursor:pointer; color:#fff; background:var(--navy); position:relative; overflow:hidden; transition:transform .18s, box-shadow .18s; }
-    .cta::before{ content:""; position:absolute; inset:0; background:var(--grad-brand); opacity:0; transition:opacity .2s; }
-    .cta span{ position:relative; z-index:2; }
-    .cta:hover{ transform:translateY(-2px); box-shadow:0 12px 26px rgba(9,146,194,.35); }
-    .cta:hover::before{ opacity:1; }
-    .cta:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
-    .error-msg{ font-size:.85rem; color:var(--red); margin-top:.2rem; display:none; }
-    .error-msg.visible{ display:block; }
-    .trust{ text-align:center; font-size:.8rem; color:var(--muted); margin-top:1rem; }
+    .hero .lede {
+      font-size: var(--fs-body-l); line-height: var(--lh-relaxed); color: rgba(245,248,252,.82);
+      max-width: 52ch; margin-bottom: var(--s-4);
+      transform: translateY(14px); animation: hero-rise 700ms var(--smooth) 320ms forwards;
+    }
+    .hero .fine { font-size: var(--fs-small); color: var(--blue-light); margin-bottom: var(--s-6);
+      transform: translateY(14px); animation: hero-rise 700ms var(--smooth) 420ms forwards; }
 
-    /* ===== Section base ===== */
-    .sec{ padding:4.5rem 0; }
-    .sec-eyebrow{ font-size:.82rem; font-weight:800; letter-spacing:.06em; color:var(--blue); text-transform:none; margin-bottom:.6rem; }
-    .sec h2{ font-size:clamp(1.5rem,3.6vw,2.25rem); margin-bottom:.8rem; }
-    .sec .lead{ font-size:1.05rem; color:var(--muted); max-width:54ch; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: var(--s-4); align-items: center;
+      transform: translateY(14px); animation: hero-rise 700ms var(--smooth) 520ms forwards; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2);
+      flex-direction: row-reverse; min-height: 56px; padding: 0 var(--s-6);
+      border-radius: var(--radius-md); border: none; cursor: pointer;
+      font-family: var(--font-body); font-weight: 700; font-size: var(--fs-body-l);
+      transition: transform var(--dur-hover) ease, box-shadow var(--dur-hover) ease, filter var(--dur-hover) ease;
+      text-decoration: none;
+    }
+    .btn-grad { background: var(--grad-brand); color: #fff; box-shadow: 0 8px 28px rgba(9,146,194,.35); position: relative; }
+    .btn-grad::after { content:""; position:absolute; inset:0; border-radius: inherit; box-shadow: 0 0 0 0 rgba(9,146,194,.45);
+      animation: cta-pulse 2600ms var(--smooth) infinite; }
+    @keyframes cta-pulse { 0%{box-shadow:0 0 0 0 rgba(9,146,194,.40)} 70%{box-shadow:0 0 0 16px rgba(9,146,194,0)} 100%{box-shadow:0 0 0 0 rgba(9,146,194,0)} }
+    .btn-grad:hover { transform: translateY(-2px); filter: brightness(1.08); }
+    .btn-icon { width: 18px; height: 18px; stroke: currentColor; }
+    .btn-ghost-light { color: #fff; background: transparent; border: 1.5px solid var(--on-dark-line); min-height: 56px; }
+    .btn-ghost-light:hover { background: rgba(255,255,255,.06); transform: translateY(-2px); }
 
-    /* mechanism */
-    .mech{ background:linear-gradient(180deg,#fff, var(--bg)); }
-    .mech-row{ display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:center; }
-    @media(max-width:760px){ .mech-row{ grid-template-columns:1fr; gap:1.6rem; } }
-    .mech-visual{ background:var(--navy); border-radius:var(--radius); padding:2.2rem; color:#fff; box-shadow:var(--shadow); position:relative; overflow:hidden; }
-    .mech-visual .step{ display:flex; align-items:center; gap:.9rem; padding:.7rem 0; }
-    .mech-visual .step .n{ width:30px; height:30px; flex:0 0 auto; border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:.85rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18); }
-    .mech-visual .step.on .n{ background:var(--grad-blue); border-color:transparent; }
-    .mech-visual .step .t{ font-size:.95rem; color:#dce8f1; }
+    /* The signature energy line drawn through the hero */
+    .energy-svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; opacity: .9; }
+    .energy-path { fill: none; stroke: url(#energyGrad); stroke-width: 2.5; stroke-linecap: round;
+      stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw-line 2200ms var(--smooth) 200ms forwards; }
+    @keyframes draw-line { to { stroke-dashoffset: 0; } }
 
-    /* value cards */
-    .vgrid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1.1rem; margin-top:2.2rem; }
-    @media(max-width:900px){ .vgrid{ grid-template-columns:1fr 1fr; } }
-    @media(max-width:520px){ .vgrid{ grid-template-columns:1fr; } }
-    .vcard{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:1.5rem; transition:transform .2s, box-shadow .2s, border-color .2s; }
-    .vcard:hover{ transform:translateY(-4px); box-shadow:var(--shadow); border-color:transparent; }
-    .vcard .vic{ width:48px; height:48px; border-radius:14px; display:grid; place-items:center; font-size:1.4rem; margin-bottom:1rem; background:rgba(9,146,194,.1); }
-    .vcard:nth-child(2) .vic{ background:rgba(191,9,47,.09); }
-    .vcard h3{ font-size:1.1rem; margin-bottom:.4rem; }
-    .vcard p{ font-size:.92rem; color:var(--muted); }
+    /* Hero panel — proof card on navy */
+    .hero-panel {
+      background: var(--on-dark-surface); border: 1px solid var(--on-dark-line);
+      border-radius: var(--radius); padding: var(--s-6); backdrop-filter: blur(6px);
+      transform: translateY(20px); animation: hero-rise 800ms var(--smooth) 600ms forwards;
+    }
+    .panel-top { display: flex; align-items: center; gap: var(--s-3); margin-bottom: var(--s-5); }
+    .panel-step { display: flex; align-items: flex-start; gap: var(--s-3); padding: var(--s-3) 0; }
+    .panel-step + .panel-step { border-top: 1px solid var(--on-dark-line); }
+    .step-num { flex: none; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center;
+      font-family: var(--font-display); font-weight: 800; color: #fff; font-size: var(--fs-body); }
+    .step-1 { background: var(--grad-blue); } .step-2 { background: linear-gradient(160deg,#5b99c3,#bf092f); } .step-3 { background: var(--grad-red); }
+    .step-text b { display: block; color: #fff; font-size: var(--fs-body); font-weight: 700; }
+    .step-text span { font-size: var(--fs-small); color: rgba(245,248,252,.66); }
 
-    /* closing CTA */
-    .closing{ background:var(--navy); color:#fff; border-radius:var(--radius); padding:3rem 2rem; text-align:center; position:relative; overflow:hidden; }
-    .closing h2{ color:#fff; font-size:clamp(1.5rem,3.4vw,2rem); margin-bottom:1.3rem; }
-    .closing .energy{ max-width:220px; margin:0 auto 1.6rem; }
-    .btn-link{ display:inline-block; background:var(--grad-red); color:#fff; font-family:var(--font-display); font-weight:800; font-size:1.05rem;
-      padding:.95rem 2.2rem; border-radius:var(--radius-sm); text-decoration:none; transition:transform .18s, box-shadow .18s; }
-    .btn-link:hover{ transform:translateY(-2px); box-shadow:0 12px 26px rgba(191,9,47,.4); }
+    /* Trust strip */
+    .trust { border-top: 1px solid var(--on-dark-line); margin-top: var(--s-7); padding-top: var(--s-5); }
+    .trust-row { display: flex; flex-wrap: wrap; gap: var(--s-6) var(--s-7); }
+    .trust-item .num { font-family: var(--font-display); font-weight: 800; font-size: 1.75rem; color: #fff; line-height: 1; }
+    .trust-item .num .ph { color: var(--blue-light); }
+    .trust-item .lbl { font-size: var(--fs-small); color: rgba(245,248,252,.66); margin-top: 4px; }
+    .ph-tag { font-size: 10px; color: var(--blue-light); border: 1px dashed var(--blue-light); border-radius: 6px; padding: 1px 5px; vertical-align: middle; margin-inline-start: 6px; }
 
-    footer{ padding:2rem 1.25rem; text-align:center; font-size:.82rem; color:var(--muted); }
+    /* Section scaffolding */
+    section.block { padding-block: var(--section-gap-mobile); }
+    @media (min-width: 768px) { section.block { padding-block: var(--section-gap-desktop); } }
+    .sec-eyebrow { font-size: var(--fs-small); font-weight: 700; letter-spacing: .02em; color: var(--blue);
+      display: inline-flex; align-items: center; gap: var(--s-2); margin-bottom: var(--s-3); }
+    .sec-eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--grad-brand); }
+    .sec-title { font-family: var(--font-heading); font-weight: 800; font-size: var(--fs-h1); color: var(--navy);
+      line-height: var(--lh-heading); letter-spacing: var(--ls-heading); margin-bottom: var(--s-3); max-width: 22ch; }
+    .sec-sub { font-size: var(--fs-body-l); color: var(--muted); max-width: 60ch; line-height: var(--lh-relaxed); }
 
-    /* scroll reveal */
-    .reveal{ opacity:0; transform:translateY(22px); transition:opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
-    .reveal.in{ opacity:1; transform:none; }
-    @media(prefers-reduced-motion:reduce){
-      .reveal{ opacity:1; transform:none; transition:none; } .energy i{ animation:none; transform:scaleX(1); }
-      .cta,.vcard,.btn-link{ transition:none; }
+    /* Mechanism — pain framing */
+    .pain-grid { display: grid; grid-template-columns: 1fr; gap: var(--s-5); margin-top: var(--s-7); }
+    @media (min-width: 760px) { .pain-grid { grid-template-columns: repeat(3, 1fr); } }
+    .pain-card { position: relative; background: var(--surface); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: var(--s-6); box-shadow: var(--shadow);
+      transition: transform var(--dur-hover) ease, box-shadow var(--dur-hover) ease; }
+    .pain-card::before { content:""; position:absolute; inset: 0 auto 0 0; width: 4px; border-radius: var(--radius) 0 0 var(--radius);
+      background: var(--grad-brand); }
+    .pain-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+    .pain-card h3 { font-size: var(--fs-h3); color: var(--navy); margin-bottom: var(--s-2); font-weight: 700; }
+    .pain-card p { font-size: var(--fs-body); color: var(--muted); line-height: var(--lh-body); }
+    .pain-ico { width: 30px; height: 30px; stroke: var(--blue); stroke-width: 2; fill: none; margin-bottom: var(--s-4); }
+
+    /* Value cards — what's inside */
+    .value-head { display: flex; flex-direction: column; gap: var(--s-3); align-items: center; text-align: center; }
+    .value-head .sec-title, .value-head .sec-sub { max-width: 40ch; margin-inline: auto; }
+    .value-grid { display: grid; grid-template-columns: 1fr; gap: var(--s-5); margin-top: var(--s-7); }
+    @media (min-width: 560px) { .value-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1000px) { .value-grid { grid-template-columns: repeat(4, 1fr); } }
+    .value-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: var(--s-6); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: var(--s-3);
+      transition: transform var(--dur-hover) ease, box-shadow var(--dur-hover) ease; }
+    .value-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+    .value-ico-wrap { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; background: var(--blue-fill); }
+    .value-ico-wrap.hot { background: var(--red-fill); }
+    .value-ico { width: 26px; height: 26px; stroke-width: 2; fill: none; }
+    .value-card h3 { font-size: var(--fs-h3); color: var(--navy); font-weight: 700; }
+    .value-card p { font-size: var(--fs-body); color: var(--muted); line-height: var(--lh-body); }
+    .value-tag { font-size: var(--fs-micro); font-weight: 700; color: var(--blue); }
+
+    /* Conversion — navy closing */
+    .convert { position: relative; background: var(--navy); color: #fff; overflow: hidden; }
+    .convert .glow-c { width: 460px; height: 460px; top: -180px; left: -120px; }
+    .convert .wrap { position: relative; z-index: 2; }
+    .convert-grid { display: grid; grid-template-columns: 1fr; gap: var(--s-7); align-items: center; }
+    @media (min-width: 920px) { .convert-grid { grid-template-columns: 1.05fr .95fr; gap: var(--s-8); } }
+    .convert h2 { font-family: var(--font-display); font-weight: 800; font-size: var(--fs-h1); color: #fff;
+      line-height: var(--lh-heading); letter-spacing: var(--ls-heading); margin-bottom: var(--s-4); }
+    .convert h2 .grad { background: var(--grad-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .convert .lede { font-size: var(--fs-body-l); color: rgba(245,248,252,.82); line-height: var(--lh-relaxed); margin-bottom: var(--s-5); max-width: 46ch; }
+    .checklist { display: flex; flex-direction: column; gap: var(--s-3); }
+    .checklist li { display: flex; align-items: center; gap: var(--s-3); font-size: var(--fs-body); color: rgba(245,248,252,.9); }
+    .check { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--success-fill); display: grid; place-items: center; }
+    .check svg { width: 13px; height: 13px; stroke: var(--success); stroke-width: 2.5; fill: none; }
+
+    /* Form card */
+    .form-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-modal); padding: var(--s-7); }
+    .form-card .top-rule { height: 4px; border-radius: 99px; background: var(--grad-brand); margin: calc(-1 * var(--s-7)) calc(-1 * var(--s-7)) var(--s-6); border-radius: var(--radius) var(--radius) 0 0; }
+    .form-card h3 { font-family: var(--font-heading); font-weight: 800; font-size: var(--fs-h2); color: var(--navy); margin-bottom: var(--s-2); }
+    .form-card .form-sub { font-size: var(--fs-small); color: var(--muted); margin-bottom: var(--s-5); }
+    .field-group { margin-bottom: var(--s-4); }
+    .field-group label { display: block; font-size: var(--fs-small); font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+    .field-group label .req { color: var(--red); }
+    .field {
+      width: 100%; height: 52px; background: var(--surface); border: 1.5px solid var(--line);
+      border-radius: var(--radius-md); padding: 0 var(--s-4); font-family: var(--font-body); font-size: var(--fs-body);
+      color: var(--ink); direction: ltr; text-align: right; transition: border-color var(--dur-hover), box-shadow var(--dur-hover);
+    }
+    .field::placeholder { color: var(--muted); }
+    .field:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(9,146,194,.15); }
+    .submit { width: 100%; min-height: 56px; margin-top: var(--s-2); border: none; border-radius: var(--radius-md);
+      background: var(--grad-brand); color: #fff; font-family: var(--font-body); font-weight: 700; font-size: var(--fs-body-l);
+      cursor: pointer; transition: transform var(--dur-hover) ease, filter var(--dur-hover) ease; display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2); }
+    .submit:hover { transform: translateY(-2px); filter: brightness(1.08); }
+    .submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .error-msg { font-size: var(--fs-small); color: var(--error); margin-top: var(--s-3); display: none; }
+    .error-msg.visible { display: block; }
+    .form-fine { font-size: var(--fs-micro); color: var(--muted); text-align: center; margin-top: var(--s-4); }
+    .form-success { text-align: center; padding: var(--s-4) 0; }
+    .form-success .ok-ring { width: 56px; height: 56px; border-radius: 50%; background: var(--success-fill); display: grid; place-items: center; margin: 0 auto var(--s-4); }
+    .form-success .ok-ring svg { width: 28px; height: 28px; stroke: var(--success); stroke-width: 2.5; fill: none; }
+
+    /* Footer */
+    footer.site-footer { background: var(--navy); color: rgba(245,248,252,.7); border-top: 1px solid var(--on-dark-line); }
+    footer.site-footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s-4); padding-block: var(--s-6); }
+    footer.site-footer .built { font-size: var(--fs-small); }
+    footer.site-footer .built b { color: #fff; font-weight: 700; }
+
+    /* Mobile sticky CTA */
+    .sticky-cta { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: var(--s-3) var(--s-4) calc(var(--s-3) + env(safe-area-inset-bottom));
+      background: rgba(12,37,66,.96); backdrop-filter: blur(10px); border-top: 1px solid var(--on-dark-line); display: none; }
+    .sticky-cta a { display: flex; }
+    @media (max-width: 720px) { .sticky-cta { display: block; } body { padding-bottom: 84px; } }
+
+    /* Scroll reveal — hidden state only applies once JS confirms it can reveal (html.js) */
+    .reveal { transition: opacity var(--dur-reveal) ease, transform var(--dur-reveal) var(--smooth); }
+    html.js .reveal:not(.in) { opacity: 0; transform: translateY(24px); }
+    .stagger > * { transition-delay: calc(var(--i, 0) * 80ms); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero h1, .hero .lede, .hero .fine, .cta-row, .hero-panel { animation: none !important; opacity: 1 !important; filter: none !important; transform: none !important; }
+      .energy-path { animation: none !important; stroke-dashoffset: 0 !important; }
+      .btn-grad::after { animation: none !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
     }
   </style>
 </head>
 <body>
+  <script>document.documentElement.classList.add('js');</script>
 
-<header class="site-head">
-  <div class="wrap">
-    <img src="../מותג/logos/logo-horizontal.svg" alt="סקייל רווחי">
-    <a class="head-cta" href="#register">התחל עכשיו ›</a>
-  </div>
-</header>
+  <!-- ── Header ─────────────────────────────────────────── -->
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand-lockup" href="#" aria-label="סקייל רווחי">
+        <img src="assets/logo-horizontal-white.png" alt="סקייל רווחי">
+      </a>
+      <a class="header-link" href="#register">כניסה לקורס</a>
+    </div>
+  </header>
 
-<!-- ===== HERO ===== -->
-<section class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <span class="eyebrow"><span class="dot"></span> קורס חינמי · מותאם אישית</span>
-      <h1>תגלה למה השיווק שלך <span class="accent">לא עובד</span> — ואיך לתקן את זה</h1>
-      <p class="sub">לבעלי עסקים שרוצים לידים איכותיים ומכירות אמיתיות — לא קורס גנרי.</p>
-      <div class="energy"><i></i></div>
-      <div class="micro">
-        <span><span class="ic">✓</span> 5 שאלות קצרות</span>
-        <span><span class="ic">✓</span> אבחון מדויק למצב שלך</span>
-        <span><span class="ic">✓</span> בלי כרטיס אשראי</span>
+  <!-- ── Hero ───────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="brand-glow glow-a"></div>
+    <div class="brand-glow glow-b"></div>
+
+    <svg class="energy-svg" viewBox="0 0 1200 700" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="energyGrad" x1="1" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#0992c2"/><stop offset=".5" stop-color="#5b99c3"/>
+          <stop offset=".78" stop-color="#bf092f"/><stop offset="1" stop-color="#911220"/>
+        </linearGradient>
+      </defs>
+      <path class="energy-path" d="M1180 60 C 980 140, 1080 300, 820 340 S 360 380, 300 520 S 520 660, 120 660"/>
+    </svg>
+
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow"><span class="dot"></span>פורטל לימוד חינמי · משפך שיווקי</span>
+          <h1>תגלה למה השיווק שלך לא עובד — <span class="grad">ואיך לתקן את זה</span></h1>
+          <p class="lede">קורס חינמי מותאם אישית לבעלי עסקים שרוצים לידים איכותיים ומכירות אמיתיות. אבחון מדויק לפי המצב שלך — לא קורס גנרי.</p>
+          <p class="fine">5 שאלות קצרות · בלי תשלום · בלי כרטיס אשראי</p>
+          <div class="cta-row">
+            <a class="btn btn-grad" href="#register">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              התחל אבחון של 60 שניות
+            </a>
+            <a class="btn btn-ghost-light" href="#inside">מה מקבלים בפנים</a>
+          </div>
+
+          <div class="trust">
+            <div class="trust-row">
+              <div class="trust-item"><div class="num"><span class="ph">[X]</span><span class="ph-tag">placeholder</span></div><div class="lbl">בעלי עסקים בקורס</div></div>
+              <div class="trust-item"><div class="num"><span class="ph">[Y]</span><span class="ph-tag">placeholder</span></div><div class="lbl">לידים שנוצרו</div></div>
+              <div class="trust-item"><div class="num">7</div><div class="lbl">שיעורי וידאו אמיתיים</div></div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero-panel" aria-label="איך זה עובד">
+          <div class="panel-top">
+            <span class="eyebrow" style="margin:0"><span class="dot"></span>המסלול שלך</span>
+          </div>
+          <div class="panel-step"><span class="step-num step-1">1</span><span class="step-text"><b>אבחון אישי</b><span>5 שאלות בונות תמונת מצב מדויקת</span></span></div>
+          <div class="panel-step"><span class="step-num step-2">2</span><span class="step-text"><b>שיעור ממוקד</b><span>נבחר עבורך לפי נקודת הכאב החזקה</span></span></div>
+          <div class="panel-step"><span class="step-num step-3">3</span><span class="step-text"><b>תרגול ויישום</b><span>משחק תרגול שמחזיר ידע לפעולה</span></span></div>
+        </aside>
       </div>
     </div>
+  </section>
 
-    <div id="register">
-      <form class="form-card" id="register-form" novalidate>
-        <div class="fc-title">קבל גישה חינמית</div>
-        <p class="fc-note">השאר פרטים ותתחיל מהשיעור שהכי רלוונטי לך.</p>
-        <div class="field">
-          <label for="email">מייל</label>
-          <input type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" required>
+  <!-- ── Mechanism / pain ───────────────────────────────── -->
+  <section class="block" id="mechanism">
+    <div class="wrap">
+      <span class="sec-eyebrow reveal"><span class="dot"></span>למה זה קורה</span>
+      <h2 class="sec-title reveal">השיווק לא נשבר במקרה — יש לזה מנגנון</h2>
+      <p class="sec-sub reveal">רוב בעלי העסקים תקועים באחת משלוש נקודות. האבחון מזהה את שלך, והקורס פותר בדיוק אותה.</p>
+      <div class="pain-grid stagger">
+        <article class="pain-card reveal" style="--i:0">
+          <svg class="pain-ico" viewBox="0 0 24 24"><path d="M3 3v18h18" stroke-linecap="round"/><path d="M7 14l3-3 3 2 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>אין לידים</h3>
+          <p>אתה מעלה תוכן אבל אין זרימה קבועה של אנשים שרוצים לקנות. התוכן מקצועי — אבל מרגיש כללי מדי.</p>
+        </article>
+        <article class="pain-card reveal" style="--i:1">
+          <svg class="pain-ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke-linecap="round"/><path d="M21 21l-4-4" stroke-linecap="round"/></svg>
+          <h3>לידים לא רלוונטיים</h3>
+          <p>מגיעים אנשים — אבל לא הנכונים. הבעיה לרוב לא בכמות החשיפה אלא במה שהתוכן גורם לאנשים להבין עליך.</p>
+        </article>
+        <article class="pain-card reveal" style="--i:2">
+          <svg class="pain-ico" viewBox="0 0 24 24"><path d="M12 2l2.4 6.9H21l-5.3 4.1 2 6.9L12 16l-5.7 3.9 2-6.9L3 8.9h6.6z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>קשה במכירות</h3>
+          <p>הבעיה לא בשיחת המכירה — אלא בשיווק שמגיע לפניה. שיווק טוב מנטרל התנגדויות מראש ובונה אמון.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── What's inside ──────────────────────────────────── -->
+  <section class="block" id="inside" style="background:var(--surface);">
+    <div class="wrap">
+      <div class="value-head">
+        <span class="sec-eyebrow reveal"><span class="dot"></span>מה מקבלים בפנים</span>
+        <h2 class="sec-title reveal">משפך לימוד חינמי שבנוי כדי להזיז אותך קדימה</h2>
+        <p class="sec-sub reveal">לא ספריית וידאו עוד אחת — מסע מודרך עם תרגול ומורה אישי.</p>
+      </div>
+      <div class="value-grid stagger">
+        <article class="value-card reveal" style="--i:0">
+          <div class="value-ico-wrap"><svg class="value-ico" viewBox="0 0 24 24" stroke="var(--blue)"><path d="M5 4l14 8-14 8z" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+          <h3>שיעורים אמיתיים</h3>
+          <p>7 שיעורי וידאו — מ"איזה משפך מתאים לך" ועד מודעות לקהל קר. תוכן מהשטח, לא תיאוריה.</p>
+          <span class="value-tag">וידאו · מעשי</span>
+        </article>
+        <article class="value-card reveal" style="--i:1">
+          <div class="value-ico-wrap"><svg class="value-ico" viewBox="0 0 24 24" stroke="var(--blue)"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 8V5M9 14h.01M15 14h.01" stroke-linecap="round"/></svg></div>
+          <h3>מורה AI אישי</h3>
+          <p>שאל כל דבר מהקורס וקבל תשובה שמצטטת את השיעור הרלוונטי ומכוונת לצעד הבא.</p>
+          <span class="value-tag">זמין 24/7</span>
+        </article>
+        <article class="value-card reveal" style="--i:2">
+          <div class="value-ico-wrap hot"><svg class="value-ico" viewBox="0 0 24 24" stroke="var(--red)"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M8 12h3M9.5 10.5v3M15 11h.01M17.5 13h.01" stroke-linecap="round"/></svg></div>
+          <h3>משחק תרגול</h3>
+          <p>תרחישים אינטראקטיביים עם משוב מיידי, XP ורצף — שמחזירים את הידע מהשיעור לפעולה.</p>
+          <span class="value-tag">XP · רצף</span>
+        </article>
+        <article class="value-card reveal" style="--i:3">
+          <div class="value-ico-wrap"><svg class="value-ico" viewBox="0 0 24 24" stroke="var(--blue)"><path d="M4 18l5-5 4 3 7-8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="20" cy="8" r="1.6"/></svg></div>
+          <h3>מסלול מותאם</h3>
+          <p>האבחון בונה לך נקודת פתיחה אישית — אתה מתחיל בדיוק מהשיעור שיזיז אותך הכי הרבה.</p>
+          <span class="value-tag">לפי האבחון</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Conversion ─────────────────────────────────────── -->
+  <section class="block convert" id="register">
+    <div class="brand-glow glow-c"></div>
+    <div class="wrap">
+      <div class="convert-grid">
+        <div class="convert-copy">
+          <span class="eyebrow"><span class="dot"></span>הצעד הראשון</span>
+          <h2>השאר פרטים — והאבחון <span class="grad">יחכה לך</span></h2>
+          <p class="lede">מייל וטלפון, וזהו. תוך 60 שניות תהיה בתוך השאלון שבונה לך מסלול אישי. בלי תשלום, בלי כרטיס אשראי.</p>
+          <ul class="checklist">
+            <li><span class="check"><svg viewBox="0 0 24 24"><path d="M4 12l5 5 11-11" stroke-linecap="round" stroke-linejoin="round"/></svg></span>גישה מלאה למשפך הלימוד החינמי</li>
+            <li><span class="check"><svg viewBox="0 0 24 24"><path d="M4 12l5 5 11-11" stroke-linecap="round" stroke-linejoin="round"/></svg></span>אבחון אישי + שיעור ראשון שנבחר עבורך</li>
+            <li><span class="check"><svg viewBox="0 0 24 24"><path d="M4 12l5 5 11-11" stroke-linecap="round" stroke-linejoin="round"/></svg></span>מורה AI ומשחק תרגול</li>
+          </ul>
         </div>
-        <div class="field">
-          <label for="phone">טלפון</label>
-          <input type="tel" id="phone" name="phone" placeholder="050-0000000" autocomplete="tel" required>
+
+        <div class="form-card">
+          <div class="top-rule"></div>
+          <div id="form-live">
+            <h3>קבל גישה חינמית</h3>
+            <p class="form-sub">5 שאלות קצרות מחכות לך מצד שני.</p>
+            <form id="register-form" novalidate>
+              <div class="field-group">
+                <label for="email">מייל <span class="req">*</span></label>
+                <input class="field" type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" required>
+              </div>
+              <div class="field-group">
+                <label for="phone">טלפון <span class="req">*</span></label>
+                <input class="field" type="tel" id="phone" name="phone" placeholder="050-0000000" autocomplete="tel" required>
+              </div>
+              <p class="error-msg" id="form-error"></p>
+              <button type="submit" class="submit" id="submit-btn">
+                קבל גישה חינמית
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </form>
+            <p class="form-fine">בלחיצה אתה מאשר קבלת תכני הקורס. ניתן להסיר בכל עת.</p>
+          </div>
         </div>
-        <p class="error-msg" id="form-error"></p>
-        <button type="submit" class="cta" id="submit-btn"><span>קבל גישה חינמית</span></button>
-        <p class="trust">בלי תשלום · בלי כרטיס אשראי · גישה מיידית</p>
-      </form>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ===== MECHANISM ===== -->
-<section class="sec mech">
-  <div class="wrap mech-row">
-    <div class="reveal">
-      <div class="sec-eyebrow">למה זה קורה</div>
-      <h2>השיווק לא נשבר — הוא פשוט לא מותאם אליך</h2>
-      <p class="lead">רוב בעלי העסקים מנסים את אותו "סוד" שעבד למישהו אחר. אבל משפך שיווקי נכון תלוי בך: באישיות שלך ובמי שאתה משרת. השאלון מאתר בדיוק איפה אתה תקוע — ומשם מתחילים.</p>
+  <!-- ── Footer ─────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <a class="brand-lockup" href="#" aria-label="סקייל רווחי">
+        <img src="assets/logo-horizontal-white.png" alt="סקייל רווחי" style="height:34px;width:auto">
+      </a>
+      <span class="built">נבנה ע"י <b>הלל</b></span>
     </div>
-    <div class="mech-visual reveal">
-      <div class="step on"><span class="n">1</span><span class="t">עונה על 5 שאלות קצרות</span></div>
-      <div class="step on"><span class="n">2</span><span class="t">מקבל אבחון מדויק למצב שלך</span></div>
-      <div class="step"><span class="n">3</span><span class="t">מתחיל מהשיעור שפותר את הכאב שלך</span></div>
-      <div class="step"><span class="n">4</span><span class="t">מתקדם עם מורה אישי, תרגול ומסלול</span></div>
-    </div>
-  </div>
-</section>
+  </footer>
 
-<!-- ===== VALUE ===== -->
-<section class="sec">
-  <div class="wrap">
-    <div class="reveal">
-      <div class="sec-eyebrow">מה מחכה לך בפנים</div>
-      <h2>לא עוד קורס — מערכת שמובילה אותך צעד-צעד</h2>
-    </div>
-    <div class="vgrid">
-      <div class="vcard reveal"><div class="vic">🎯</div><h3>שיעורים אמיתיים</h3><p>תוכן מקצועי על משפכים, פרסונל ברנד ומודעות — ישר מהשטח.</p></div>
-      <div class="vcard reveal"><div class="vic">🎓</div><h3>מורה AI אישי</h3><p>שואל כל שאלה על השיעור ומקבל תשובה מותאמת, בכל רגע.</p></div>
-      <div class="vcard reveal"><div class="vic">🎮</div><h3>משחק תרגול</h3><p>מקבע את מה שלמדת דרך תרגול קצר ומהנה, לא רק צפייה.</p></div>
-      <div class="vcard reveal"><div class="vic">🧭</div><h3>מסלול מותאם</h3><p>מתחילים בדיוק מהנקודה הנכונה לך, וממשיכים לפי הקצב שלך.</p></div>
-    </div>
-  </div>
-</section>
+  <!-- Mobile sticky CTA -->
+  <div class="sticky-cta"><a class="btn btn-grad" href="#register" style="width:100%;min-height:52px">קבל גישה חינמית</a></div>
 
-<!-- ===== CLOSING ===== -->
-<section class="sec">
-  <div class="wrap">
-    <div class="closing reveal">
-      <div class="energy"><i></i></div>
-      <h2>מוכן לגלות מה באמת עוצר את הצמיחה שלך?</h2>
-      <a class="btn-link" href="#register">קבל גישה חינמית</a>
-    </div>
-  </div>
-</section>
+  <!-- PRODUCTION: real data layer wired (חוזה registerLead → survey.html נשמר). -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script>
+    /* Scroll-reveal */
+    (function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var els = document.querySelectorAll('.reveal');
+      if (reduce || !('IntersectionObserver' in window)) { els.forEach(function(e){ e.classList.add('in'); }); return; }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, { threshold: 0.15 });
+      els.forEach(function (e) { io.observe(e); });
+    })();
 
-<footer>נבנה ע"י הלל</footer>
+    /* Conversion form — preserves the original registerLead → survey.html contract,
+       with a graceful demo fallback so it works in the design-system preview. */
+    (function () {
+      var form = document.getElementById('register-form');
+      var submitBtn = document.getElementById('submit-btn');
+      var errorEl = document.getElementById('form-error');
+      var live = document.getElementById('form-live');
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabase-client.js"></script>
-<script>
-  /* scroll reveal — stagger */
-  (function(){
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(e,i){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { threshold:.16, rootMargin:'0px 0px -8% 0px' });
-    document.querySelectorAll('.vgrid').forEach(function(g){
-      Array.prototype.forEach.call(g.children, function(c,i){ c.style.transitionDelay=(i*70)+'ms'; });
-    });
-    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
-  })();
+      function showError(msg) { errorEl.textContent = msg; errorEl.classList.add('visible'); }
+      function clearError() { errorEl.textContent = ''; errorEl.classList.remove('visible'); }
 
-  /* form — חוזה מקורי נשמר במלואו */
-  const form = document.getElementById('register-form');
-  const submitBtn = document.getElementById('submit-btn');
-  const errorEl = document.getElementById('form-error');
-  function showError(msg){ errorEl.textContent = msg; errorEl.classList.add('visible'); }
-  function clearError(){ errorEl.textContent = ''; errorEl.classList.remove('visible'); }
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        clearError();
+        var email = document.getElementById('email').value.trim();
+        var phone = document.getElementById('phone').value.trim();
+        if (!email || !phone) { showError('נא למלא מייל וטלפון.'); return; }
+        if (!email.includes('@')) { showError('כתובת המייל לא תקינה.'); return; }
 
-  form.addEventListener('submit', async function(e){
-    e.preventDefault(); clearError();
-    const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    if(!email || !phone){ showError('נא למלא מייל וטלפון.'); return; }
-    if(!email.includes('@')){ showError('כתובת המייל לא תקינה.'); return; }
-    submitBtn.disabled = true;
-    submitBtn.querySelector('span').textContent = 'רושם...';
-    try{
-      await window.portalData.registerLead({ email, phone });
-      localStorage.setItem('sr_user_email', email);
-      window.location.href = 'survey.html';
-    }catch(err){
-      showError('אירעה שגיאה. נסה שוב.');
-      submitBtn.disabled = false;
-      submitBtn.querySelector('span').textContent = 'קבל גישה חינמית';
-    }
-  });
-</script>
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'רושם...';
 
+        try {
+          if (window.portalData && typeof window.portalData.registerLead === 'function') {
+            await window.portalData.registerLead({ email: email, phone: phone });
+            localStorage.setItem('sr_user_email', email);
+            window.location.href = 'survey.html';
+            return;
+          }
+          // Demo fallback (design-system preview): no backend wired.
+          await new Promise(function (r) { setTimeout(r, 650); });
+          live.innerHTML =
+            '<div class="form-success">' +
+              '<div class="ok-ring"><svg viewBox="0 0 24 24"><path d="M4 12l5 5 11-11" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
+              '<h3>נרשמת בהצלחה!</h3>' +
+              '<p class="form-sub">בפרודקשן תועבר עכשיו ל-survey.html — לשאלון בן 5 השאלות.</p>' +
+            '</div>';
+        } catch (err) {
+          showError('אירעה שגיאה. נסה שוב.');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'קבל גישה חינמית';
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
