@@ -93,9 +93,9 @@ var analysisContent = {
    video_url = PENDING עד שנשלוף מ-Base44 לפי id.
    ⚠️ no_leads + hard_to_sell — לאמת שקיימים ב-7 שיעורי המשפך שנשלפו. */
 var lessonMap = {
-  no_leads:                 { lesson_id: '69fb172226f8a8dc7a299c0f', title: 'PERSONAL BRAND ב2026',                               video_url: 'PENDING' },
-  irrelevant_leads_paid:    { lesson_id: '69fdb0d061b1d68cdc1682b0', title: 'איך ליצור מודעות ממומנות ל100k',                     video_url: 'PENDING' },
-  irrelevant_leads_no_paid: { lesson_id: '6a0ad15fd255b29c89482e43', title: 'פורמטים להנגשת תוכן',                                video_url: 'PENDING' },
+  no_leads:                 { lesson_id: '69fb172226f8a8dc7a299c0f', title: 'PERSONAL BRAND ב2026',                               video_url: 'https://player.vimeo.com/video/1193178199?h=fff7b763e5', candidate: true },
+  irrelevant_leads_paid:    { lesson_id: '69fdb0d061b1d68cdc1682b0', title: 'איך ליצור מודעות ממומנות ל100k',                     video_url: 'https://player.vimeo.com/video/1190416923?h=8e1169cbea', funnel_order: 6 },
+  irrelevant_leads_no_paid: { lesson_id: '6a0ad15fd255b29c89482e43', title: 'פורמטים להנגשת תוכן',                                video_url: 'https://player.vimeo.com/video/1192963645?h=b6a16e08bc', funnel_order: 3 },
   hard_to_sell:             { lesson_id: '69fb172226f8a8dc7a299c0c', title: 'איך לגרום לאנשים לקבל החלטות מהר (קונפליקט)',        video_url: 'PENDING' }
 };
 
