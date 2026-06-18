@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>סקייל רווחי — קורס חינמי</title>
+  <link rel="stylesheet" href="../מותג/brand-system.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: inherit; background: var(--bg, #fff); color: var(--text, #111); min-height: 100vh; display: flex; flex-direction: column; }
+
+    header { padding: 1.25rem 2rem; border-bottom: 1px solid var(--border, #e5e5e5); }
+
+    .hero { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 4rem 1.5rem 3rem; gap: 1.25rem; max-width: 680px; margin: 0 auto; width: 100%; }
+    .hero h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); line-height: 1.25; color: var(--navy, #0d1b3e); }
+    .hero .sub { font-size: 1.1rem; color: var(--text-muted, #555); }
+    .hero .body-copy { font-size: 0.95rem; line-height: 1.7; color: var(--text-muted, #555); }
+
+    .form-card { width: 100%; max-width: 420px; margin: 0 auto; padding: 2rem; border: 1px solid var(--border, #e5e5e5); border-radius: 12px; background: var(--card-bg, #fafafa); display: flex; flex-direction: column; gap: 1rem; }
+    .form-card label { font-size: 0.9rem; font-weight: 600; color: var(--navy, #0d1b3e); display: block; margin-bottom: 0.3rem; }
+    .form-card input { width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--border, #ccc); border-radius: 8px; font-size: 1rem; font-family: inherit; background: var(--bg, #fff); color: var(--text, #111); direction: ltr; text-align: right; }
+    .form-card input:focus { outline: 2px solid var(--blue, #0992c2); outline-offset: 1px; }
+
+    .btn-primary { width: 100%; padding: 0.85rem; font-size: 1.05rem; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; background: var(--navy, #0c2542); color: #fff; transition: opacity 0.15s; }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .error-msg { font-size: 0.87rem; color: #c0392b; display: none; }
+    .error-msg.visible { display: block; }
+
+    footer { padding: 1.25rem; text-align: center; font-size: 0.8rem; color: var(--text-muted, #888); border-top: 1px solid var(--border, #e5e5e5); }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="../מותג/ScaleRivhi-LogoPack-NewColors/אתרים,אונליין,ווב,אפליקציות-SVG/Vector_Horizontal_Gold.svg"
+       alt="סקייל רווחי" height="48">
+</header>
+
+<main>
+  <section class="hero">
+    <h1>תגלה למה השיווק שלך לא עובד — ואיך לתקן את זה</h1>
+    <p class="sub">קורס חינמי מותאם אישית לבעלי עסקים שרוצים לידים איכותיים ומכירות אמיתיות</p>
+    <p class="body-copy">
+      5 שאלות קצרות. אבחון מדויק לפי המצב שלך. שיעור ראשון שממש רלוונטי לך —
+      לא קורס גנרי, אלא נקודת הכאב הכי חזקה שלך. בלי תשלום, בלי כרטיס אשראי.
+    </p>
+
+    <form class="form-card" id="register-form" novalidate>
+      <div>
+        <label for="email">מייל</label>
+        <input type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" required>
+      </div>
+      <div>
+        <label for="phone">טלפון</label>
+        <input type="tel" id="phone" name="phone" placeholder="050-0000000" autocomplete="tel" required>
+      </div>
+      <p class="error-msg" id="form-error"></p>
+      <button type="submit" class="btn-primary" id="submit-btn">קבל גישה חינמית</button>
+    </form>
+  </section>
+</main>
+
+<footer>נבנה ע"י הלל</footer>
+
+<script src="js/supabase-client.js"></script>
+<script>
+  const form = document.getElementById('register-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const errorEl = document.getElementById('form-error');
+
+  function showError(msg) {
+    errorEl.textContent = msg;
+    errorEl.classList.add('visible');
+  }
+  function clearError() {
+    errorEl.textContent = '';
+    errorEl.classList.remove('visible');
+  }
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    clearError();
+
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+
+    if (!email || !phone) {
+      showError('נא למלא מייל וטלפון.');
+      return;
+    }
+    if (!email.includes('@')) {
+      showError('כתובת המייל לא תקינה.');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'רושם...';
+
+    try {
+      await window.portalData.registerLead({ email, phone });
+      localStorage.setItem('sr_user_email', email);
+      window.location.href = 'survey.html';
+    } catch (err) {
+      showError('אירעה שגיאה. נסה שוב.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'קבל גישה חינמית';
+    }
+  });
+</script>
+
+</body>
+</html>

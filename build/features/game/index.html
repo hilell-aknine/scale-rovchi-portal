@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>סקייל רווחי — תרגול אינטראקטיבי</title>
+  <link rel="stylesheet" href="../../../מותג/brand-system.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Heebo:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg)}
+    header{padding:.9rem 1.5rem;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:var(--surface)}
+    header img{height:38px}
+    .mode-pill{font-size:.72rem;background:var(--bg);color:var(--blue);border:1px solid var(--line);padding:3px 10px;border-radius:99px;font-weight:700}
+    main{flex:1;max-width:620px;width:100%;margin:0 auto;padding:1.25rem 1.1rem 3rem}
+    .hud-wrap{margin-bottom:1.25rem}
+    .lesson-pick{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem;font-size:.85rem;color:var(--muted)}
+    .lesson-pick select{font-family:inherit;font-size:.85rem;padding:.45rem .7rem;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--navy);font-weight:600}
+
+    /* card */
+    .g-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:1.4rem 1.3rem;box-shadow:var(--shadow)}
+    .g-topbar{display:flex;align-items:center;gap:.9rem}
+    .g-progress{flex:1;height:12px;background:var(--line);border-radius:99px;overflow:hidden}
+    .g-progress-fill{height:100%;background:var(--grad-blue);border-radius:99px;transition:width .4s ease}
+    .g-hearts{display:flex;gap:2px;font-size:1.05rem}
+    .g-heart.lost{opacity:.55}
+    .g-meta{font-size:.76rem;color:var(--muted);margin-top:.55rem}
+
+    .g-question-area{margin-top:1.3rem}
+    .g-q{font-size:1.18rem;font-weight:700;color:var(--navy);line-height:1.5;margin-bottom:1.2rem;font-family:var(--font-display)}
+
+    .g-options{display:flex;flex-direction:column;gap:.65rem}
+    .g-tf{flex-direction:row}
+    .g-tf .g-opt{flex:1;text-align:center}
+    .g-opt{width:100%;text-align:right;background:#fff;border:2px solid var(--line);border-radius:14px;padding:.95rem 1.1rem;font-family:inherit;font-size:1rem;font-weight:600;color:var(--navy);cursor:pointer;transition:all .15s}
+    .g-opt:hover:not(:disabled){border-color:var(--blue);transform:translateY(-1px)}
+    .g-opt:disabled{cursor:default}
+    .g-opt.correct{border-color:#1a9e57;background:#e9f9f0;color:#0f7a40}
+    .g-opt.wrong{border-color:var(--red);background:#fdecef;color:var(--red)}
+
+    /* order */
+    .g-order-target{min-height:58px;border:2px dashed var(--line);border-radius:14px;padding:.6rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-bottom:1rem}
+    .g-order-hint{color:var(--muted);font-size:.85rem;padding:.3rem .5rem}
+    .g-order-pool{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.1rem}
+    .g-chip{background:#fff;border:2px solid var(--line);border-radius:99px;padding:.5rem 1rem;font-family:inherit;font-size:.92rem;font-weight:600;color:var(--navy);cursor:pointer;transition:all .15s}
+    .g-chip:hover{border-color:var(--blue)}
+    .g-chip.placed{background:var(--bg)}
+    .g-chip.correct{border-color:#1a9e57;background:#e9f9f0;color:#0f7a40}
+    .g-chip.wrong{border-color:var(--red);background:#fdecef;color:var(--red)}
+    .g-check{width:100%;background:var(--navy);color:#fff;border:0;border-radius:12px;padding:.85rem;font-family:inherit;font-weight:700;font-size:.95rem;cursor:pointer}
+    .g-check:disabled{opacity:.45;cursor:default}
+
+    /* feedback */
+    .g-feedback{display:none}
+    .g-feedback.show{display:block;margin-top:1.2rem;border-radius:14px;padding:1rem 1.1rem;animation:fbin .25s ease}
+    @keyframes fbin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .g-feedback.ok{background:#e9f9f0;border:1px solid #bde9cf}
+    .g-feedback.no{background:#fdecef;border:1px solid #f6c9d2}
+    .g-fb-head{font-weight:800;font-size:1.05rem;color:var(--navy);display:flex;align-items:center;justify-content:space-between}
+    .g-fb-xp{font-size:.82rem;color:#0f7a40;font-weight:800}
+    .g-fb-explain{font-size:.9rem;color:#3a4654;line-height:1.55;margin-top:.45rem}
+    .g-next{margin-top:.9rem;width:100%;background:var(--grad-blue);color:#fff;border:0;border-radius:12px;padding:.8rem;font-family:inherit;font-weight:700;font-size:.95rem;cursor:pointer}
+
+    /* end screens */
+    .g-end{text-align:center}
+    .g-end-emoji{font-size:3.2rem;line-height:1}
+    .g-end-title{font-family:var(--font-display);font-size:1.6rem;font-weight:800;color:var(--navy);margin:.5rem 0 .3rem}
+    .g-end-sub{color:var(--muted);font-size:.95rem;margin-bottom:1.3rem}
+    .g-end-stats{display:flex;gap:.7rem;justify-content:center;margin-bottom:1.2rem}
+    .g-end-stat{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:.9rem .5rem}
+    .g-end-stat .v{font-size:1.5rem;font-weight:800;color:var(--navy)}
+    .g-end-stat .l{font-size:.72rem;color:var(--muted);margin-top:2px}
+    .g-end-badge{background:#fff;border:1px solid var(--blue);color:var(--navy);border-radius:12px;padding:.7rem;font-weight:700;font-size:.9rem;margin-bottom:1.1rem}
+    .g-end-actions{display:flex;gap:.7rem}
+    .g-restart{flex:1;background:var(--navy);color:#fff;border:0;border-radius:12px;padding:.85rem;font-family:inherit;font-weight:700;cursor:pointer}
+    .g-back{flex:1;background:var(--bg);color:var(--navy);border:1px solid var(--line);border-radius:12px;padding:.85rem;font-family:inherit;font-weight:700;cursor:pointer}
+
+    footer{padding:1.1rem;text-align:center;font-size:.78rem;color:var(--muted);border-top:1px solid var(--line)}
+  </style>
+</head>
+<body>
+<header>
+  <img src="../../../מותג/ScaleRivhi-LogoPack-NewColors/אתרים,אונליין,ווב,אפליקציות-SVG/Vector_Horizontal_Black.svg" alt="סקייל רווחי">
+  <span class="mode-pill" id="mode-pill">MOCK</span>
+</header>
+
+<main>
+  <div class="hud-wrap"><div id="hud"></div></div>
+
+  <div class="lesson-pick">
+    <span>תרגול עבור שיעור:</span>
+    <select id="lesson-select">
+      <option value="lsn-1">1 · מאיפה מגיעים לידים</option>
+      <option value="lsn-2">2 · מקור לידים יציב</option>
+      <option value="lsn-3">3 · סינון לידים</option>
+      <option value="lsn-4">4 · סגירת עסקאות</option>
+    </select>
+  </div>
+
+  <div id="game"></div>
+</main>
+
+<footer>נבנה ע"י הלל</footer>
+
+<script src="../gamification/gamification.js"></script>
+<script src="questions.js"></script>
+<script src="../../js/content.js"></script>
+<script src="game.js"></script>
+<script>
+  // אתחול גיימיפיקציה משותפת (HUD בראש העמוד)
+  var G = window.SRGamification.init({ viewerId: 'demo@scale', mode: 'MOCK' });
+  document.getElementById('mode-pill').textContent = G.mode;
+  G.renderHUD('#hud');
+
+  // ממיר פורמט content.js → פורמט game.js
+  function mapQuestion(q) {
+    var type = q.type;
+    if (type === 'multiple_choice') type = 'mc';
+    else if (type === 'true_false') type = 'tf';
+    else if (type === 'order_steps') type = 'order';
+
+    var mapped = {
+      type: type,
+      q: q.q,
+      explain: q.explanation || ''
+    };
+
+    if (type === 'mc') {
+      mapped.options = q.options || [];
+      mapped.answer = typeof q.answer_index === 'number' ? q.answer_index : 0;
+    } else if (type === 'tf') {
+      // answer_index: 0 = נכון, 1 = לא נכון
+      mapped.answer = (q.answer_index === 0);
+    } else if (type === 'order') {
+      mapped.items = q.options || [];
+    }
+
+    return mapped;
+  }
+
+  // הצגת מצב ריק
+  function showEmpty(title) {
+    document.getElementById('game').innerHTML =
+      '<div class="g-card" style="text-align:center;padding:2.5rem 1.5rem">' +
+        '<div style="font-size:2.5rem;margin-bottom:.8rem">📝</div>' +
+        '<div style="font-family:var(--font-display);font-size:1.3rem;font-weight:800;color:var(--navy);margin-bottom:.5rem">' +
+          'התרגול לשיעור זה בהכנה' +
+        '</div>' +
+        '<div style="color:var(--muted);font-size:.92rem">' +
+          (title ? 'שיעור: ' + title + '<br>' : '') +
+          'החומר מתעדכן בקרוב. חזור מאוחר יותר.' +
+        '</div>' +
+      '</div>';
+  }
+
+  // קריאת order מה-URL (?order=N), אחרת 1
+  var params = new URLSearchParams(location.search);
+  var sel = document.getElementById('lesson-select');
+  var initOrder = parseInt(params.get('order'), 10) || 1;
+
+  // סנכרון הבורר אם order תואם אחת האפשרויות
+  [].forEach.call(sel.options, function (o) {
+    if (parseInt(o.value.replace('lsn-', ''), 10) === initOrder) sel.value = o.value;
+  });
+
+  var game;
+
+  function launch(order) {
+    var lessonTitle = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : ('שיעור ' + order);
+    document.getElementById('game').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted)">טוען שאלות…</div>';
+
+    SRContent.ready.then(function () {
+      var raw = SRContent.getQuestions(order);
+
+      if (!raw || raw.length === 0) {
+        showEmpty(lessonTitle);
+        return;
+      }
+
+      var questions = raw.map(mapQuestion);
+
+      // זריקת השאלות ישירות לתוך SRGame (עוקפת את SRQuestions.getForLesson)
+      game = new window.SRGame({
+        mount: '#game',
+        lessonId: 'order-' + order,
+        lessonTitle: lessonTitle,
+        questions: questions,
+        onFinish: function (result) {
+          var backUrl = '../../lesson.html?id=' + order;
+          window.location.href = backUrl;
+        }
+      });
+      game.start();
+    });
+  }
+
+  sel.addEventListener('change', function () {
+    var order = parseInt(sel.value.replace('lsn-', ''), 10) || 1;
+    launch(order);
+  });
+
+  launch(initOrder);
+</script>
+</body>
+</html>

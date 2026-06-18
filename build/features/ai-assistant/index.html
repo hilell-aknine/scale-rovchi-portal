@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>סקייל רווחי — עוזר AI אישי</title>
+  <link rel="stylesheet" href="../../../מותג/brand-system.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Heebo:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg)}
+    header{padding:.9rem 1.5rem;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:var(--surface)}
+    header img{height:38px}
+    .mode-pill{font-size:.72rem;background:var(--bg);color:var(--blue);border:1px solid var(--line);padding:3px 10px;border-radius:99px;font-weight:700}
+    main{flex:1;max-width:720px;width:100%;margin:0 auto;padding:1.75rem 1.25rem 4rem}
+    /* דמה של עמוד שיעור ברקע, כדי שהווידג'ט יראה בהקשר */
+    .video-frame{aspect-ratio:16/9;background:linear-gradient(135deg,var(--navy),var(--navy-soft));border-radius:18px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:3rem;box-shadow:var(--shadow)}
+    h1{font-family:var(--font-display);color:var(--navy);font-size:1.5rem;margin:1.4rem 0 .5rem}
+    .lesson-body{color:#3a4654;line-height:1.75;font-size:.96rem}
+    .lesson-body p{margin-bottom:1rem}
+    .hint{margin-top:1.6rem;background:#fff;border:1px dashed var(--blue);border-radius:14px;padding:1rem 1.1rem;color:var(--navy);font-size:.9rem}
+    .hint b{color:var(--blue)}
+    footer{padding:1.1rem;text-align:center;font-size:.78rem;color:var(--muted);border-top:1px solid var(--line)}
+  </style>
+</head>
+<body>
+<header>
+  <img src="../../../מותג/ScaleRivhi-LogoPack-NewColors/אתרים,אונליין,ווב,אפליקציות-SVG/Vector_Horizontal_Black.svg" alt="סקייל רווחי">
+  <span class="mode-pill" id="mode-pill">MOCK</span>
+</header>
+
+<main>
+  <div class="video-frame">▶</div>
+  <h1>שיעור 1 · מאיפה באמת מגיעים לידים</h1>
+  <div class="lesson-body">
+    <p>בשיעור הזה נבין שהבסיס לכל מנוע לידים יציב הוא הגדרה מדויקת של הלקוח האידיאלי.
+       בלי ההגדרה הזו, כל ליד שייכנס יהיה אקראי, וקשה יהיה למכור לו.</p>
+    <p>נדבר על מסע הליד: חשיפה → עניין → פנייה → שיחת מכירה, ולמה איכות חשובה יותר מכמות.</p>
+  </div>
+
+  <div class="hint">
+    <b>נסה את העוזר 👇</b> — לחץ על "שאל את המורה" בפינה השמאלית התחתונה ושאל אותו על השיעור.
+    הוא יודע על מה השיעור ויענה לפי התוכן. (במצב הדגמה התשובות מקומיות; בפורטל החי הוא יתחבר ל-LLM אמיתי.)
+  </div>
+</main>
+
+<footer>נבנה ע"י הלל</footer>
+
+<script src="ai-assistant.js"></script>
+<script>
+  document.getElementById('mode-pill').textContent = 'MOCK';
+
+  // הקשר השיעור שמוזרק לעוזר. בפורטל החי ה-summary/transcript יגיעו מ-Supabase.
+  var lesson = {
+    id: 'lsn-1',
+    title: 'מאיפה באמת מגיעים לידים',
+    summary: 'הבסיס למנוע לידים יציב הוא הגדרת הלקוח האידיאלי, ושמירה על איכות לפני כמות לאורך מסע הליד.',
+    example: 'דוגמה: יועץ עסקי שהגדיר שהלקוח שלו הוא "בעל עסק עם מחזור 50-200 אלף בחודש" — פתאום המסרים שלו דיברו רק אליהם, והלידים שנכנסו היו הרבה יותר רלוונטיים וקלים לסגירה.',
+    firstStep: 'הצעד הראשון: כתוב על דף מי הלקוח האידיאלי שלך — תחום, גודל עסק, והכאב המרכזי שלו. זה לבד יחדד לך את כל המסרים השיווקיים.',
+    suggestions: ['תן לי תקציר של השיעור', 'תן דוגמה מהחיים', 'מה הצעד הראשון שאני עושה?', 'למה איכות חשובה מכמות?'],
+    knowledge: [
+      { keywords: ['איכות','כמות','רלוונטי'], a: 'איכות חשובה מכמות כי ליד לא רלוונטי שורף לך זמן יקר בשיחות מכירה שלא יסגרו. עדיף 10 לידים מדויקים מ-100 אקראיים.' },
+      { keywords: ['לקוח אידיאלי','אווטאר','קהל','למי'], a: 'הלקוח האידיאלי הוא האדם הספציפי שהפתרון שלך הכי מתאים לו. ככל שתגדיר אותו חד יותר (תחום, גודל, כאב), כך המסרים שלך ימשכו בדיוק אותו.' },
+      { keywords: ['מסע','שלבים','משפך','חשיפה'], a: 'מסע הליד: קודם חשיפה (הוא נתקל בך), אז עניין (משהו תפס אותו), אז פנייה (הוא מרים יד), ורק בסוף שיחת מכירה. כל שלב בונה את הבא.' }
+    ]
+  };
+
+  new window.SRAssistant({ lesson: lesson, mode: 'MOCK' });
+</script>
+</body>
+</html>

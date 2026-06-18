@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>הניתוח האישי שלך | סקייל רווחי</title>
+  <link rel="stylesheet" href="../מותג/brand-system.css" />
+  <script src="js/survey-config.js"></script>
+  <style>
+    /* ניטרלי — סטיילינג סופי יגיע בסשן עיצוב נפרד */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body, 'Heebo', sans-serif);
+      background: var(--color-bg, #f8f8f8);
+      color: var(--color-text, #1a1a1a);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sr-page {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .sr-card {
+      background: var(--color-surface, #ffffff);
+      border-radius: var(--radius-card, 16px);
+      box-shadow: var(--shadow-card, 0 4px 24px rgba(0,0,0,0.08));
+      max-width: 640px;
+      width: 100%;
+      padding: 2.5rem 2rem;
+    }
+
+    /* --- שגיאה: concern חסר --- */
+    .sr-error-state {
+      text-align: center;
+    }
+    .sr-error-state h2 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--color-danger, #c0392b);
+    }
+    .sr-error-state p {
+      margin-bottom: 1.5rem;
+      color: var(--color-muted, #666);
+      line-height: 1.6;
+    }
+
+    /* --- תוכן ניתוח --- */
+    .sr-badge {
+      display: inline-block;
+      background: var(--color-accent, #1a1a1a);
+      color: var(--color-accent-text, #fff);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 0.3em 0.8em;
+      border-radius: 99px;
+      margin-bottom: 1.25rem;
+      text-transform: uppercase;
+    }
+
+    .sr-title {
+      font-family: var(--font-display, 'Heebo', sans-serif);
+      font-size: 1.75rem;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 1.25rem;
+      color: var(--color-heading, #1a1a1a);
+    }
+
+    .sr-divider {
+      border: none;
+      border-top: 1px solid var(--color-border, #e5e5e5);
+      margin: 1.5rem 0;
+    }
+
+    .sr-section-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-muted, #888);
+      margin-bottom: 0.5rem;
+    }
+
+    .sr-body {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--color-text, #1a1a1a);
+      margin-bottom: 1.5rem;
+    }
+
+    .sr-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .sr-meta-box {
+      background: var(--color-bg, #f8f8f8);
+      border-radius: var(--radius-sm, 10px);
+      padding: 1rem;
+    }
+
+    .sr-meta-box .sr-section-label {
+      margin-bottom: 0.4rem;
+    }
+
+    .sr-meta-box p {
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: var(--color-text, #1a1a1a);
+    }
+
+    /* --- כפתורים --- */
+    .sr-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .btn-primary {
+      display: block;
+      width: 100%;
+      padding: 0.9rem 1.5rem;
+      background: var(--color-primary, #1a1a1a);
+      color: var(--color-primary-text, #fff);
+      font-family: var(--font-body, 'Heebo', sans-serif);
+      font-size: 1rem;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      border: none;
+      border-radius: var(--radius-btn, 10px);
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+
+    .btn-secondary {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      background: transparent;
+      color: var(--color-muted, #666);
+      font-family: var(--font-body, 'Heebo', sans-serif);
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-align: center;
+      text-decoration: underline;
+      border: none;
+      cursor: pointer;
+      transition: color 0.15s ease;
+    }
+    .btn-secondary:hover { color: var(--color-text, #1a1a1a); }
+
+    /* --- פוטר --- */
+    footer {
+      text-align: center;
+      padding: 1.25rem;
+      font-size: 0.78rem;
+      color: var(--color-muted, #aaa);
+    }
+
+    @media (max-width: 480px) {
+      .sr-card { padding: 1.75rem 1.25rem; }
+      .sr-title { font-size: 1.4rem; }
+      .sr-meta-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<main class="sr-page" id="sr-main" role="main" aria-live="polite">
+  <!-- תוכן נטען דינמית על ידי JS -->
+</main>
+
+<footer>
+  נבנה ע"י הלל
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var concern = localStorage.getItem('sr_concern');
+  var main = document.getElementById('sr-main');
+
+  /* ---- מצב שגיאה: concern ריק ---- */
+  if (!concern) {
+    main.innerHTML =
+      '<div class="sr-card sr-error-state">' +
+        '<h2>לא נמצאו תשובות לשאלון</h2>' +
+        '<p>כדי לקבל את הניתוח האישי שלך, יש להשלים תחילה את שאלון ההתאמה.</p>' +
+        '<a href="survey.html" class="btn-primary">חזרה לשאלון</a>' +
+      '</div>';
+    return;
+  }
+
+  /* ---- בדיקת תלות: window.SURVEY ---- */
+  if (typeof window.SURVEY === 'undefined' ||
+      typeof window.SURVEY.analysisContent === 'undefined' ||
+      typeof window.SURVEY.lessonMap === 'undefined') {
+    main.innerHTML =
+      '<div class="sr-card sr-error-state">' +
+        '<h2>שגיאת טעינה</h2>' +
+        '<p>לא ניתן לטעון את מנוע ההתאמה. אנא רענן את הדף.</p>' +
+        '<a href="survey.html" class="btn-primary">חזרה לשאלון</a>' +
+      '</div>';
+    return;
+  }
+
+  var content = window.SURVEY.analysisContent[concern];
+  var lessonId = window.SURVEY.lessonMap[concern];
+
+  /* ---- מצב שגיאה: concern לא מוכר ---- */
+  if (!content) {
+    main.innerHTML =
+      '<div class="sr-card sr-error-state">' +
+        '<h2>לא נמצא ניתוח מתאים</h2>' +
+        '<p>סוג הדאגה שנשמר לא מוכר במערכת. נסה למלא את השאלון מחדש.</p>' +
+        '<a href="survey.html" class="btn-primary">חזרה לשאלון</a>' +
+      '</div>';
+    return;
+  }
+
+  /* ---- בניית כתובת URL לשיעור המומלץ ---- */
+  var lessonHref = lessonId
+    ? 'lesson.html?id=' + encodeURIComponent(lessonId)
+    : 'courses.html';
+
+  /* ---- רינדור הניתוח ---- */
+  var goalHtml = content.goal
+    ? '<div class="sr-meta-box">' +
+        '<div class="sr-section-label">המטרה שלך</div>' +
+        '<p>' + _esc(content.goal) + '</p>' +
+      '</div>'
+    : '';
+
+  var recommendationHtml = content.recommendation
+    ? '<div class="sr-meta-box">' +
+        '<div class="sr-section-label">ההמלצה שלנו</div>' +
+        '<p>' + _esc(content.recommendation) + '</p>' +
+      '</div>'
+    : '';
+
+  var metaGrid = (goalHtml || recommendationHtml)
+    ? '<div class="sr-meta-grid">' + goalHtml + recommendationHtml + '</div>'
+    : '';
+
+  main.innerHTML =
+    '<div class="sr-card">' +
+      '<span class="sr-badge">הניתוח האישי שלך</span>' +
+      '<h1 class="sr-title">' + _esc(content.title) + '</h1>' +
+      '<hr class="sr-divider" />' +
+      '<div class="sr-section-label">אבחון</div>' +
+      '<p class="sr-body">' + _esc(content.body) + '</p>' +
+      metaGrid +
+      '<div class="sr-actions">' +
+        '<a href="' + lessonHref + '" class="btn-primary">התחל מהשיעור שמתאים לך</a>' +
+        '<a href="courses.html" class="btn-secondary">עבור למרכז הלמידה</a>' +
+      '</div>' +
+    '</div>';
+
+  /* ---- עזר: XSS escape ---- */
+  function _esc(str) {
+    if (typeof str !== 'string') return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+})();
+</script>
+
+</body>
+</html>

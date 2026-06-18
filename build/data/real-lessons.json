@@ -1,0 +1,13 @@
+{
+  "_source": "Base44 — entity Lesson (המשפך החינמי). נשאב 18.06.2026. תוכן אמיתי — לא להמציא.",
+  "_note": "embed_url בפורמט player.vimeo.com עם hash הפרטיות. שיעור 7 ציבורי (בלי hash).",
+  "lessons": [
+    { "order": 1, "title": "איזה משפך שיווקי מתאים לך?", "vimeo_id": "1195965488", "vimeo_hash": "94ebc6feec", "embed_url": "https://player.vimeo.com/video/1195965488?h=94ebc6feec", "source_url": "https://vimeo.com/1195965488/94ebc6feec" },
+    { "order": 2, "title": "איך ליישם personal brand בפועל", "vimeo_id": "1193568308", "vimeo_hash": "9c813bb67d", "embed_url": "https://player.vimeo.com/video/1193568308?h=9c813bb67d", "source_url": "https://vimeo.com/1193568308/9c813bb67d" },
+    { "order": 3, "title": "פורמטים להנגשת תוכן", "vimeo_id": "1192963645", "vimeo_hash": "b6a16e08bc", "embed_url": "https://player.vimeo.com/video/1192963645?h=b6a16e08bc", "source_url": "https://vimeo.com/1192963645/b6a16e08bc" },
+    { "order": 4, "title": "איך למצוא את ה-A וB טכני", "vimeo_id": "1190424686", "vimeo_hash": "bc28e24dca", "embed_url": "https://player.vimeo.com/video/1190424686?h=bc28e24dca", "source_url": "https://vimeo.com/1190424686/bc28e24dca" },
+    { "order": 5, "title": "הכלים הישנים", "vimeo_id": "1190412577", "vimeo_hash": "b065e8f310", "embed_url": "https://player.vimeo.com/video/1190412577?h=b065e8f310", "source_url": "https://vimeo.com/1190412577/b065e8f310" },
+    { "order": 6, "title": "איך ליצור מודעות ממומנות ל100k", "vimeo_id": "1190416923", "vimeo_hash": "8e1169cbea", "embed_url": "https://player.vimeo.com/video/1190416923?h=8e1169cbea", "source_url": "https://vimeo.com/1190416923/8e1169cbea" },
+    { "order": 7, "title": "מודעות לקהל קר", "vimeo_id": "1025943016", "vimeo_hash": null, "embed_url": "https://player.vimeo.com/video/1025943016", "source_url": "https://vimeo.com/1025943016" }
+  ]
+}

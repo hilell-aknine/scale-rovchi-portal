@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>סקייל רווחי — מערכת גיימיפיקציה (דמו)</title>
+  <link rel="stylesheet" href="../../../מותג/brand-system.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Heebo:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg)}
+    header{padding:1rem 1.5rem;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:var(--surface)}
+    header img{height:40px}
+    .mode-pill{font-size:.72rem;background:var(--bg);color:var(--blue);border:1px solid var(--line);padding:3px 10px;border-radius:99px;font-weight:700}
+    main{flex:1;max-width:760px;width:100%;margin:0 auto;padding:1.75rem 1.25rem 3rem}
+    h1{font-family:var(--font-display);color:var(--navy);font-size:1.5rem;margin-bottom:.35rem}
+    .lead{color:var(--muted);font-size:.92rem;margin-bottom:1.75rem;line-height:1.6}
+    .block-label{font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:1.75rem 0 .7rem}
+    .controls{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.5rem;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:1.1rem}
+    .controls button{flex:1 1 auto;min-width:135px;background:var(--navy);color:#fff;border:0;border-radius:10px;padding:.7rem .9rem;font-weight:700;font-size:.85rem;font-family:inherit;cursor:pointer;transition:transform .15s,background .15s}
+    .controls button:hover{transform:translateY(-2px)}
+    .controls button.accent{background:var(--grad-blue)}
+    .controls button.ghost{background:var(--bg);color:var(--navy);border:1px solid var(--line)}
+    .note{margin-top:1.5rem;font-size:.8rem;color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:12px;padding:.85rem 1rem;line-height:1.6}
+    footer{padding:1.1rem;text-align:center;font-size:.78rem;color:var(--muted);border-top:1px solid var(--line)}
+  </style>
+</head>
+<body>
+<header>
+  <img src="../../../מותג/ScaleRivhi-LogoPack-NewColors/אתרים,אונליין,ווב,אפליקציות-SVG/Vector_Horizontal_Black.svg" alt="סקייל רווחי">
+  <span class="mode-pill" id="mode-pill">MOCK</span>
+</header>
+
+<main>
+  <h1>מערכת גיימיפיקציה</h1>
+  <p class="lead">מנוע משותף ל-XP, רמות, תגים ורצפים. אותו מודול נטען בכל עמוד בפורטל —
+    כאן הוא רץ standalone עם נתוני דמה. שחק עם הכפתורים למטה כדי לראות איך זה מתנהג.</p>
+
+  <div class="block-label">סרגל קומפקטי (HUD) — נשתל בראש כל עמוד</div>
+  <div id="hud"></div>
+
+  <div class="block-label">לוח מלא — לעמוד הפרופיל</div>
+  <div id="full"></div>
+
+  <div class="controls">
+    <button class="accent" data-act="view">+ צפייה בשיעור (10XP)</button>
+    <button class="accent" data-act="complete">+ השלמת שיעור (50XP)</button>
+    <button class="accent" data-act="game">+ סיום תרגול (40XP)</button>
+    <button data-act="big">+ 200XP (קפיצת רמה)</button>
+    <button data-act="streak">דמה: עוד יום ברצף</button>
+    <button class="ghost" data-act="reset">איפוס</button>
+  </div>
+
+  <div class="note">
+    <strong>נקודת חיבור:</strong> במצב LIVE מעבירים ל-<code>SRGamification.init()</code> את
+    <code>onLoad</code>/<code>onSave</code> שמחברים את המצב לטבלת <code>user_gamification</code> ב-Supabase.
+    פירוט מלא ב-<code>features/INTEGRATION.md</code>.
+  </div>
+</main>
+
+<footer>נבנה ע"י הלל</footer>
+
+<script src="gamification.js"></script>
+<script>
+  var G = window.SRGamification.init({ viewerId: 'demo@scale', mode: 'MOCK' });
+  document.getElementById('mode-pill').textContent = G.mode;
+  G.renderHUD('#hud');
+  G.renderFull('#full');
+
+  // כפתור "עוד יום ברצף" — מזייף את lastActiveDay ליום אתמול כדי לראות עלייה
+  function fakePrevDay() {
+    var d = new Date(); d.setDate(d.getDate() - 1);
+    var y = d.getFullYear(), m = ('0'+(d.getMonth()+1)).slice(-2), day = ('0'+d.getDate()).slice(-2);
+    G.state.lastActiveDay = y+'-'+m+'-'+day;
+  }
+
+  document.querySelector('.controls').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    switch (b.dataset.act) {
+      case 'view':     G.recordActivity('lesson_view');     break;
+      case 'complete': G.recordActivity('lesson_complete'); break;
+      case 'game':     G.recordActivity('game_complete');   break;
+      case 'big':      G.addXP(200, 'דמו');                 break;
+      case 'streak':   fakePrevDay(); G.recordActivity('daily_login'); break;
+      case 'reset':    G.reset();                            break;
+    }
+  });
+</script>
+</body>
+</html>

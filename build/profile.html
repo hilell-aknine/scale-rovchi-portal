@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>הפרופיל שלי — סקייל רווחי</title>
+  <link rel="stylesheet" href="../מותג/brand-system.css" />
+  <style>
+    body {
+      font-family: var(--font-body, sans-serif);
+      background: var(--color-bg, #f9f9f9);
+      color: var(--color-text, #111);
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      padding: var(--space-md, 1rem) var(--space-lg, 2rem);
+      border-bottom: 1px solid var(--color-border, #e0e0e0);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header a {
+      color: var(--color-primary, #1a1a1a);
+      text-decoration: none;
+      font-size: var(--text-sm, 0.9rem);
+    }
+
+    main {
+      max-width: 640px;
+      margin: var(--space-xl, 3rem) auto;
+      padding: 0 var(--space-lg, 2rem);
+    }
+
+    h1 {
+      font-family: var(--font-display, sans-serif);
+      font-size: var(--text-xl, 1.75rem);
+      margin-bottom: var(--space-lg, 2rem);
+    }
+
+    .card {
+      background: var(--color-surface, #fff);
+      border: 1px solid var(--color-border, #e0e0e0);
+      border-radius: var(--radius-md, 8px);
+      padding: var(--space-lg, 2rem);
+      margin-bottom: var(--space-md, 1rem);
+    }
+
+    .card h2 {
+      font-size: var(--text-md, 1.1rem);
+      margin: 0 0 var(--space-sm, 0.5rem);
+      color: var(--color-muted, #555);
+      font-weight: 600;
+    }
+
+    .card p {
+      margin: 0;
+      font-size: var(--text-base, 1rem);
+      word-break: break-all;
+    }
+
+    .progress-bar-wrap {
+      background: var(--color-border, #e0e0e0);
+      border-radius: 999px;
+      height: 10px;
+      margin-top: var(--space-sm, 0.5rem);
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--color-primary, #1a1a1a);
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+
+    .progress-label {
+      font-size: var(--text-sm, 0.85rem);
+      color: var(--color-muted, #555);
+      margin-top: 0.3rem;
+    }
+
+    .btn-logout {
+      display: inline-block;
+      margin-top: var(--space-lg, 2rem);
+      padding: var(--space-sm, 0.5rem) var(--space-md, 1.25rem);
+      background: var(--color-danger, #c0392b);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm, 6px);
+      cursor: pointer;
+      font-size: var(--text-base, 1rem);
+      font-family: inherit;
+    }
+
+    .btn-logout:hover {
+      opacity: 0.9;
+    }
+
+    .error-msg {
+      color: var(--color-danger, #c0392b);
+      font-size: var(--text-sm, 0.85rem);
+      margin-top: var(--space-sm, 0.5rem);
+    }
+
+    footer {
+      text-align: center;
+      padding: var(--space-lg, 2rem);
+      font-size: var(--text-sm, 0.8rem);
+      color: var(--color-muted, #888);
+      border-top: 1px solid var(--color-border, #e0e0e0);
+      margin-top: var(--space-xl, 4rem);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="courses.html">← חזרה למרכז הלמידה</a>
+    <span>סקייל רווחי</span>
+  </header>
+
+  <main>
+    <h1>הפרופיל שלי</h1>
+
+    <!-- פרטי משתמש -->
+    <div class="card">
+      <h2>כתובת מייל</h2>
+      <p id="viewer-email">טוען...</p>
+    </div>
+
+    <!-- התקדמות -->
+    <div class="card">
+      <h2>התקדמות כללית</h2>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+      </div>
+      <p class="progress-label" id="progress-label">טוען נתוני התקדמות...</p>
+      <p class="error-msg" id="progress-error" style="display:none"></p>
+    </div>
+
+    <!-- התנתקות -->
+    <button class="btn-logout" id="btn-logout">התנתק</button>
+  </main>
+
+  <footer>נבנה ע"י הלל</footer>
+
+  <!-- סקריפטים -->
+  <script src="js/supabase-client.js"></script>
+  <script src="js/access.js"></script>
+  <script>
+    // שלב 1: בדיקת גישה
+    window.access.requireAccess();
+
+    // שלב 2: הצגת מייל
+    const viewer = window.access.getViewer();
+    document.getElementById('viewer-email').textContent = viewer || '—';
+
+    // שלב 3: טעינת התקדמות
+    (async function loadProgress() {
+      const errorEl = document.getElementById('progress-error');
+      const labelEl = document.getElementById('progress-label');
+      const barEl = document.getElementById('progress-bar');
+
+      try {
+        if (
+          typeof window.portalData === 'undefined' ||
+          typeof window.portalData.getProgress !== 'function'
+        ) {
+          labelEl.textContent = 'נתוני התקדמות אינם זמינים כרגע.';
+          return;
+        }
+
+        const progress = await window.portalData.getProgress(viewer);
+
+        // progress צפוי: { completed: number, total: number }
+        if (progress && typeof progress.total === 'number' && progress.total > 0) {
+          const pct = Math.round((progress.completed / progress.total) * 100);
+          barEl.style.width = pct + '%';
+          labelEl.textContent =
+            progress.completed + ' מתוך ' + progress.total + ' שיעורים הושלמו (' + pct + '%)';
+        } else {
+          labelEl.textContent = 'טרם השלמת שיעורים.';
+          barEl.style.width = '0%';
+        }
+      } catch (err) {
+        errorEl.style.display = 'block';
+        errorEl.textContent = 'שגיאה בטעינת ההתקדמות. נסה לרענן.';
+        labelEl.textContent = '';
+        console.error('[profile] getProgress error:', err);
+      }
+    })();
+
+    // שלב 4: כפתור התנתקות
+    document.getElementById('btn-logout').addEventListener('click', function () {
+      window.access.logout();
+    });
+  </script>
+
+</body>
+</html>

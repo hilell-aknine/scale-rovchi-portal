@@ -1,0 +1,20 @@
+{
+  "_source": "Base44 lib/surveyConfig.js — ANALYSES + RECOMMENDED_LESSONS. נשאב 18.06.2026.",
+  "_pending": [
+    "body + recommendation מילה-במילה (כרגע תמצית בלבד — לא להמציא את המלא).",
+    "video_url לכל lesson_id מומלץ (לשלוף מ-Base44 לפי id).",
+    "2 שיעורים מומלצים (no_leads, hard_to_sell) אינם ב-7 שיעורי המשפך שנשלפו קודם — לאמת שהם קיימים ואיפה."
+  ],
+  "recommendedLessonMap": {
+    "no_leads":                 { "lesson_id": "69fb172226f8a8dc7a299c0f", "title": "PERSONAL BRAND ב2026", "video_url": "PENDING" },
+    "irrelevant_leads_paid":    { "lesson_id": "69fdb0d061b1d68cdc1682b0", "title": "איך ליצור מודעות ממומנות ל100k", "video_url": "PENDING" },
+    "irrelevant_leads_no_paid": { "lesson_id": "6a0ad15fd255b29c89482e43", "title": "פורמטים להנגשת תוכן", "video_url": "PENDING" },
+    "hard_to_sell":             { "lesson_id": "69fb172226f8a8dc7a299c0c", "title": "איך לגרום לאנשים לקבל החלטות מהר (קונפליקט)", "video_url": "PENDING" }
+  },
+  "analyses": {
+    "no_leads":                 { "title": "אין לידים = Personal Brand 2026", "body_summary": "קשה לגדול בלי לידים. התוכן לא יוצר מספיק חיבור.", "goal": "יצירת ביקוש גבוה ונוכחות אישית חזקה.", "recommendation": "PENDING_VERBATIM" },
+    "irrelevant_leads_paid":    { "title": "לידים לא רלוונטיים + ממומן", "body_summary": "הבעיה במסר של המודעה שמושכת אנשים לא מדויקים.", "goal": "מודעות שמושכות את האנשים המתאימים באמת.", "recommendation": "PENDING_VERBATIM" },
+    "irrelevant_leads_no_paid": { "title": "לידים לא רלוונטיים + לא ממומן", "body_summary": "התוכן לא משדר את הערך המדויק או את סוג הלקוח שאתה מחפש.", "goal": "משיכת האנשים הנכונים בצורה אורגנית.", "recommendation": "PENDING_VERBATIM" },
+    "hard_to_sell":             { "title": "קשה במכירות = שיעור הקונפליקט", "body_summary": "הבעיה היא בשיווק שלא מנטרל התנגדויות מספיק מוקדם.", "goal": "שיווק שמכין את הקרקע למכירה קלה וטבעית.", "recommendation": "PENDING_VERBATIM" }
+  }
+}

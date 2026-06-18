@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>שאלון התאמה — סקייל רווחי</title>
+  <link rel="stylesheet" href="../מותג/brand-system.css">
+  <style>
+    /* סטיילינג ניטרלי בלבד — העיצוב יחודד בסשן נפרד. רק tokens מהמותג. */
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+    .survey-shell {
+      width: 100%; max-width: 560px;
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 2rem 1.75rem;
+    }
+    .progress-wrap { margin-bottom: 1.5rem; }
+    .progress-meta { display: flex; justify-content: space-between; font-size: .9rem; color: var(--muted); margin-bottom: .5rem; }
+    .progress-bar { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0; background: var(--grad-brand); border-radius: 99px; transition: width .3s ease; }
+    .q-label { font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; color: var(--navy); margin: 0 0 1.5rem; line-height: 1.4; }
+    .options { display: flex; flex-direction: column; gap: .75rem; }
+    .option-btn {
+      width: 100%; text-align: right; padding: 1rem 1.25rem;
+      background: var(--bg); color: var(--navy);
+      border: 2px solid var(--line); border-radius: var(--radius-sm);
+      font-family: var(--font-body); font-size: 1.05rem; font-weight: 600; cursor: pointer;
+      transition: border-color .2s, transform .15s, background .2s;
+    }
+    .option-btn:hover { border-color: var(--blue); transform: translateY(-2px); }
+    .option-btn.selected { border-color: var(--navy); background: #fff; }
+    .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.75rem; gap: 1rem; }
+    .btn-back { background: none; border: 0; color: var(--muted); font-family: var(--font-body); font-weight: 600; cursor: pointer; font-size: .95rem; }
+    .btn-back:disabled { opacity: 0; pointer-events: none; }
+    .gate-note { font-size: .85rem; color: var(--muted); margin-top: 1rem; text-align: center; }
+    .state-msg { text-align: center; padding: 1rem; color: var(--muted); font-weight: 600; }
+    .state-msg.error { color: var(--red); }
+    footer { position: fixed; bottom: .75rem; left: 0; right: 0; text-align: center; font-size: .8rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <main class="survey-shell" id="shell">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span id="progressText">שאלה 1</span>
+        <span id="progressCount"></span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+
+    <h1 class="q-label" id="qLabel"></h1>
+    <div class="options" id="options"></div>
+
+    <div class="nav-row">
+      <button class="btn-back" id="btnBack" disabled>← חזרה</button>
+      <span></span>
+    </div>
+
+    <p class="gate-note">השאלון הוא השער. חובה לענות על כל השאלות כדי להמשיך לתוכן.</p>
+    <div class="state-msg" id="stateMsg" style="display:none;"></div>
+  </main>
+
+  <footer>נבנה ע"י הלל</footer>
+
+  <script src="js/supabase-client.js"></script>
+  <script src="js/survey-config.js"></script>
+  <script>
+    (function () {
+      var QUESTIONS = window.SURVEY.QUESTIONS;
+      var answers = {};        // id -> value
+      var idx = 0;             // current question index
+
+      var qLabel      = document.getElementById('qLabel');
+      var optionsEl   = document.getElementById('options');
+      var btnBack     = document.getElementById('btnBack');
+      var progressFill = document.getElementById('progressFill');
+      var progressText = document.getElementById('progressText');
+      var progressCount = document.getElementById('progressCount');
+      var stateMsg    = document.getElementById('stateMsg');
+
+      function render() {
+        var q = QUESTIONS[idx];
+        var total = QUESTIONS.length;
+
+        progressText.textContent = 'שאלה ' + (idx + 1);
+        progressCount.textContent = (idx + 1) + ' / ' + total;
+        progressFill.style.width = ((idx) / total * 100) + '%';
+
+        qLabel.textContent = q.label;
+        btnBack.disabled = (idx === 0);
+
+        optionsEl.innerHTML = '';
+        q.options.forEach(function (opt) {
+          var btn = document.createElement('button');
+          btn.className = 'option-btn';
+          btn.textContent = opt.label;
+          if (answers[q.id] === opt.value) btn.classList.add('selected');
+          btn.addEventListener('click', function () { choose(q, opt.value); });
+          optionsEl.appendChild(btn);
+        });
+      }
+
+      function choose(q, value) {
+        // gate: בחירה היא הדרך היחידה להתקדם
+        answers[q.id] = value;
+        if (idx < QUESTIONS.length - 1) {
+          idx++;
+          render();
+        } else {
+          finish();
+        }
+      }
+
+      btnBack.addEventListener('click', function () {
+        if (idx > 0) { idx--; render(); }
+      });
+
+      function setState(msg, isError) {
+        stateMsg.textContent = msg;
+        stateMsg.className = 'state-msg' + (isError ? ' error' : '');
+        stateMsg.style.display = 'block';
+      }
+
+      async function finish() {
+        // gate סופי: לוודא שכל השאלות נענו
+        var missing = QUESTIONS.filter(function (q) {
+          return typeof answers[q.id] === 'undefined';
+        });
+        if (missing.length) { idx = QUESTIONS.indexOf(missing[0]); render(); return; }
+
+        optionsEl.innerHTML = '';
+        qLabel.textContent = 'שומר את התשובות שלך...';
+        progressFill.style.width = '100%';
+        progressText.textContent = 'סיום';
+
+        var payload = {
+          uploads_content:   answers.uploads_content,
+          does_paid_ads:     answers.does_paid_ads,
+          marketing_concern: answers.marketing_concern,
+          has_team:          answers.has_team,
+          income_goal:       answers.income_goal,
+          user_email:        localStorage.getItem('sr_user_email')
+        };
+
+        try {
+          await window.portalData.saveSurveyResponse(payload);
+          localStorage.setItem('sr_concern', answers.marketing_concern);
+          // שמירת lesson_id המומלץ לשימוש ב-analysis.html
+          var lessonEntry = window.SURVEY.lessonMap[answers.marketing_concern];
+          if (lessonEntry && lessonEntry.lesson_id) {
+            localStorage.setItem('sr_lesson_id', lessonEntry.lesson_id);
+          }
+          window.location.href = 'analysis.html';
+        } catch (err) {
+          setState('משהו השתבש בשמירה. נסה שוב בעוד רגע.', true);
+          qLabel.textContent = 'שאלון התאמה';
+        }
+      }
+
+      render();
+    })();
+  </script>
+</body>
+</html>

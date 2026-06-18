@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>סקייל רווחי — טבלת מובילים</title>
+  <link rel="stylesheet" href="../../../מותג/brand-system.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Heebo:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg)}
+    header{padding:.9rem 1.5rem;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:var(--surface)}
+    header img{height:38px}
+    .mode-pill{font-size:.72rem;background:var(--bg);color:var(--blue);border:1px solid var(--line);padding:3px 10px;border-radius:99px;font-weight:700}
+    main{flex:1;max-width:620px;width:100%;margin:0 auto;padding:1.5rem 1.1rem 3rem}
+
+    #board{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:1.3rem;box-shadow:var(--shadow)}
+    .lb-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
+    .lb-title{font-family:var(--font-display);font-size:1.35rem;font-weight:800;color:var(--navy)}
+    .lb-period{font-size:.8rem;color:var(--muted);margin-top:3px}
+    .lb-myrank{flex:0 0 auto;width:52px;height:52px;border-radius:14px;background:var(--grad-blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem}
+
+    .lb-tabs{display:flex;gap:.4rem;background:var(--bg);border-radius:12px;padding:4px;margin-bottom:.9rem}
+    .lb-tab{flex:1;border:0;background:transparent;border-radius:9px;padding:.55rem .3rem;font-family:inherit;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;transition:all .15s}
+    .lb-tab .lb-tab-ico{font-size:1rem}
+    .lb-tab.active{background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(12,37,66,.08)}
+    .lb-metric-desc{font-size:.8rem;color:var(--muted);text-align:center;margin-bottom:1.1rem}
+
+    /* podium */
+    .lb-podium{display:flex;align-items:flex-end;justify-content:center;gap:.7rem;margin-bottom:1.3rem}
+    .lb-pod{flex:1;max-width:150px;text-align:center;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:.8rem .4rem .5rem;position:relative}
+    .lb-pod.me{border-color:var(--blue);background:#fff}
+    .lb-pod-1{transform:translateY(-12px);border-color:var(--blue)}
+    .lb-pod-medal{font-size:1.5rem;line-height:1}
+    .lb-avatar{width:46px;height:46px;margin:.45rem auto .35rem;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem}
+    .lb-avatar.sm{width:38px;height:38px;font-size:.85rem;margin:0}
+    .lb-pod-name{font-size:.82rem;font-weight:700;color:var(--navy);line-height:1.25}
+    .lb-pod-val{font-size:.82rem;color:var(--blue);font-weight:800;margin-top:2px}
+    .lb-pod-1 .lb-pod-bar{height:34px;background:var(--grad-blue)}
+    .lb-pod-2 .lb-pod-bar{height:22px;background:var(--blue-light)}
+    .lb-pod-3 .lb-pod-bar{height:14px;background:var(--muted)}
+    .lb-pod-bar{margin:.5rem -.4rem -.5rem;border-radius:0 0 13px 13px;opacity:.85}
+
+    /* list */
+    .lb-list{display:flex;flex-direction:column;gap:.4rem}
+    .lb-row{display:flex;align-items:center;gap:.8rem;padding:.6rem .7rem;border-radius:12px;background:#fff;border:1px solid transparent}
+    .lb-row:nth-child(odd){background:var(--bg)}
+    .lb-row.me{border-color:var(--blue);background:#eef7fb}
+    .lb-rank{flex:0 0 24px;text-align:center;font-weight:800;color:var(--muted);font-size:.92rem}
+    .lb-name{flex:1;font-weight:600;color:var(--navy);font-size:.92rem;display:flex;align-items:center;gap:.4rem}
+    .lb-you{font-size:.68rem;background:var(--blue);color:#fff;padding:1px 8px;border-radius:99px;font-weight:700}
+    .lb-val{font-weight:800;color:var(--navy);font-size:.95rem}
+    .lb-suffix{font-size:.7rem;color:var(--muted);font-weight:600}
+    .lb-foot{font-size:.76rem;color:var(--muted);text-align:center;margin-top:1.1rem;line-height:1.5}
+
+    .sim{margin-top:1.2rem;display:flex;gap:.6rem;flex-wrap:wrap}
+    .sim button{flex:1;min-width:140px;background:var(--bg);border:1px solid var(--line);color:var(--navy);border-radius:10px;padding:.65rem;font-family:inherit;font-weight:700;font-size:.82rem;cursor:pointer}
+    footer{padding:1.1rem;text-align:center;font-size:.78rem;color:var(--muted);border-top:1px solid var(--line)}
+  </style>
+</head>
+<body>
+<header>
+  <img src="../../../מותג/ScaleRivhi-LogoPack-NewColors/אתרים,אונליין,ווב,אפליקציות-SVG/Vector_Horizontal_Black.svg" alt="סקייל רווחי">
+  <span class="mode-pill" id="mode-pill">MOCK</span>
+</header>
+
+<main>
+  <div id="board"></div>
+
+  <div class="sim">
+    <button id="sim-xp">דמה: הרווחתי 300XP</button>
+    <button id="sim-view">דמה: צפיתי בשיעור</button>
+  </div>
+</main>
+
+<footer>נבנה ע"י הלל</footer>
+
+<script src="../gamification/gamification.js"></script>
+<script src="leaderboard.js"></script>
+<script>
+  var G = window.SRGamification.init({ viewerId: 'demo@scale', mode: 'MOCK' });
+  document.getElementById('mode-pill').textContent = G.mode;
+
+  var board = new window.SRLeaderboard({ mount: '#board', metric: 'xp', meName: 'דנה (את)' });
+  board.render();
+
+  // הדגמה: שינוי ב-XP של המשתמש משתקף בדירוג
+  document.getElementById('sim-xp').addEventListener('click', function () {
+    G.addXP(300, 'דמו'); board._buildMe(); board.render();
+  });
+  document.getElementById('sim-view').addEventListener('click', function () {
+    G.recordActivity('lesson_view'); board._buildMe(); board.render();
+  });
+</script>
+</body>
+</html>

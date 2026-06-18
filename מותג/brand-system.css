@@ -1,0 +1,61 @@
+/* ════════════════════════════════════════════════════════════
+   מערכת מותג — סקייל רווחי (Scale Rivhi)
+   צבעים חולצו מקבצי הלוגו הרשמיים (LogoPack-NewColors), 18.06.2026.
+   זה ה-SSOT לעיצוב. כל מסך מייבא את הקובץ הזה. לא לקודד צבעים ידנית.
+   ════════════════════════════════════════════════════════════ */
+:root{
+  /* ---- צבעי ליבה ---- */
+  --navy:        #0c2542;   /* ראשי: טקסט, כותרות, רקעים כהים */
+  --ink:         #22221e;   /* שחור-מונו (וריאנט לוגו שחור) */
+
+  /* ---- אקסנט כחול (חצי האייקון השמאלי) ---- */
+  --blue:        #0992c2;
+  --blue-light:  #5b99c3;
+  --grad-blue:   linear-gradient(160deg, #0992c2, #5b99c3);
+
+  /* ---- אקסנט אדום (חצי האייקון הימני) ---- */
+  --red:         #bf092f;
+  --red-dark:    #911220;
+  --grad-red:    linear-gradient(160deg, #bf092f, #911220);
+
+  /* ---- גרדיאנט המותג המלא (כחול→אדום, כמו האייקון) ---- */
+  --grad-brand:  linear-gradient(120deg, #0992c2 0%, #5b99c3 45%, #bf092f 75%, #911220 100%);
+
+  /* ---- ניטרלים (נגזרים, להשלמת מערכת) ---- */
+  --bg:          #f5f8fc;   /* רקע עמוד בהיר */
+  --surface:     #ffffff;   /* קלפים */
+  --navy-soft:   #1a3a5c;   /* נייבי בהיר יותר למצבי hover */
+  --muted:       #5a6b7a;   /* טקסט משני */
+  --line:        rgba(12,37,66,.12);
+  --shadow:      0 10px 30px rgba(12,37,66,.10);
+
+  /* ---- טיפוגרפיה ----
+     ⚠️ פריט פתוח: הפונט הרשמי של המותג הוא outlines בלוגו, שמו לא ידוע עדיין.
+     עד שרותם תמסור את קובץ הפונט — סטאק עברי נקי כברירת מחדל. */
+  --font-display: 'Heebo', 'Assistant', system-ui, sans-serif;  /* כותרות */
+  --font-body:    'Assistant', 'Heebo', system-ui, sans-serif;  /* גוף */
+
+  /* ---- רדיוסים/מרווחים ---- */
+  --radius:   18px;
+  --radius-sm: 12px;
+}
+
+/* בסיס RTL */
+html{ direction: rtl; }
+body{ background: var(--bg); color: var(--navy); font-family: var(--font-body); }
+
+/* עזרי מותג נפוצים */
+.brand-grad-text{
+  background: var(--grad-brand);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.btn-primary{
+  background: var(--navy); color:#fff; border:0; border-radius: var(--radius-sm);
+  padding: .9rem 1.6rem; font-weight:700; cursor:pointer;
+  transition: transform .2s, background .2s;
+}
+.btn-primary:hover{ background: var(--navy-soft); transform: translateY(-2px); }
+.btn-accent{
+  background: var(--grad-red); color:#fff; border:0; border-radius: var(--radius-sm);
+  padding: .9rem 1.6rem; font-weight:700; cursor:pointer;
+}
