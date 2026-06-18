@@ -113,8 +113,10 @@
 
 <footer>נבנה ע"י הלל</footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-client.js"></script>
 <script src="js/content.js"></script>
+<script src="js/survey-config.js"></script>
 <script>
 (function () {
   /* ─── Helpers ─── */
@@ -124,6 +126,7 @@
 
   /* ─── URL params ─── */
   const params      = new URLSearchParams(location.search);
+  const recParam    = params.get('rec');
   const orderParam  = parseInt(params.get('order') || '1', 10);
   const lessonOrder = isNaN(orderParam) || orderParam < 1 ? 1 : orderParam;
 
@@ -234,6 +237,54 @@
 
   /* ─── Boot ─── */
   async function init() {
+
+    /* ═══════════════════════════════════════════════════
+     * ?rec=<concern>  — שיעור מומלץ מהשאלון
+     *
+     * concern ∈ { no_leads | irrelevant_leads_paid |
+     *             irrelevant_leads_no_paid | hard_to_sell }
+     *
+     * מקור: window.SURVEY.lessonMap[concern]
+     *   → { title: string, video_url: string }
+     *   video_url מגיע **כמו שהוא** מ-survey-config.js
+     *   (player.vimeo.com עם ?h= או בלי) — מועבר ישר ל-buildEmbed.
+     * ═══════════════════════════════════════════════════ */
+    if (recParam) {
+      const validConcerns = ['no_leads', 'irrelevant_leads_paid', 'irrelevant_leads_no_paid', 'hard_to_sell'];
+      if (!validConcerns.includes(recParam)) {
+        showError('קוד הבעיה שהתקבל אינו מוכר. נסה לחזור לשאלון ולנסות שנית.');
+        return;
+      }
+
+      /* וודא ש-survey-config.js נטען */
+      if (!window.SURVEY || !window.SURVEY.lessonMap) {
+        showError('הגדרות השאלון לא נטענו. רענן את הדף ונסה שוב.');
+        return;
+      }
+
+      const recLesson = window.SURVEY.lessonMap[recParam];
+      if (!recLesson || !recLesson.video_url) {
+        showError('לא נמצא שיעור מומלץ לבעיה זו. פנה לתמיכה.');
+        return;
+      }
+
+      /* כותרת */
+      const title = recLesson.title || 'שיעור מומלץ';
+      qs('#lesson-title').textContent = title;
+      document.title = title + ' — סקייל רווחי';
+
+      /* נגן (video_url כמו שהוא) */
+      buildEmbed(recLesson.video_url);
+
+      /* הצג תוכן, הסתר טעינה; אין key_points לשיעור מומלץ */
+      hide(qs('#state-loading'));
+      show(qs('#lesson-content'));
+      return;
+    }
+
+    /* ═══════════════════════════════════════════════════
+     * מסלול רגיל — ?order=N דרך SRContent
+     * ═══════════════════════════════════════════════════ */
     try {
       /* Wait for SRContent to finish loading its data */
       if (typeof window.SRContent === 'undefined' || typeof window.SRContent.ready === 'undefined') {
