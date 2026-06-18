@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+  <!--sr-funnel-gate--><script>(function(){try{if(location.search.indexOf("dev=1")>-1)return;var e=localStorage.getItem("sr_user_email");var p=localStorage.getItem("sr_concern")||localStorage.getItem("sr_lesson_id")||localStorage.getItem("sr_access_token");if(!e){location.replace("index.html");return;}if(!p){location.replace("survey.html");return;}}catch(_){}})();</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>הפרופיל שלי — סקייל רווחי</title>
@@ -141,6 +142,15 @@
       <p class="error-msg" id="progress-error" style="display:none"></p>
     </div>
 
+    <!-- המורה האישי -->
+    <div class="card" style="margin-top: var(--space-lg, 2rem);">
+      <h2>המורה האישי שלך 🎓</h2>
+      <p style="font-size: var(--text-sm, 0.9rem); color: var(--color-muted, #555); margin-bottom: var(--space-md, 1rem);">
+        שאל כל שאלה על תוכן הקורס — המורה עונה רק על מה שנלמד בשיעורים
+      </p>
+      <div id="tutor-mount"></div>
+    </div>
+
     <!-- התנתקות -->
     <button class="btn-logout" id="btn-logout">התנתק</button>
   </main>
@@ -151,6 +161,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-client.js"></script>
   <script src="js/access.js"></script>
+  <script src="features/ai-assistant/ai-assistant.js"></script>
   <script>
     // שלב 1: בדיקת גישה
     window.access.requireAccess();
@@ -198,6 +209,14 @@
     document.getElementById('btn-logout').addEventListener('click', function () {
       window.access.logout();
     });
+
+    // שלב 5: הפעלת המורה ה-AI
+    if (window.SRTutor && typeof window.SRTutor.mount === 'function') {
+      window.SRTutor.mount({
+        el: document.getElementById('tutor-mount'),
+        lessonOrder: null
+      });
+    }
   </script>
 
 </body>
