@@ -2,111 +2,240 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>סקייל רווחי — קורס חינמי</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>סקייל רווחי — קורס חינמי מותאם אישית</title>
+  <link rel="icon" href="../מותג/logos/logo-icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../מותג/brand-system.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: inherit; background: var(--bg, #fff); color: var(--text, #111); min-height: 100vh; display: flex; flex-direction: column; }
+    *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+    body{ background:var(--bg); color:var(--navy); font-family:var(--font-body); line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+    .wrap{ width:100%; max-width:1080px; margin:0 auto; padding:0 1.4rem; }
+    h1,h2,h3{ font-family:var(--font-display); line-height:1.15; font-weight:800; }
 
-    header { padding: 1.25rem 2rem; border-bottom: 1px solid var(--border, #e5e5e5); }
+    /* ===== Header ===== */
+    .site-head{ position:absolute; top:0; inset-inline:0; z-index:20; padding:1.1rem 0; }
+    .site-head .wrap{ display:flex; align-items:center; justify-content:space-between; }
+    .site-head img{ height:42px; width:auto; filter:brightness(0) invert(1); }
+    .head-cta{ color:#fff; font-weight:700; font-size:.92rem; text-decoration:none; opacity:.85; border-bottom:1px solid transparent; transition:opacity .2s; }
+    .head-cta:hover{ opacity:1; }
 
-    .hero { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 4rem 1.5rem 3rem; gap: 1.25rem; max-width: 680px; margin: 0 auto; width: 100%; }
-    .hero h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); line-height: 1.25; color: var(--navy, #0d1b3e); }
-    .hero .sub { font-size: 1.1rem; color: var(--text-muted, #555); }
-    .hero .body-copy { font-size: 0.95rem; line-height: 1.7; color: var(--text-muted, #555); }
+    /* ===== Hero ===== */
+    .hero{ position:relative; background:var(--navy); color:#fff; padding:7.5rem 0 4.5rem; overflow:hidden; }
+    .hero::before{ content:""; position:absolute; width:60vw; height:60vw; max-width:680px; max-height:680px; top:-22%; inset-inline-start:-12%;
+      background:radial-gradient(circle, rgba(9,146,194,.32), transparent 62%); pointer-events:none; }
+    .hero::after{ content:""; position:absolute; width:48vw; height:48vw; max-width:560px; max-height:560px; bottom:-26%; inset-inline-end:-14%;
+      background:radial-gradient(circle, rgba(191,9,47,.24), transparent 62%); pointer-events:none; }
+    .hero-grid{ position:relative; z-index:2; display:grid; grid-template-columns:1.15fr .85fr; gap:3rem; align-items:center; }
+    @media(max-width:860px){ .hero{ padding:6.5rem 0 3.5rem; } .hero-grid{ grid-template-columns:1fr; gap:2.2rem; } }
 
-    .form-card { width: 100%; max-width: 420px; margin: 0 auto; padding: 2rem; border: 1px solid var(--border, #e5e5e5); border-radius: 12px; background: var(--card-bg, #fafafa); display: flex; flex-direction: column; gap: 1rem; }
-    .form-card label { font-size: 0.9rem; font-weight: 600; color: var(--navy, #0d1b3e); display: block; margin-bottom: 0.3rem; }
-    .form-card input { width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--border, #ccc); border-radius: 8px; font-size: 1rem; font-family: inherit; background: var(--bg, #fff); color: var(--text, #111); direction: ltr; text-align: right; }
-    .form-card input:focus { outline: 2px solid var(--blue, #0992c2); outline-offset: 1px; }
+    .eyebrow{ display:inline-flex; align-items:center; gap:.5rem; font-size:.82rem; font-weight:700; letter-spacing:.02em;
+      background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); padding:.45rem 1rem; border-radius:99px; margin-bottom:1.3rem; }
+    .eyebrow .dot{ width:8px; height:8px; border-radius:50%; background:var(--grad-brand); }
+    .hero h1{ font-size:clamp(2rem,5.2vw,3.4rem); color:#fff; margin-bottom:1.1rem; }
+    .hero h1 .accent{ background:var(--grad-brand); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .hero .sub{ font-size:clamp(1.05rem,2.4vw,1.3rem); color:#cdddea; max-width:34ch; margin-bottom:1.5rem; }
+    .hero .micro{ display:flex; flex-wrap:wrap; gap:1.1rem; font-size:.9rem; color:#9fb6c8; }
+    .hero .micro span{ display:inline-flex; align-items:center; gap:.4rem; }
+    .hero .micro .ic{ color:var(--blue-light); font-weight:900; }
 
-    .btn-primary { width: 100%; padding: 0.85rem; font-size: 1.05rem; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; background: var(--navy, #0c2542); color: #fff; transition: opacity 0.15s; }
-    .btn-primary:hover { opacity: 0.88; }
-    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    /* energy line — חתימת המותג */
+    .energy{ position:relative; height:4px; width:100%; margin:1.9rem 0; border-radius:99px; overflow:hidden; background:rgba(255,255,255,.08); }
+    .energy i{ position:absolute; inset:0; background:var(--grad-brand); transform-origin:right; animation:flow 3.2s ease-in-out infinite; }
+    @keyframes flow{ 0%{ transform:scaleX(.25); opacity:.7;} 50%{ transform:scaleX(1); opacity:1;} 100%{ transform:scaleX(.25); opacity:.7;} }
 
-    .error-msg { font-size: 0.87rem; color: #c0392b; display: none; }
-    .error-msg.visible { display: block; }
+    /* ===== Form card ===== */
+    .form-card{ background:var(--surface); color:var(--navy); border-radius:var(--radius); padding:1.9rem; box-shadow:0 24px 60px rgba(0,0,0,.35); }
+    .form-card .fc-title{ font-family:var(--font-display); font-weight:800; font-size:1.25rem; margin-bottom:.3rem; }
+    .form-card .fc-note{ font-size:.86rem; color:var(--muted); margin-bottom:1.3rem; }
+    .field{ margin-bottom:1rem; }
+    .field label{ display:block; font-size:.85rem; font-weight:700; margin-bottom:.4rem; }
+    .field input{ width:100%; padding:.85rem 1rem; border:1.5px solid var(--line); border-radius:var(--radius-sm); font-size:1rem; font-family:inherit;
+      background:#fff; color:var(--navy); direction:ltr; text-align:right; transition:border-color .15s, box-shadow .15s; }
+    .field input:focus{ outline:none; border-color:var(--blue); box-shadow:0 0 0 3px rgba(9,146,194,.16); }
+    .cta{ width:100%; padding:1rem; font-size:1.08rem; font-weight:800; font-family:var(--font-display); border:0; border-radius:var(--radius-sm);
+      cursor:pointer; color:#fff; background:var(--navy); position:relative; overflow:hidden; transition:transform .18s, box-shadow .18s; }
+    .cta::before{ content:""; position:absolute; inset:0; background:var(--grad-brand); opacity:0; transition:opacity .2s; }
+    .cta span{ position:relative; z-index:2; }
+    .cta:hover{ transform:translateY(-2px); box-shadow:0 12px 26px rgba(9,146,194,.35); }
+    .cta:hover::before{ opacity:1; }
+    .cta:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
+    .error-msg{ font-size:.85rem; color:var(--red); margin-top:.2rem; display:none; }
+    .error-msg.visible{ display:block; }
+    .trust{ text-align:center; font-size:.8rem; color:var(--muted); margin-top:1rem; }
 
-    footer { padding: 1.25rem; text-align: center; font-size: 0.8rem; color: var(--text-muted, #888); border-top: 1px solid var(--border, #e5e5e5); }
+    /* ===== Section base ===== */
+    .sec{ padding:4.5rem 0; }
+    .sec-eyebrow{ font-size:.82rem; font-weight:800; letter-spacing:.06em; color:var(--blue); text-transform:none; margin-bottom:.6rem; }
+    .sec h2{ font-size:clamp(1.5rem,3.6vw,2.25rem); margin-bottom:.8rem; }
+    .sec .lead{ font-size:1.05rem; color:var(--muted); max-width:54ch; }
+
+    /* mechanism */
+    .mech{ background:linear-gradient(180deg,#fff, var(--bg)); }
+    .mech-row{ display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:center; }
+    @media(max-width:760px){ .mech-row{ grid-template-columns:1fr; gap:1.6rem; } }
+    .mech-visual{ background:var(--navy); border-radius:var(--radius); padding:2.2rem; color:#fff; box-shadow:var(--shadow); position:relative; overflow:hidden; }
+    .mech-visual .step{ display:flex; align-items:center; gap:.9rem; padding:.7rem 0; }
+    .mech-visual .step .n{ width:30px; height:30px; flex:0 0 auto; border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:.85rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18); }
+    .mech-visual .step.on .n{ background:var(--grad-blue); border-color:transparent; }
+    .mech-visual .step .t{ font-size:.95rem; color:#dce8f1; }
+
+    /* value cards */
+    .vgrid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1.1rem; margin-top:2.2rem; }
+    @media(max-width:900px){ .vgrid{ grid-template-columns:1fr 1fr; } }
+    @media(max-width:520px){ .vgrid{ grid-template-columns:1fr; } }
+    .vcard{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:1.5rem; transition:transform .2s, box-shadow .2s, border-color .2s; }
+    .vcard:hover{ transform:translateY(-4px); box-shadow:var(--shadow); border-color:transparent; }
+    .vcard .vic{ width:48px; height:48px; border-radius:14px; display:grid; place-items:center; font-size:1.4rem; margin-bottom:1rem; background:rgba(9,146,194,.1); }
+    .vcard:nth-child(2) .vic{ background:rgba(191,9,47,.09); }
+    .vcard h3{ font-size:1.1rem; margin-bottom:.4rem; }
+    .vcard p{ font-size:.92rem; color:var(--muted); }
+
+    /* closing CTA */
+    .closing{ background:var(--navy); color:#fff; border-radius:var(--radius); padding:3rem 2rem; text-align:center; position:relative; overflow:hidden; }
+    .closing h2{ color:#fff; font-size:clamp(1.5rem,3.4vw,2rem); margin-bottom:1.3rem; }
+    .closing .energy{ max-width:220px; margin:0 auto 1.6rem; }
+    .btn-link{ display:inline-block; background:var(--grad-red); color:#fff; font-family:var(--font-display); font-weight:800; font-size:1.05rem;
+      padding:.95rem 2.2rem; border-radius:var(--radius-sm); text-decoration:none; transition:transform .18s, box-shadow .18s; }
+    .btn-link:hover{ transform:translateY(-2px); box-shadow:0 12px 26px rgba(191,9,47,.4); }
+
+    footer{ padding:2rem 1.25rem; text-align:center; font-size:.82rem; color:var(--muted); }
+
+    /* scroll reveal */
+    .reveal{ opacity:0; transform:translateY(22px); transition:opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
+    .reveal.in{ opacity:1; transform:none; }
+    @media(prefers-reduced-motion:reduce){
+      .reveal{ opacity:1; transform:none; transition:none; } .energy i{ animation:none; transform:scaleX(1); }
+      .cta,.vcard,.btn-link{ transition:none; }
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <img src="../מותג/ScaleRivhi-LogoPack-NewColors/אתרים,אונליין,ווב,אפליקציות-SVG/Vector_Horizontal_Gold.svg"
-       alt="סקייל רווחי" height="48">
+<header class="site-head">
+  <div class="wrap">
+    <img src="../מותג/logos/logo-horizontal.svg" alt="סקייל רווחי">
+    <a class="head-cta" href="#register">התחל עכשיו ›</a>
+  </div>
 </header>
 
-<main>
-  <section class="hero">
-    <h1>תגלה למה השיווק שלך לא עובד — ואיך לתקן את זה</h1>
-    <p class="sub">קורס חינמי מותאם אישית לבעלי עסקים שרוצים לידים איכותיים ומכירות אמיתיות</p>
-    <p class="body-copy">
-      5 שאלות קצרות. אבחון מדויק לפי המצב שלך. שיעור ראשון שממש רלוונטי לך —
-      לא קורס גנרי, אלא נקודת הכאב הכי חזקה שלך. בלי תשלום, בלי כרטיס אשראי.
-    </p>
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span> קורס חינמי · מותאם אישית</span>
+      <h1>תגלה למה השיווק שלך <span class="accent">לא עובד</span> — ואיך לתקן את זה</h1>
+      <p class="sub">לבעלי עסקים שרוצים לידים איכותיים ומכירות אמיתיות — לא קורס גנרי.</p>
+      <div class="energy"><i></i></div>
+      <div class="micro">
+        <span><span class="ic">✓</span> 5 שאלות קצרות</span>
+        <span><span class="ic">✓</span> אבחון מדויק למצב שלך</span>
+        <span><span class="ic">✓</span> בלי כרטיס אשראי</span>
+      </div>
+    </div>
 
-    <form class="form-card" id="register-form" novalidate>
-      <div>
-        <label for="email">מייל</label>
-        <input type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" required>
-      </div>
-      <div>
-        <label for="phone">טלפון</label>
-        <input type="tel" id="phone" name="phone" placeholder="050-0000000" autocomplete="tel" required>
-      </div>
-      <p class="error-msg" id="form-error"></p>
-      <button type="submit" class="btn-primary" id="submit-btn">קבל גישה חינמית</button>
-    </form>
-  </section>
-</main>
+    <div id="register">
+      <form class="form-card" id="register-form" novalidate>
+        <div class="fc-title">קבל גישה חינמית</div>
+        <p class="fc-note">השאר פרטים ותתחיל מהשיעור שהכי רלוונטי לך.</p>
+        <div class="field">
+          <label for="email">מייל</label>
+          <input type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="phone">טלפון</label>
+          <input type="tel" id="phone" name="phone" placeholder="050-0000000" autocomplete="tel" required>
+        </div>
+        <p class="error-msg" id="form-error"></p>
+        <button type="submit" class="cta" id="submit-btn"><span>קבל גישה חינמית</span></button>
+        <p class="trust">בלי תשלום · בלי כרטיס אשראי · גישה מיידית</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MECHANISM ===== -->
+<section class="sec mech">
+  <div class="wrap mech-row">
+    <div class="reveal">
+      <div class="sec-eyebrow">למה זה קורה</div>
+      <h2>השיווק לא נשבר — הוא פשוט לא מותאם אליך</h2>
+      <p class="lead">רוב בעלי העסקים מנסים את אותו "סוד" שעבד למישהו אחר. אבל משפך שיווקי נכון תלוי בך: באישיות שלך ובמי שאתה משרת. השאלון מאתר בדיוק איפה אתה תקוע — ומשם מתחילים.</p>
+    </div>
+    <div class="mech-visual reveal">
+      <div class="step on"><span class="n">1</span><span class="t">עונה על 5 שאלות קצרות</span></div>
+      <div class="step on"><span class="n">2</span><span class="t">מקבל אבחון מדויק למצב שלך</span></div>
+      <div class="step"><span class="n">3</span><span class="t">מתחיל מהשיעור שפותר את הכאב שלך</span></div>
+      <div class="step"><span class="n">4</span><span class="t">מתקדם עם מורה אישי, תרגול ומסלול</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VALUE ===== -->
+<section class="sec">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow">מה מחכה לך בפנים</div>
+      <h2>לא עוד קורס — מערכת שמובילה אותך צעד-צעד</h2>
+    </div>
+    <div class="vgrid">
+      <div class="vcard reveal"><div class="vic">🎯</div><h3>שיעורים אמיתיים</h3><p>תוכן מקצועי על משפכים, פרסונל ברנד ומודעות — ישר מהשטח.</p></div>
+      <div class="vcard reveal"><div class="vic">🎓</div><h3>מורה AI אישי</h3><p>שואל כל שאלה על השיעור ומקבל תשובה מותאמת, בכל רגע.</p></div>
+      <div class="vcard reveal"><div class="vic">🎮</div><h3>משחק תרגול</h3><p>מקבע את מה שלמדת דרך תרגול קצר ומהנה, לא רק צפייה.</p></div>
+      <div class="vcard reveal"><div class="vic">🧭</div><h3>מסלול מותאם</h3><p>מתחילים בדיוק מהנקודה הנכונה לך, וממשיכים לפי הקצב שלך.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CLOSING ===== -->
+<section class="sec">
+  <div class="wrap">
+    <div class="closing reveal">
+      <div class="energy"><i></i></div>
+      <h2>מוכן לגלות מה באמת עוצר את הצמיחה שלך?</h2>
+      <a class="btn-link" href="#register">קבל גישה חינמית</a>
+    </div>
+  </div>
+</section>
 
 <footer>נבנה ע"י הלל</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-client.js"></script>
 <script>
+  /* scroll reveal — stagger */
+  (function(){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e,i){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold:.16, rootMargin:'0px 0px -8% 0px' });
+    document.querySelectorAll('.vgrid').forEach(function(g){
+      Array.prototype.forEach.call(g.children, function(c,i){ c.style.transitionDelay=(i*70)+'ms'; });
+    });
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  })();
+
+  /* form — חוזה מקורי נשמר במלואו */
   const form = document.getElementById('register-form');
   const submitBtn = document.getElementById('submit-btn');
   const errorEl = document.getElementById('form-error');
+  function showError(msg){ errorEl.textContent = msg; errorEl.classList.add('visible'); }
+  function clearError(){ errorEl.textContent = ''; errorEl.classList.remove('visible'); }
 
-  function showError(msg) {
-    errorEl.textContent = msg;
-    errorEl.classList.add('visible');
-  }
-  function clearError() {
-    errorEl.textContent = '';
-    errorEl.classList.remove('visible');
-  }
-
-  form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    clearError();
-
+  form.addEventListener('submit', async function(e){
+    e.preventDefault(); clearError();
     const email = document.getElementById('email').value.trim();
     const phone = document.getElementById('phone').value.trim();
-
-    if (!email || !phone) {
-      showError('נא למלא מייל וטלפון.');
-      return;
-    }
-    if (!email.includes('@')) {
-      showError('כתובת המייל לא תקינה.');
-      return;
-    }
-
+    if(!email || !phone){ showError('נא למלא מייל וטלפון.'); return; }
+    if(!email.includes('@')){ showError('כתובת המייל לא תקינה.'); return; }
     submitBtn.disabled = true;
-    submitBtn.textContent = 'רושם...';
-
-    try {
+    submitBtn.querySelector('span').textContent = 'רושם...';
+    try{
       await window.portalData.registerLead({ email, phone });
       localStorage.setItem('sr_user_email', email);
       window.location.href = 'survey.html';
-    } catch (err) {
+    }catch(err){
       showError('אירעה שגיאה. נסה שוב.');
       submitBtn.disabled = false;
-      submitBtn.textContent = 'קבל גישה חינמית';
+      submitBtn.querySelector('span').textContent = 'קבל גישה חינמית';
     }
   });
 </script>
