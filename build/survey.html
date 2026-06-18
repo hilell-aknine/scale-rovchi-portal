@@ -5,46 +5,179 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>שאלון התאמה — סקייל רווחי</title>
-  <link rel="stylesheet" href="../מותג/brand-system.css">
+  <link rel="stylesheet" href="ds/styles.css">
   <style>
-    /* סטיילינג ניטרלי בלבד — העיצוב יחודד בסשן נפרד. רק tokens מהמותג. */
-    * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+    /* ── Survey-local layout (tokens from ds/styles.css) ───────────────── */
+    :root { --font-display: 'Heebo', 'Assistant', system-ui, sans-serif; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--s-6) var(--s-4);
+    }
+
+    /* ── Progress eyebrow ── */
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: var(--s-2);
+      font-size: var(--fs-small); font-weight: 700; color: var(--blue);
+      letter-spacing: .02em; margin-bottom: var(--s-5);
+    }
+    .eyebrow .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--grad-brand);
+      flex-shrink: 0;
+    }
+
+    /* ── Survey card ── */
     .survey-shell {
       width: 100%; max-width: 560px;
-      background: var(--surface); border: 1px solid var(--line);
-      border-radius: var(--radius); box-shadow: var(--shadow);
-      padding: 2rem 1.75rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: var(--s-7) var(--s-6);
     }
-    .progress-wrap { margin-bottom: 1.5rem; }
-    .progress-meta { display: flex; justify-content: space-between; font-size: .9rem; color: var(--muted); margin-bottom: .5rem; }
-    .progress-bar { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
-    .progress-fill { height: 100%; width: 0; background: var(--grad-brand); border-radius: 99px; transition: width .3s ease; }
-    .q-label { font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; color: var(--navy); margin: 0 0 1.5rem; line-height: 1.4; }
-    .options { display: flex; flex-direction: column; gap: .75rem; }
+
+    /* ── Progress bar ── */
+    .progress-wrap { margin-bottom: var(--s-6); }
+    .progress-meta {
+      display: flex; justify-content: space-between;
+      font-size: var(--fs-small); color: var(--muted);
+      margin-bottom: var(--s-2);
+    }
+    .progress-bar {
+      height: 6px;
+      background: var(--line);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; width: 0;
+      background: var(--grad-brand);
+      border-radius: 99px;
+      transition: width .35s ease;
+    }
+
+    /* ── Question label ── */
+    .q-label {
+      font-family: var(--font-display);
+      font-size: var(--fs-h2);
+      font-weight: 800;
+      color: var(--navy);
+      margin: 0 0 var(--s-6);
+      line-height: var(--lh-heading);
+    }
+
+    /* ── Answer options ── */
+    .options { display: flex; flex-direction: column; gap: var(--s-3); }
+
     .option-btn {
-      width: 100%; text-align: right; padding: 1rem 1.25rem;
-      background: var(--bg); color: var(--navy);
-      border: 2px solid var(--line); border-radius: var(--radius-sm);
-      font-family: var(--font-body); font-size: 1.05rem; font-weight: 600; cursor: pointer;
-      transition: border-color .2s, transform .15s, background .2s;
+      width: 100%;
+      min-height: 52px;
+      text-align: right;
+      padding: var(--s-4) var(--s-5);
+      background: var(--bg);
+      color: var(--navy);
+      border: 2px solid var(--line);
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: var(--fs-body);
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color var(--dur-hover) ease,
+                  transform var(--dur-hover) ease,
+                  background var(--dur-hover) ease,
+                  box-shadow var(--dur-hover) ease;
     }
-    .option-btn:hover { border-color: var(--blue); transform: translateY(-2px); }
-    .option-btn.selected { border-color: var(--navy); background: #fff; }
-    .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.75rem; gap: 1rem; }
-    .btn-back { background: none; border: 0; color: var(--muted); font-family: var(--font-body); font-weight: 600; cursor: pointer; font-size: .95rem; }
+    .option-btn:hover {
+      border-color: var(--blue);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+    .option-btn:focus-visible {
+      outline: 3px solid rgba(9,146,194,.45);
+      outline-offset: 2px;
+    }
+    .option-btn.selected {
+      border-color: var(--blue);
+      background: var(--surface);
+      box-shadow: 0 0 0 3px rgba(9,146,194,.15);
+    }
+
+    /* ── Nav row ── */
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: var(--s-6);
+      gap: var(--s-4);
+    }
+
+    /* Back button — ghost */
+    .btn-back {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: var(--fs-small);
+      cursor: pointer;
+      min-height: 44px;
+      padding: 0 var(--s-2);
+      border-radius: var(--radius-md);
+      transition: color var(--dur-hover) ease;
+    }
+    .btn-back:hover { color: var(--navy); }
+    .btn-back:focus-visible {
+      outline: 3px solid rgba(9,146,194,.45);
+      outline-offset: 2px;
+    }
     .btn-back:disabled { opacity: 0; pointer-events: none; }
-    .gate-note { font-size: .85rem; color: var(--muted); margin-top: 1rem; text-align: center; }
-    .state-msg { text-align: center; padding: 1rem; color: var(--muted); font-weight: 600; }
-    .state-msg.error { color: var(--red); }
-    footer { position: fixed; bottom: .75rem; left: 0; right: 0; text-align: center; font-size: .8rem; color: var(--muted); }
+
+    /* Gate note */
+    .gate-note {
+      font-size: var(--fs-small);
+      color: var(--muted);
+      margin-top: var(--s-5);
+      text-align: center;
+      line-height: var(--lh-body);
+    }
+
+    /* State messages */
+    .state-msg {
+      text-align: center;
+      padding: var(--s-4) 0;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: var(--fs-body);
+    }
+    .state-msg.error { color: var(--red, #bf092f); }
+
+    /* Footer */
+    footer {
+      margin-top: var(--s-5);
+      font-size: var(--fs-small);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .progress-fill { transition: none; }
+      .option-btn { transition: none; }
+    }
   </style>
 </head>
 <body>
   <main class="survey-shell" id="shell">
     <div class="progress-wrap">
       <div class="progress-meta">
-        <span id="progressText">שאלה 1</span>
+        <span class="eyebrow"><span class="dot"></span><span id="progressText">שאלה 1</span></span>
         <span id="progressCount"></span>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>

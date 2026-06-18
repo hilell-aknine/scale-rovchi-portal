@@ -5,251 +5,556 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>סקייל רווחי — מרכז הלמידה</title>
-  <link rel="stylesheet" href="../מותג/brand-system.css">
+  <link rel="stylesheet" href="ds/styles.css">
   <style>
+    /* ── Reset & base ──────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: inherit; background: var(--bg, #fff); color: var(--text, #111); min-height: 100vh; display: flex; flex-direction: column; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+    a { color: inherit; }
 
-    /* Header */
-    header { padding: 1rem 2rem; border-bottom: 1px solid var(--border, #e5e5e5); display: flex; align-items: center; justify-content: space-between; }
-    .header-user { font-size: 0.85rem; color: var(--text-muted, #666); }
+    .wrap {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding-inline: var(--pad-inline-mobile);
+    }
+    @media (min-width: 768px) { .wrap { padding-inline: var(--pad-inline-desktop); } }
 
-    /* Loading & Error states */
-    .state-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; padding: 3rem; text-align: center; color: var(--text-muted, #666); }
-    .spinner { width: 36px; height: 36px; border: 3px solid var(--line, #e5e5e5); border-top-color: var(--blue, #0992c2); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    /* ── Header ─────────────────────────────────────────────── */
+    .site-header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(12,37,66,.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--on-dark-line);
+    }
+    .site-header .wrap {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .brand-lockup { display: inline-flex; align-items: center; }
+    .brand-lockup img { height: 36px; width: auto; display: block; }
+    .header-user {
+      font-size: var(--fs-small);
+      color: rgba(245,248,252,.65);
+      font-weight: var(--fw-medium);
+    }
+
+    /* ── Loading / Error states ─────────────────────────────── */
+    .state-center {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: var(--s-4); padding: var(--s-8);
+      text-align: center; color: var(--muted);
+    }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--line);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Main layout */
-    main { flex: 1; max-width: 900px; width: 100%; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
+    /* ── Hero band (page title + progress) ─────────────────── */
+    .courses-hero {
+      background: var(--navy);
+      color: #fff;
+      padding-block: var(--s-8) var(--s-7);
+      position: relative;
+      overflow: hidden;
+    }
+    .courses-hero .glow-hero {
+      position: absolute;
+      width: 480px; height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(9,146,194,.18) 0%, transparent 70%);
+      top: -200px; left: -100px;
+      pointer-events: none;
+    }
+    .courses-hero .wrap { position: relative; z-index: 2; }
 
-    /* Resume banner */
-    .resume-banner { background: var(--navy, #0d1b3e); color: #fff; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-    .resume-banner .resume-text { font-size: 0.95rem; }
-    .resume-banner .resume-text strong { display: block; font-size: 1rem; margin-bottom: 0.2rem; }
-    .resume-btn { background: var(--blue, #0992c2); color: #fff; font-weight: 700; font-size: 0.9rem; padding: 0.6rem 1.25rem; border-radius: 8px; text-decoration: none; white-space: nowrap; transition: opacity 0.15s; }
-    .resume-btn:hover { opacity: 0.88; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: var(--s-2);
+      font-size: var(--fs-small); font-weight: var(--fw-bold);
+      color: var(--blue-light); letter-spacing: .02em;
+      margin-bottom: var(--s-4);
+    }
+    .hero-eyebrow .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--grad-brand); flex-shrink: 0;
+    }
 
-    /* Global progress */
-    .progress-section { margin-bottom: 2.5rem; }
-    .progress-section h2 { font-size: 1.2rem; color: var(--navy, #0d1b3e); margin-bottom: 0.75rem; }
-    .progress-bar-wrap { background: var(--border, #e5e5e5); border-radius: 99px; height: 12px; overflow: hidden; }
-    .progress-bar-fill { height: 100%; background: var(--blue, #0992c2); border-radius: 99px; transition: width 0.4s ease; }
-    .progress-pct { font-size: 0.88rem; color: var(--text-muted, #666); margin-top: 0.4rem; text-align: left; }
+    .courses-hero h1 {
+      font-family: var(--font-heading);
+      font-weight: var(--fw-black);
+      font-size: var(--fs-h1);
+      line-height: var(--lh-heading);
+      letter-spacing: var(--ls-heading);
+      color: #fff;
+      margin-bottom: var(--s-5);
+    }
+    .courses-hero h1 .grad {
+      background: var(--grad-brand);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
 
-    /* Page title */
-    .page-title { font-size: 1.6rem; color: var(--navy, #0d1b3e); margin-bottom: 1.75rem; }
+    /* Resume banner (on hero bg) */
+    .resume-banner {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: var(--s-4);
+      flex-wrap: wrap;
+      background: var(--on-dark-surface);
+      border: 1px solid var(--on-dark-line);
+      border-radius: var(--radius-md);
+      padding: var(--s-4) var(--s-5);
+      margin-bottom: var(--s-6);
+      backdrop-filter: blur(6px);
+    }
+    .resume-label {
+      font-size: var(--fs-small); font-weight: var(--fw-bold);
+      color: var(--blue-light); margin-bottom: 2px;
+    }
+    .resume-title {
+      font-size: var(--fs-body); color: #fff; font-weight: var(--fw-semibold);
+    }
+    .resume-btn {
+      display: inline-flex; align-items: center; gap: var(--s-2);
+      background: var(--grad-brand); color: #fff;
+      font-weight: var(--fw-bold); font-size: var(--fs-small);
+      padding: var(--s-2) var(--s-5); border-radius: var(--radius-md);
+      text-decoration: none; white-space: nowrap;
+      transition: transform var(--dur-hover) ease, filter var(--dur-hover) ease;
+    }
+    .resume-btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
 
-    /* Course card */
-    .course-card { border: 1px solid var(--border, #e5e5e5); border-radius: 14px; margin-bottom: 1.5rem; overflow: hidden; background: var(--card-bg, #fafafa); }
-    .course-header { padding: 1.25rem 1.5rem; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; cursor: pointer; user-select: none; }
-    .course-header:hover { background: rgba(0,0,0,0.02); }
-    .course-info { flex: 1; }
-    .course-title { font-size: 1.1rem; font-weight: 700; color: var(--navy, #0d1b3e); margin-bottom: 0.3rem; }
-    .course-desc { font-size: 0.88rem; color: var(--text-muted, #666); line-height: 1.55; }
-    .course-chevron { font-size: 1.1rem; color: var(--text-muted, #888); transition: transform 0.2s; flex-shrink: 0; margin-top: 2px; }
-    .course-card.open .course-chevron { transform: rotate(180deg); }
+    /* Progress bar */
+    .progress-wrap { margin-top: var(--s-2); }
+    .progress-meta {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: var(--s-2);
+    }
+    .progress-label {
+      font-size: var(--fs-small); font-weight: var(--fw-bold); color: rgba(245,248,252,.7);
+    }
+    .progress-pct-text {
+      font-size: var(--fs-micro); color: var(--blue-light); font-weight: var(--fw-bold);
+    }
+    .progress-track {
+      height: 8px; border-radius: var(--radius-pill);
+      background: rgba(255,255,255,.12); overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--grad-brand);
+      border-radius: var(--radius-pill);
+      transition: width 0.6s var(--smooth);
+      width: 0%;
+    }
 
-    /* Course tree (modules + lessons) */
-    .course-tree { display: none; border-top: 1px solid var(--border, #e5e5e5); }
-    .course-card.open .course-tree { display: block; }
+    /* ── Main content area ──────────────────────────────────── */
+    main {
+      flex: 1;
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+      padding: var(--s-7) var(--pad-inline-mobile) var(--s-8);
+    }
+    @media (min-width: 768px) {
+      main { padding-inline: var(--pad-inline-desktop); }
+    }
 
-    .module-block { border-bottom: 1px solid var(--border, #f0f0f0); }
-    .module-block:last-child { border-bottom: none; }
-    .module-title { font-size: 0.92rem; font-weight: 700; color: var(--navy, #0d1b3e); padding: 0.85rem 1.5rem 0.55rem; background: rgba(0,0,0,0.02); }
+    .section-eyebrow {
+      display: inline-flex; align-items: center; gap: var(--s-2);
+      font-size: var(--fs-small); font-weight: var(--fw-bold);
+      color: var(--blue); letter-spacing: .02em; margin-bottom: var(--s-5);
+    }
+    .section-eyebrow .dot {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--grad-brand);
+    }
 
-    .lesson-list { list-style: none; padding: 0.25rem 0 0.5rem; }
-    .lesson-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.55rem 1.5rem 0.55rem 1.25rem; }
-    .lesson-item:hover { background: rgba(0,0,0,0.02); }
-    .lesson-check { width: 20px; height: 20px; flex-shrink: 0; border-radius: 50%; border: 2px solid var(--border, #ccc); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #fff; transition: background 0.2s, border-color 0.2s; }
-    .lesson-check.done { background: var(--blue, #0992c2); border-color: var(--blue, #0992c2); }
-    .lesson-link { font-size: 0.92rem; color: var(--text, #111); text-decoration: none; flex: 1; }
-    .lesson-link:hover { color: var(--navy, #0d1b3e); text-decoration: underline; }
-    .lesson-link.done-text { color: var(--text-muted, #888); text-decoration: line-through; }
-    .lesson-duration { font-size: 0.78rem; color: var(--text-muted, #999); white-space: nowrap; }
+    /* ── Lesson cards grid ──────────────────────────────────── */
+    .lessons-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--s-4);
+    }
+    @media (min-width: 640px) {
+      .lessons-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 900px) {
+      .lessons-grid { grid-template-columns: repeat(3, 1fr); }
+    }
 
-    footer { padding: 1.25rem; text-align: center; font-size: 0.8rem; color: var(--text-muted, #888); border-top: 1px solid var(--border, #e5e5e5); }
+    /* ── Individual lesson card ─────────────────────────────── */
+    .lesson-card {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: var(--s-6);
+      box-shadow: var(--shadow);
+      display: flex; flex-direction: column; gap: var(--s-3);
+      text-decoration: none; color: var(--ink);
+      transition:
+        transform var(--dur-hover) var(--smooth),
+        box-shadow var(--dur-hover) ease;
+      overflow: hidden;
+    }
+    .lesson-card::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--grad-brand);
+      border-radius: var(--radius) var(--radius) 0 0;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform var(--dur-hover) var(--smooth);
+    }
+    .lesson-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+    .lesson-card:hover::before { transform: scaleX(1); }
+    .lesson-card:focus-visible {
+      outline: 3px solid var(--blue); outline-offset: 3px;
+    }
+
+    /* Done state */
+    .lesson-card.is-done {
+      background: var(--surface);
+    }
+    .lesson-card.is-done::before {
+      transform: scaleX(1);
+      background: linear-gradient(120deg, var(--success), #34d399);
+    }
+
+    /* Card header row: number badge + completed badge */
+    .card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: var(--s-2);
+    }
+    .lesson-num {
+      width: 44px; height: 44px; flex-shrink: 0;
+      border-radius: var(--radius-md);
+      background: var(--blue-fill);
+      display: grid; place-items: center;
+      font-family: var(--font-display);
+      font-weight: var(--fw-black);
+      font-size: var(--fs-h3);
+      color: var(--blue);
+      transition: background var(--dur-hover), color var(--dur-hover);
+    }
+    .lesson-card:hover .lesson-num {
+      background: var(--blue);
+      color: #fff;
+    }
+    .lesson-card.is-done .lesson-num {
+      background: var(--success-fill);
+      color: var(--success);
+    }
+    .lesson-card.is-done:hover .lesson-num {
+      background: var(--success);
+      color: #fff;
+    }
+
+    /* Completed badge */
+    .done-badge {
+      display: none;
+      align-items: center; gap: var(--s-1);
+      background: var(--success-fill);
+      color: var(--success);
+      font-size: var(--fs-micro); font-weight: var(--fw-bold);
+      padding: 3px 10px; border-radius: var(--radius-pill);
+    }
+    .lesson-card.is-done .done-badge { display: inline-flex; }
+    .done-badge svg { width: 11px; height: 11px; stroke: currentColor; stroke-width: 2.5; fill: none; flex-shrink: 0; }
+
+    /* Card body */
+    .lesson-title {
+      font-family: var(--font-heading);
+      font-weight: var(--fw-bold);
+      font-size: var(--fs-h4);
+      color: var(--navy);
+      line-height: var(--lh-heading);
+    }
+    .lesson-card.is-done .lesson-title { color: var(--muted); }
+
+    .lesson-desc {
+      font-size: var(--fs-small);
+      color: var(--muted);
+      line-height: var(--lh-body);
+      flex: 1;
+    }
+
+    /* Card footer: CTA link */
+    .card-cta {
+      display: inline-flex; align-items: center; gap: var(--s-2);
+      font-size: var(--fs-small); font-weight: var(--fw-bold);
+      color: var(--blue); margin-top: var(--s-1);
+      transition: gap var(--dur-hover);
+    }
+    .lesson-card:hover .card-cta { gap: var(--s-3); }
+    .lesson-card.is-done .card-cta { color: var(--muted); }
+    .card-cta svg {
+      width: 14px; height: 14px; stroke: currentColor;
+      stroke-width: 2; fill: none; flex-shrink: 0;
+    }
+
+    /* ── Empty state ────────────────────────────────────────── */
+    .empty-state {
+      text-align: center; padding: var(--s-8) var(--s-5);
+      background: var(--surface); border-radius: var(--radius);
+      border: 1px solid var(--line);
+    }
+    .empty-state p { font-size: var(--fs-body-l); color: var(--muted); margin-bottom: var(--s-2); }
+    .empty-state small { font-size: var(--fs-small); color: var(--muted); }
+
+    /* ── Scroll reveal ──────────────────────────────────────── */
+    .reveal {
+      transition: opacity var(--dur-reveal) ease, transform var(--dur-reveal) var(--smooth);
+    }
+    html.js .reveal:not(.in) { opacity: 0; transform: translateY(20px); }
+    .stagger > * { transition-delay: calc(var(--i, 0) * 70ms); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .lesson-card, .progress-fill { transition: none !important; animation: none !important; }
+      html.js .reveal:not(.in) { opacity: 1 !important; transform: none !important; }
+    }
+
+    /* ── Footer ─────────────────────────────────────────────── */
+    footer.site-footer {
+      background: var(--navy);
+      color: rgba(245,248,252,.6);
+      border-top: 1px solid var(--on-dark-line);
+    }
+    footer.site-footer .wrap {
+      display: flex; flex-wrap: wrap; align-items: center;
+      justify-content: space-between; gap: var(--s-4);
+      padding-block: var(--s-5);
+    }
+    footer.site-footer .built {
+      font-size: var(--fs-small);
+    }
+    footer.site-footer .built b { color: #fff; font-weight: var(--fw-bold); }
   </style>
 </head>
 <body>
+  <script>document.documentElement.classList.add('js');</script>
 
-<header>
-  <img src="../מותג/ScaleRivhi-LogoPack-NewColors/אתרים,אונליין,ווב,אפליקציות-SVG/Vector_Horizontal_Gold.svg"
-       alt="סקייל רווחי" height="44">
-  <span class="header-user" id="header-email"></span>
-</header>
-
-<div id="loading-state" class="state-center">
-  <div class="spinner"></div>
-  <span>טוען קורסים...</span>
-</div>
-
-<div id="error-state" class="state-center" style="display:none;">
-  <span style="font-size:2rem;">⚠️</span>
-  <p id="error-msg">אירעה שגיאה בטעינת הקורסים.</p>
-</div>
-
-<main id="main-content" style="display:none;">
-  <!-- Resume banner (shown only when there is a next lesson) -->
-  <div class="resume-banner" id="resume-banner" style="display:none;">
-    <div class="resume-text">
-      <strong>ממשיך מאיפה שעצרת</strong>
-      <span id="resume-lesson-title">...</span>
+  <!-- ── Header ─────────────────────────────────────────────── -->
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand-lockup" href="index.html" aria-label="סקייל רווחי">
+        <img src="../מותג/ScaleRivhi-LogoPack-NewColors/אתרים,אונליין,ווב,אפליקציות-SVG/Vector_Horizontal_Gold.svg"
+             alt="סקייל רווחי">
+      </a>
+      <span class="header-user" id="header-email" aria-label="מייל משתמש מחובר"></span>
     </div>
-    <a class="resume-btn" id="resume-link" href="#">צפה בשיעור ←</a>
+  </header>
+
+  <!-- ── Loading state ──────────────────────────────────────── -->
+  <div id="loading-state" class="state-center" role="status" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <span>טוען קורסים...</span>
   </div>
 
-  <!-- Global progress -->
-  <section class="progress-section">
-    <h2>ההתקדמות שלך</h2>
-    <div class="progress-bar-wrap">
-      <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
-    </div>
-    <p class="progress-pct" id="progress-pct">0% הושלם</p>
-  </section>
+  <!-- ── Error state ────────────────────────────────────────── -->
+  <div id="error-state" class="state-center" style="display:none;" role="alert">
+    <span style="font-size:2rem;" aria-hidden="true">⚠️</span>
+    <p id="error-msg">אירעה שגיאה בטעינת הקורסים.</p>
+  </div>
 
-  <h1 class="page-title">הקורסים שלי</h1>
-  <div id="courses-container"></div>
-</main>
+  <!-- ── Hero band (progress) ───────────────────────────────── -->
+  <div id="courses-hero" class="courses-hero" style="display:none;">
+    <div class="glow-hero" aria-hidden="true"></div>
+    <div class="wrap">
 
-<footer>נבנה ע"י הלל</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabase-client.js"></script>
-<script src="js/content.js"></script>
-<script>
-(async function () {
-  /* ---------- helpers ---------- */
-  function el(id) { return document.getElementById(id); }
-
-  function showError(msg) {
-    el('loading-state').style.display = 'none';
-    el('error-state').style.display  = '';
-    el('error-msg').textContent = msg;
-  }
-
-  function escHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
-
-  /* ---------- auth guard ---------- */
-  const viewer = localStorage.getItem('sr_user_email');
-  if (!viewer) {
-    window.location.href = 'index.html';
-    return;
-  }
-  el('header-email').textContent = viewer;
-
-  /* ---------- load lessons from SRContent ---------- */
-  let lessons;
-  try {
-    await window.SRContent.ready;
-    lessons = window.SRContent.getLessons();
-  } catch (err) {
-    showError('אירעה שגיאה בטעינת השיעורים. נסה לרענן את הדף.');
-    return;
-  }
-
-  if (!lessons || lessons.length === 0) {
-    el('loading-state').style.display = 'none';
-    el('main-content').style.display  = '';
-    el('courses-container').innerHTML = `
-      <div style="text-align:center;padding:3rem 1rem;color:var(--text-muted,#888);">
-        <p style="font-size:1.1rem;margin-bottom:0.5rem;">אין שיעורים זמינים כרגע.</p>
-        <p style="font-size:0.88rem;">החומרים יתווספו בקרוב — חזור מאוחר יותר.</p>
-      </div>`;
-    el('progress-section') && (el('progress-section').style.display = 'none');
-    return;
-  }
-
-  /* ---------- build completed-lesson set (localStorage) ---------- */
-  let completedRaw = [];
-  try { completedRaw = JSON.parse(localStorage.getItem('sr_progress') || '[]'); } catch(_) {}
-  const completedSet = new Set(completedRaw);
-
-  /* ---------- compute global progress ---------- */
-  const totalLessons = lessons.length;
-  const doneLessons  = lessons.filter(l => completedSet.has(String(l.order))).length;
-  const pct = totalLessons > 0 ? Math.round((doneLessons / totalLessons) * 100) : 0;
-
-  el('progress-fill').style.width = pct + '%';
-  el('progress-pct').textContent  = `${pct}% הושלם (${doneLessons} מתוך ${totalLessons} שיעורים)`;
-
-  /* ---------- "המשך מאיפה שעצרת" ---------- */
-  const nextLesson = lessons.find(l => !completedSet.has(String(l.order)));
-  if (nextLesson) {
-    el('resume-lesson-title').textContent = nextLesson.title || 'שיעור הבא';
-    el('resume-link').href = `lesson.html?order=${nextLesson.order}`;
-    el('resume-banner').style.display = '';
-  }
-
-  /* ---------- render lessons ---------- */
-  const container = el('courses-container');
-
-  lessons.forEach((lesson, idx) => {
-    const done = completedSet.has(String(lesson.order));
-
-    const card = document.createElement('div');
-    card.className = 'course-card';
-    if (idx === 0) card.classList.add('open');
-
-    /* lesson header (acts as the card header + expand toggle) */
-    const header = document.createElement('div');
-    header.className = 'course-header';
-    header.setAttribute('role', 'button');
-    header.setAttribute('aria-expanded', idx === 0 ? 'true' : 'false');
-    header.innerHTML = `
-      <div class="course-info">
-        <div class="course-title">${escHtml(lesson.title || 'שיעור')}</div>
-        ${lesson.description ? `<div class="course-desc">${escHtml(lesson.description)}</div>` : ''}
+      <!-- Resume banner -->
+      <div class="resume-banner" id="resume-banner" style="display:none;" aria-label="המשך צפייה">
+        <div>
+          <div class="resume-label">ממשיך מאיפה שעצרת</div>
+          <div class="resume-title" id="resume-lesson-title">...</div>
+        </div>
+        <a class="resume-btn" id="resume-link" href="#">
+          צפה בשיעור
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
-      <span class="course-chevron">▼</span>
-    `;
 
-    header.addEventListener('click', () => {
-      const isOpen = card.classList.toggle('open');
-      header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      <!-- Progress -->
+      <h1>
+        הקורסים שלי —
+        <span class="grad">מרכז הלמידה</span>
+      </h1>
+
+      <div class="progress-wrap" role="region" aria-label="התקדמות כללית">
+        <div class="progress-meta">
+          <span class="progress-label">ההתקדמות שלך</span>
+          <span class="progress-pct-text" id="progress-pct" aria-live="polite">0% הושלם</span>
+        </div>
+        <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Main content ────────────────────────────────────────── -->
+  <main id="main-content" style="display:none;">
+    <span class="section-eyebrow reveal">
+      <span class="dot" aria-hidden="true"></span>השיעורים שלי
+    </span>
+    <div id="courses-container" class="lessons-grid stagger"></div>
+  </main>
+
+  <!-- ── Footer ─────────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <a class="brand-lockup" href="index.html" aria-label="סקייל רווחי">
+        <img src="../מותג/ScaleRivhi-LogoPack-NewColors/אתרים,אונליין,ווב,אפליקציות-SVG/Vector_Horizontal_Gold.svg"
+             alt="סקייל רווחי" style="height:30px;width:auto;">
+      </a>
+      <span class="built">נבנה ע"י <b>הלל</b></span>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/content.js"></script>
+  <script>
+  (async function () {
+    /* ---------- helpers ---------- */
+    function el(id) { return document.getElementById(id); }
+
+    function showError(msg) {
+      el('loading-state').style.display = 'none';
+      el('error-state').style.display   = '';
+      el('error-msg').textContent = msg;
+    }
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    /* ---------- auth guard ---------- */
+    const viewer = localStorage.getItem('sr_user_email');
+    if (!viewer) { window.location.href = 'index.html'; return; }
+    el('header-email').textContent = viewer;
+
+    /* ---------- load lessons ---------- */
+    let lessons;
+    try {
+      await window.SRContent.ready;
+      lessons = window.SRContent.getLessons();
+    } catch (err) {
+      showError('אירעה שגיאה בטעינת השיעורים. נסה לרענן את הדף.');
+      return;
+    }
+
+    /* ---------- show hero band ---------- */
+    el('courses-hero').style.display = '';
+
+    /* ---------- empty state ---------- */
+    if (!lessons || lessons.length === 0) {
+      el('loading-state').style.display = 'none';
+      el('main-content').style.display  = '';
+      el('courses-container').innerHTML =
+        '<div class="empty-state">' +
+          '<p>אין שיעורים זמינים כרגע.</p>' +
+          '<small>החומרים יתווספו בקרוב — חזור מאוחר יותר.</small>' +
+        '</div>';
+      return;
+    }
+
+    /* ---------- progress ---------- */
+    let completedRaw = [];
+    try { completedRaw = JSON.parse(localStorage.getItem('sr_progress') || '[]'); } catch(_) {}
+    const completedSet = new Set(completedRaw);
+
+    const totalLessons = lessons.length;
+    const doneLessons  = lessons.filter(function(l){ return completedSet.has(String(l.order)); }).length;
+    const pct = totalLessons > 0 ? Math.round((doneLessons / totalLessons) * 100) : 0;
+
+    var fillEl  = el('progress-fill');
+    var trackEl = el('progress-track');
+    var pctEl   = el('progress-pct');
+    fillEl.style.width = pct + '%';
+    trackEl.setAttribute('aria-valuenow', pct);
+    pctEl.textContent  = pct + '% הושלם (' + doneLessons + ' מתוך ' + totalLessons + ' שיעורים)';
+
+    /* ---------- resume banner ---------- */
+    const nextLesson = lessons.find(function(l){ return !completedSet.has(String(l.order)); });
+    if (nextLesson) {
+      el('resume-lesson-title').textContent = nextLesson.title || 'שיעור הבא';
+      el('resume-link').href = 'lesson.html?order=' + nextLesson.order;
+      el('resume-banner').style.display = '';
+    }
+
+    /* ---------- render lesson cards ---------- */
+    const container = el('courses-container');
+
+    lessons.forEach(function(lesson, idx) {
+      var done = completedSet.has(String(lesson.order));
+      var orderLabel = String(lesson.order);
+
+      var card = document.createElement('a');
+      card.href      = 'lesson.html?order=' + lesson.order;
+      card.className = 'lesson-card reveal' + (done ? ' is-done' : '');
+      card.style.setProperty('--i', idx);
+      card.setAttribute('aria-label', (done ? 'הושלם — ' : '') + (lesson.title || 'שיעור'));
+
+      card.innerHTML =
+        '<div class="card-header">' +
+          '<span class="lesson-num" aria-hidden="true">' + escHtml(orderLabel) + '</span>' +
+          '<span class="done-badge" aria-label="שיעור הושלם">' +
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5 11-11" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            'הושלם' +
+          '</span>' +
+        '</div>' +
+        '<h2 class="lesson-title">' + escHtml(lesson.title || 'שיעור') + '</h2>' +
+        (lesson.description
+          ? '<p class="lesson-desc">' + escHtml(lesson.description) + '</p>'
+          : '') +
+        '<span class="card-cta">' +
+          (done ? 'צפה שוב' : 'התחל שיעור') +
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        '</span>';
+
+      container.appendChild(card);
     });
 
-    /* expandable body */
-    const treeEl = document.createElement('div');
-    treeEl.className = 'course-tree';
+    /* ---------- show content ---------- */
+    el('loading-state').style.display = 'none';
+    el('main-content').style.display  = '';
 
-    const lessonList = document.createElement('ul');
-    lessonList.className = 'lesson-list';
+    /* ---------- scroll-reveal ---------- */
+    (function() {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var els = document.querySelectorAll('.reveal');
+      if (reduce || !('IntersectionObserver' in window)) {
+        els.forEach(function(e){ e.classList.add('in'); });
+        return;
+      }
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(function(e){ io.observe(e); });
+    })();
 
-    const li = document.createElement('li');
-    li.className = 'lesson-item';
-
-    const check = document.createElement('span');
-    check.className = 'lesson-check' + (done ? ' done' : '');
-    check.setAttribute('aria-label', done ? 'הושלם' : 'לא הושלם');
-    if (done) check.innerHTML = '&#10003;';
-
-    const link = document.createElement('a');
-    link.className = 'lesson-link' + (done ? ' done-text' : '');
-    link.href = `lesson.html?order=${lesson.order}`;
-    link.textContent = lesson.title || 'שיעור';
-
-    li.appendChild(check);
-    li.appendChild(link);
-    lessonList.appendChild(li);
-    treeEl.appendChild(lessonList);
-
-    card.appendChild(header);
-    card.appendChild(treeEl);
-    container.appendChild(card);
-  });
-
-  /* ---------- show content ---------- */
-  el('loading-state').style.display = 'none';
-  el('main-content').style.display  = '';
-
-})();
-</script>
-
+  })();
+  </script>
 </body>
 </html>

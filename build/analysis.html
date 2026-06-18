@@ -5,284 +5,492 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>הניתוח האישי שלך | סקייל רווחי</title>
-  <link rel="stylesheet" href="../מותג/brand-system.css" />
+  <link rel="stylesheet" href="ds/styles.css" />
   <script src="js/survey-config.js"></script>
   <style>
-    /* ניטרלי — סטיילינג סופי יגיע בסשן עיצוב נפרד */
+    /* ── Analysis-page layout (tokens from ds/styles.css) ──── */
+    :root { --font-display: 'Heebo', 'Assistant', system-ui, sans-serif; }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: var(--font-body, 'Heebo', sans-serif);
-      background: var(--color-bg, #f8f8f8);
-      color: var(--color-text, #1a1a1a);
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--ink);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
 
-    .sr-page {
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding-inline: var(--pad-inline-mobile);
+    }
+    @media (min-width: 768px) { .wrap { padding-inline: var(--pad-inline-desktop); } }
+
+    /* ── Header ─────────────────────────────────────────── */
+    .site-header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(12, 37, 66, .92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--on-dark-line);
+    }
+    .site-header .wrap {
+      max-width: var(--container);
+      display: flex; align-items: center; justify-content: space-between; height: 60px;
+    }
+    .brand-lockup { display: inline-flex; align-items: center; }
+    .brand-lockup img { height: 34px; width: auto; display: block; }
+
+    /* ── Hero band (navy, dramatic) ─────────────────────── */
+    .analysis-hero {
+      position: relative;
+      background: var(--navy);
+      color: #fff;
+      overflow: hidden;
+      padding-block: var(--s-8) var(--s-7);
+      text-align: center;
+    }
+    .analysis-hero .glow-a {
+      position: absolute; width: 480px; height: 480px;
+      top: -200px; right: -140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(9,146,194,.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .analysis-hero .glow-b {
+      position: absolute; width: 380px; height: 380px;
+      bottom: -240px; left: -100px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(191,9,47,.13) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .analysis-hero .wrap { position: relative; z-index: 2; }
+
+    /* eyebrow */
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: var(--s-2);
+      font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--blue-light);
+      letter-spacing: var(--ls-eyebrow); margin-bottom: var(--s-4);
+    }
+    .eyebrow .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--grad-brand);
+      flex: none;
+    }
+
+    .analysis-hero h1 {
+      font-family: var(--font-display);
+      font-weight: var(--fw-black);
+      font-size: var(--fs-h1);
+      line-height: var(--lh-heading);
+      letter-spacing: var(--ls-heading);
+      color: #fff;
+      max-width: 22ch;
+      margin: 0 auto;
+      opacity: 0; transform: translateY(16px);
+      animation: rise 700ms var(--smooth) 100ms forwards;
+    }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+
+    .hero-sub {
+      font-size: var(--fs-body-l);
+      color: rgba(245,248,252,.78);
+      margin-top: var(--s-3);
+      opacity: 0; transform: translateY(14px);
+      animation: rise 700ms var(--smooth) 250ms forwards;
+    }
+
+    /* ── Main content area ──────────────────────────────── */
+    .analysis-stage {
       flex: 1;
+      padding-block: var(--s-8);
+    }
+
+    /* ── Diagnosis card ─────────────────────────────────── */
+    .diag-card {
+      position: relative;
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-modal);
+      overflow: hidden;
+      opacity: 0; transform: translateY(24px);
+      animation: rise 600ms var(--smooth) 380ms forwards;
+    }
+
+    /* top accent bar — brand gradient */
+    .diag-card__accent {
+      height: 5px;
+      background: var(--grad-brand);
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .diag-card__body {
+      padding: var(--s-6) var(--s-6) var(--s-5);
+    }
+    @media (min-width: 600px) {
+      .diag-card__body { padding: var(--s-7) var(--s-7) var(--s-6); }
+    }
+
+    .diag-card__label {
+      font-size: var(--fs-micro);
+      font-weight: var(--fw-bold);
+      letter-spacing: var(--ls-label);
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: var(--s-2);
+    }
+
+    .diag-card__title {
+      font-family: var(--font-heading);
+      font-weight: var(--fw-black);
+      font-size: var(--fs-h2);
+      color: var(--navy);
+      line-height: var(--lh-heading);
+      letter-spacing: var(--ls-heading);
+      margin-bottom: var(--s-5);
+    }
+
+    .diag-card__divider {
+      border: none;
+      border-top: 1px solid var(--line);
+      margin-bottom: var(--s-5);
+    }
+
+    .diag-card__section-label {
+      font-size: var(--fs-micro);
+      font-weight: var(--fw-bold);
+      letter-spacing: var(--ls-label);
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: var(--s-2);
+    }
+
+    .diag-card__text {
+      font-size: var(--fs-body-l);
+      line-height: var(--lh-relaxed);
+      color: var(--ink);
+      margin-bottom: var(--s-6);
+    }
+
+    /* meta grid — goal + recommendation */
+    .diag-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--s-4);
+      margin-bottom: var(--s-6);
+    }
+    @media (min-width: 560px) {
+      .diag-meta-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .diag-meta-box {
+      position: relative;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: var(--s-4) var(--s-5);
+      overflow: hidden;
+    }
+    /* left accent stripe (matches pain-card pattern from index.html) */
+    .diag-meta-box::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: var(--grad-brand);
+      border-radius: var(--radius-md) 0 0 var(--radius-md);
+    }
+    .diag-meta-box .meta-label {
+      font-size: var(--fs-micro);
+      font-weight: var(--fw-bold);
+      letter-spacing: var(--ls-label);
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: var(--s-1);
+    }
+    .diag-meta-box p {
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
+      color: var(--ink);
+    }
+
+    /* ── CTA section ────────────────────────────────────── */
+    .diag-card__cta {
+      padding: var(--s-5) var(--s-6) var(--s-6);
+      background: var(--bg);
+      border-top: 1px solid var(--line);
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1rem;
+      gap: var(--s-3);
+    }
+    @media (min-width: 600px) {
+      .diag-card__cta { padding: var(--s-5) var(--s-7) var(--s-7); }
     }
 
-    .sr-card {
-      background: var(--color-surface, #ffffff);
-      border-radius: var(--radius-card, 16px);
-      box-shadow: var(--shadow-card, 0 4px 24px rgba(0,0,0,0.08));
-      max-width: 640px;
+    .btn-primary-grad {
+      position: relative;
+      display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2);
+      flex-direction: row-reverse;
+      min-height: 58px;
+      padding: 0 var(--s-6);
+      border-radius: var(--radius-md); border: none; cursor: pointer;
+      font-family: var(--font-body); font-weight: var(--fw-bold); font-size: var(--fs-body-l);
+      background: var(--grad-brand);
+      color: #fff;
+      box-shadow: 0 8px 28px rgba(9,146,194,.35);
+      text-decoration: none;
+      transition: transform var(--dur-hover) ease, filter var(--dur-hover) ease;
       width: 100%;
-      padding: 2.5rem 2rem;
     }
+    .btn-primary-grad::after {
+      content: "";
+      position: absolute; inset: 0;
+      border-radius: inherit;
+      box-shadow: 0 0 0 0 rgba(9,146,194,.45);
+      animation: cta-pulse 2600ms var(--smooth) infinite;
+    }
+    @keyframes cta-pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(9,146,194,.40); }
+      70%  { box-shadow: 0 0 0 16px rgba(9,146,194,0); }
+      100% { box-shadow: 0 0 0 0 rgba(9,146,194,0); }
+    }
+    .btn-primary-grad:hover { transform: translateY(-2px); filter: brightness(1.08); }
+    .btn-primary-grad:focus-visible {
+      outline: 3px solid var(--blue-ring);
+      outline-offset: 3px;
+    }
+    .btn-icon { width: 18px; height: 18px; stroke: currentColor; fill: none; flex: none; }
 
-    /* --- שגיאה: concern חסר --- */
+    .btn-secondary-link {
+      display: block;
+      text-align: center;
+      font-family: var(--font-body); font-size: var(--fs-body); font-weight: var(--fw-medium);
+      color: var(--muted);
+      text-decoration: underline;
+      background: transparent; border: none; cursor: pointer;
+      transition: color var(--dur-hover);
+      text-decoration-color: transparent;
+      padding: var(--s-1) 0;
+    }
+    .btn-secondary-link:hover { color: var(--navy); text-decoration-color: var(--navy); }
+    .btn-secondary-link:focus-visible { outline: 2px solid var(--blue-ring); border-radius: var(--radius-sm); }
+
+    /* ── Error state ────────────────────────────────────── */
     .sr-error-state {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: var(--s-7) var(--s-6);
       text-align: center;
     }
     .sr-error-state h2 {
-      font-size: 1.4rem;
-      margin-bottom: 1rem;
-      color: var(--color-danger, #c0392b);
+      font-size: var(--fs-h3);
+      font-weight: var(--fw-bold);
+      color: var(--red);
+      margin-bottom: var(--s-3);
     }
     .sr-error-state p {
-      margin-bottom: 1.5rem;
-      color: var(--color-muted, #666);
-      line-height: 1.6;
+      font-size: var(--fs-body);
+      color: var(--muted);
+      line-height: var(--lh-relaxed);
+      margin-bottom: var(--s-5);
+      max-width: 40ch;
+      margin-inline: auto;
     }
 
-    /* --- תוכן ניתוח --- */
-    .sr-badge {
-      display: inline-block;
-      background: var(--color-accent, #1a1a1a);
-      color: var(--color-accent-text, #fff);
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      padding: 0.3em 0.8em;
-      border-radius: 99px;
-      margin-bottom: 1.25rem;
-      text-transform: uppercase;
+    /* ── Scroll reveal ──────────────────────────────────── */
+    .reveal {
+      transition: opacity var(--dur-reveal) ease, transform var(--dur-reveal) var(--smooth);
+    }
+    html.js .reveal:not(.in) { opacity: 0; transform: translateY(24px); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .analysis-hero h1, .hero-sub, .diag-card { animation: none !important; opacity: 1 !important; transform: none !important; }
+      .btn-primary-grad::after { animation: none !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
     }
 
-    .sr-title {
-      font-family: var(--font-display, 'Heebo', sans-serif);
-      font-size: 1.75rem;
-      font-weight: 800;
-      line-height: 1.3;
-      margin-bottom: 1.25rem;
-      color: var(--color-heading, #1a1a1a);
+    /* ── Footer ─────────────────────────────────────────── */
+    footer.site-footer {
+      background: var(--navy);
+      color: rgba(245,248,252,.7);
+      border-top: 1px solid var(--on-dark-line);
     }
-
-    .sr-divider {
-      border: none;
-      border-top: 1px solid var(--color-border, #e5e5e5);
-      margin: 1.5rem 0;
+    footer.site-footer .wrap {
+      max-width: var(--container);
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: var(--s-4); padding-block: var(--s-5);
     }
+    footer.site-footer .built { font-size: var(--fs-small); }
+    footer.site-footer .built b { color: #fff; font-weight: var(--fw-bold); }
 
-    .sr-section-label {
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--color-muted, #888);
-      margin-bottom: 0.5rem;
-    }
-
-    .sr-body {
-      font-size: 1rem;
-      line-height: 1.75;
-      color: var(--color-text, #1a1a1a);
-      margin-bottom: 1.5rem;
-    }
-
-    .sr-meta-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .sr-meta-box {
-      background: var(--color-bg, #f8f8f8);
-      border-radius: var(--radius-sm, 10px);
-      padding: 1rem;
-    }
-
-    .sr-meta-box .sr-section-label {
-      margin-bottom: 0.4rem;
-    }
-
-    .sr-meta-box p {
-      font-size: 0.92rem;
-      line-height: 1.55;
-      color: var(--color-text, #1a1a1a);
-    }
-
-    /* --- כפתורים --- */
-    .sr-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .btn-primary {
-      display: block;
-      width: 100%;
-      padding: 0.9rem 1.5rem;
-      background: var(--color-primary, #1a1a1a);
-      color: var(--color-primary-text, #fff);
-      font-family: var(--font-body, 'Heebo', sans-serif);
-      font-size: 1rem;
-      font-weight: 700;
-      text-align: center;
-      text-decoration: none;
-      border: none;
-      border-radius: var(--radius-btn, 10px);
-      cursor: pointer;
-      transition: opacity 0.15s ease;
-    }
-    .btn-primary:hover { opacity: 0.88; }
-
-    .btn-secondary {
-      display: block;
-      width: 100%;
-      padding: 0.75rem 1.5rem;
-      background: transparent;
-      color: var(--color-muted, #666);
-      font-family: var(--font-body, 'Heebo', sans-serif);
-      font-size: 0.9rem;
-      font-weight: 500;
-      text-align: center;
-      text-decoration: underline;
-      border: none;
-      cursor: pointer;
-      transition: color 0.15s ease;
-    }
-    .btn-secondary:hover { color: var(--color-text, #1a1a1a); }
-
-    /* --- פוטר --- */
-    footer {
-      text-align: center;
-      padding: 1.25rem;
-      font-size: 0.78rem;
-      color: var(--color-muted, #aaa);
-    }
-
+    /* ── Mobile ─────────────────────────────────────────── */
     @media (max-width: 480px) {
-      .sr-card { padding: 1.75rem 1.25rem; }
-      .sr-title { font-size: 1.4rem; }
-      .sr-meta-grid { grid-template-columns: 1fr; }
+      .analysis-hero h1 { font-size: var(--fs-h2); }
+      .diag-card__title { font-size: var(--fs-h3); }
     }
   </style>
 </head>
 <body>
+  <script>document.documentElement.classList.add('js');</script>
 
-<main class="sr-page" id="sr-main" role="main" aria-live="polite">
-  <!-- תוכן נטען דינמית על ידי JS -->
-</main>
+  <!-- ── Header ─────────────────────────────────────────── -->
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand-lockup" href="index.html" aria-label="סקייל רווחי">
+        <img src="assets/logo-horizontal-white.png" alt="סקייל רווחי">
+      </a>
+    </div>
+  </header>
 
-<footer>
-  נבנה ע"י הלל
-</footer>
+  <!-- ── Hero band ──────────────────────────────────────── -->
+  <section class="analysis-hero" aria-labelledby="analysis-heading">
+    <div class="glow-a" aria-hidden="true"></div>
+    <div class="glow-b" aria-hidden="true"></div>
+    <div class="wrap">
+      <span class="eyebrow"><span class="dot" aria-hidden="true"></span>האבחון שלך</span>
+      <h1 id="analysis-heading">הניתוח האישי שלך מוכן</h1>
+      <p class="hero-sub">על בסיס תשובותיך — זיהינו את נקודת החיכוך המדויקת ומה שיזיז אותך הכי מהר קדימה.</p>
+    </div>
+  </section>
 
-<script>
-(function () {
-  'use strict';
+  <!-- ── Diagnosis content ──────────────────────────────── -->
+  <main class="analysis-stage" id="sr-main" role="main" aria-live="polite">
+    <!-- JS renders here -->
+  </main>
 
-  var concern = localStorage.getItem('sr_concern');
-  var main = document.getElementById('sr-main');
+  <!-- ── Footer ─────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <a class="brand-lockup" href="index.html" aria-label="סקייל רווחי">
+        <img src="assets/logo-horizontal-white.png" alt="סקייל רווחי" style="height:30px;width:auto">
+      </a>
+      <span class="built">נבנה ע"י <b>הלל</b></span>
+    </div>
+  </footer>
 
-  /* ---- מצב שגיאה: concern ריק ---- */
-  if (!concern) {
+  <script>
+  (function () {
+    'use strict';
+
+    var concern = localStorage.getItem('sr_concern');
+    var main = document.getElementById('sr-main');
+
+    /* ---- מצב שגיאה: concern ריק ---- */
+    if (!concern) {
+      main.innerHTML =
+        '<div class="wrap"><div class="sr-error-state">' +
+          '<h2>לא נמצאו תשובות לשאלון</h2>' +
+          '<p>כדי לקבל את הניתוח האישי שלך, יש להשלים תחילה את שאלון ההתאמה.</p>' +
+          '<a href="survey.html" class="btn-primary-grad" style="max-width:260px;margin-inline:auto">חזרה לשאלון</a>' +
+        '</div></div>';
+      return;
+    }
+
+    /* ---- בדיקת תלות: window.SURVEY ---- */
+    if (typeof window.SURVEY === 'undefined' ||
+        typeof window.SURVEY.analysisContent === 'undefined' ||
+        typeof window.SURVEY.lessonMap === 'undefined') {
+      main.innerHTML =
+        '<div class="wrap"><div class="sr-error-state">' +
+          '<h2>שגיאת טעינה</h2>' +
+          '<p>לא ניתן לטעון את מנוע ההתאמה. אנא רענן את הדף.</p>' +
+          '<a href="survey.html" class="btn-primary-grad" style="max-width:260px;margin-inline:auto">חזרה לשאלון</a>' +
+        '</div></div>';
+      return;
+    }
+
+    var content = window.SURVEY.analysisContent[concern];
+
+    /* ---- מצב שגיאה: concern לא מוכר ---- */
+    if (!content) {
+      main.innerHTML =
+        '<div class="wrap"><div class="sr-error-state">' +
+          '<h2>לא נמצא ניתוח מתאים</h2>' +
+          '<p>סוג הדאגה שנשמר לא מוכר במערכת. נסה למלא את השאלון מחדש.</p>' +
+          '<a href="survey.html" class="btn-primary-grad" style="max-width:260px;margin-inline:auto">חזרה לשאלון</a>' +
+        '</div></div>';
+      return;
+    }
+
+    /* ---- בניית כתובת URL לשיעור המומלץ ---- */
+    var lessonHref = concern
+      ? 'lesson.html?rec=' + encodeURIComponent(concern)
+      : 'courses.html';
+
+    /* ---- meta boxes (goal + recommendation) ---- */
+    var goalHtml = content.goal
+      ? '<div class="diag-meta-box">' +
+          '<div class="meta-label">המטרה שלך</div>' +
+          '<p>' + _esc(content.goal) + '</p>' +
+        '</div>'
+      : '';
+
+    var recommendationHtml = content.recommendation
+      ? '<div class="diag-meta-box">' +
+          '<div class="meta-label">ההמלצה שלנו</div>' +
+          '<p>' + _esc(content.recommendation) + '</p>' +
+        '</div>'
+      : '';
+
+    var metaGrid = (goalHtml || recommendationHtml)
+      ? '<div class="diag-meta-grid">' + goalHtml + recommendationHtml + '</div>'
+      : '';
+
+    /* ---- render ---- */
     main.innerHTML =
-      '<div class="sr-card sr-error-state">' +
-        '<h2>לא נמצאו תשובות לשאלון</h2>' +
-        '<p>כדי לקבל את הניתוח האישי שלך, יש להשלים תחילה את שאלון ההתאמה.</p>' +
-        '<a href="survey.html" class="btn-primary">חזרה לשאלון</a>' +
+      '<div class="wrap">' +
+        '<article class="diag-card" aria-label="ניתוח אישי">' +
+          '<div class="diag-card__accent" aria-hidden="true"></div>' +
+          '<div class="diag-card__body">' +
+            '<div class="diag-card__label">ניתוח אישי</div>' +
+            '<h2 class="diag-card__title">' + _esc(content.title) + '</h2>' +
+            '<hr class="diag-card__divider" />' +
+            '<div class="diag-card__section-label">אבחון</div>' +
+            '<p class="diag-card__text">' + _esc(content.body) + '</p>' +
+            metaGrid +
+          '</div>' +
+          '<div class="diag-card__cta">' +
+            '<a href="' + lessonHref + '" class="btn-primary-grad">' +
+              '<svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+              'התחל מהשיעור שמתאים לך' +
+            '</a>' +
+            '<a href="courses.html" class="btn-secondary-link">עבור למרכז הלמידה</a>' +
+          '</div>' +
+        '</article>' +
       '</div>';
-    return;
-  }
 
-  /* ---- בדיקת תלות: window.SURVEY ---- */
-  if (typeof window.SURVEY === 'undefined' ||
-      typeof window.SURVEY.analysisContent === 'undefined' ||
-      typeof window.SURVEY.lessonMap === 'undefined') {
-    main.innerHTML =
-      '<div class="sr-card sr-error-state">' +
-        '<h2>שגיאת טעינה</h2>' +
-        '<p>לא ניתן לטעון את מנוע ההתאמה. אנא רענן את הדף.</p>' +
-        '<a href="survey.html" class="btn-primary">חזרה לשאלון</a>' +
-      '</div>';
-    return;
-  }
+    /* ---- scroll reveal on injected card ---- */
+    (function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var els = main.querySelectorAll('.reveal');
+      if (reduce || !('IntersectionObserver' in window)) {
+        els.forEach(function (e) { e.classList.add('in'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(function (e) { io.observe(e); });
+    })();
 
-  var content = window.SURVEY.analysisContent[concern];
-  var lessonId = window.SURVEY.lessonMap[concern];
-
-  /* ---- מצב שגיאה: concern לא מוכר ---- */
-  if (!content) {
-    main.innerHTML =
-      '<div class="sr-card sr-error-state">' +
-        '<h2>לא נמצא ניתוח מתאים</h2>' +
-        '<p>סוג הדאגה שנשמר לא מוכר במערכת. נסה למלא את השאלון מחדש.</p>' +
-        '<a href="survey.html" class="btn-primary">חזרה לשאלון</a>' +
-      '</div>';
-    return;
-  }
-
-  /* ---- בניית כתובת URL לשיעור המומלץ ---- */
-  var lessonHref = concern
-    ? 'lesson.html?rec=' + encodeURIComponent(concern)
-    : 'courses.html';
-
-  /* ---- רינדור הניתוח ---- */
-  var goalHtml = content.goal
-    ? '<div class="sr-meta-box">' +
-        '<div class="sr-section-label">המטרה שלך</div>' +
-        '<p>' + _esc(content.goal) + '</p>' +
-      '</div>'
-    : '';
-
-  var recommendationHtml = content.recommendation
-    ? '<div class="sr-meta-box">' +
-        '<div class="sr-section-label">ההמלצה שלנו</div>' +
-        '<p>' + _esc(content.recommendation) + '</p>' +
-      '</div>'
-    : '';
-
-  var metaGrid = (goalHtml || recommendationHtml)
-    ? '<div class="sr-meta-grid">' + goalHtml + recommendationHtml + '</div>'
-    : '';
-
-  main.innerHTML =
-    '<div class="sr-card">' +
-      '<span class="sr-badge">הניתוח האישי שלך</span>' +
-      '<h1 class="sr-title">' + _esc(content.title) + '</h1>' +
-      '<hr class="sr-divider" />' +
-      '<div class="sr-section-label">אבחון</div>' +
-      '<p class="sr-body">' + _esc(content.body) + '</p>' +
-      metaGrid +
-      '<div class="sr-actions">' +
-        '<a href="' + lessonHref + '" class="btn-primary">התחל מהשיעור שמתאים לך</a>' +
-        '<a href="courses.html" class="btn-secondary">עבור למרכז הלמידה</a>' +
-      '</div>' +
-    '</div>';
-
-  /* ---- עזר: XSS escape ---- */
-  function _esc(str) {
-    if (typeof str !== 'string') return '';
-    return str
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
-})();
-</script>
+    /* ---- XSS escape ---- */
+    function _esc(str) {
+      if (typeof str !== 'string') return '';
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+  })();
+  </script>
 
 </body>
 </html>
