@@ -432,7 +432,90 @@
     #tutor-mount {
       height: 520px;
       max-height: 70vh;
-      margin-top: var(--s-2, 8px);
+    }
+
+    /* ═══ ערכת השיעור — אקורדיון (10X v4) ═══ */
+    .kit {
+      --k-navy:#0c2542; --k-blue:#0992c2; --k-blue-light:#5b99c3;
+      --k-red:#bf092f; --k-line:#e3ecf5;
+      --k-brand:linear-gradient(120deg,#0992c2,#5b99c3,#bf092f,#911220);
+      --k-shadow:0 10px 30px rgba(12,37,66,.08);
+      --k-shadow-lg:0 20px 50px rgba(12,37,66,.14);
+      --k-radius:18px;
+      margin-top: var(--s-7, 56px);
+    }
+    .kit-head { text-align:center; margin-bottom:26px; }
+    .kit-eyebrow {
+      display:inline-block; font-size:13px; font-weight:700; letter-spacing:.08em;
+      color:var(--k-blue); background:rgba(9,146,194,.1);
+      padding:6px 16px; border-radius:999px; margin-bottom:12px;
+    }
+    .kit-title {
+      font-size:30px; font-weight:900; line-height:1.2;
+      background:var(--k-brand); -webkit-background-clip:text; background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+    .kit-sub { color:var(--k-navy); opacity:.62; font-size:15px; margin-top:6px; font-weight:500; }
+    .kit .acc-stack { display:flex; flex-direction:column; gap:14px; }
+    .kit .acc {
+      background:#fff; border-radius:var(--k-radius); box-shadow:var(--k-shadow);
+      overflow:hidden; border:1px solid var(--k-line);
+      transition:box-shadow .3s, border-color .3s;
+    }
+    .kit .acc.open { box-shadow:var(--k-shadow-lg); border-color:transparent; }
+    .kit .acc.open::before { content:""; display:block; height:4px; background:var(--k-brand); }
+    .kit .acc-bar {
+      display:flex; align-items:center; gap:14px; padding:20px 22px;
+      cursor:pointer; user-select:none; transition:background .2s;
+    }
+    .kit .acc-bar:hover { background:rgba(9,146,194,.04); }
+    .kit .acc-ico {
+      width:48px; height:48px; flex:none; border-radius:14px;
+      display:grid; place-items:center; font-size:24px; background:rgba(9,146,194,.1);
+    }
+    .kit .acc:nth-child(2) .acc-ico { background:rgba(91,153,195,.14); }
+    .kit .acc:nth-child(3) .acc-ico { background:rgba(191,9,47,.1); }
+    .kit .acc-meta { flex:1; min-width:0; }
+    .kit .acc-name { font-size:19px; font-weight:800; color:var(--k-navy); }
+    .kit .acc-tag { font-size:13.5px; color:var(--k-navy); opacity:.6; font-weight:500; margin-top:1px; }
+    .kit .acc-chev {
+      width:30px; height:30px; flex:none; border-radius:50%;
+      display:grid; place-items:center; color:var(--k-blue); background:rgba(9,146,194,.08);
+      transition:transform .35s cubic-bezier(.4,0,.2,1), background .2s; font-size:14px;
+    }
+    .kit .acc.open .acc-chev { transform:rotate(180deg); background:var(--k-blue); color:#fff; }
+    .kit .acc-wrap {
+      display:grid; grid-template-rows:0fr;
+      transition:grid-template-rows .4s cubic-bezier(.4,0,.2,1);
+    }
+    .kit .acc.open .acc-wrap { grid-template-rows:1fr; }
+    .kit .acc-inner { overflow:hidden; }
+    .kit .acc-body { padding:4px 22px 24px; }
+    .kit .wb-lead { font-size:14.5px; color:var(--k-navy); opacity:.72; margin-bottom:16px; font-weight:500; }
+    .kit .keypoints { list-style:none; display:flex; flex-direction:column; gap:10px; margin:0 0 20px; padding:0; }
+    .kit .keypoints li {
+      display:flex; gap:12px; align-items:flex-start; background:#f5f8fc;
+      border-radius:12px; padding:13px 15px; font-size:14.5px; font-weight:500;
+      border-inline-start:3px solid var(--k-blue); color:var(--k-navy);
+    }
+    .kit .keypoints li .kp-num {
+      width:24px; height:24px; flex:none; border-radius:7px; background:var(--k-navy);
+      color:#fff; display:grid; place-items:center; font-size:13px; font-weight:700;
+    }
+    .kit .wb-actions { display:flex; gap:12px; flex-wrap:wrap; }
+    .kit .k-btn {
+      flex:1; min-width:180px; border:none; border-radius:12px; padding:14px 18px;
+      font-family:inherit; font-size:15px; font-weight:700; cursor:pointer;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      transition:transform .15s, box-shadow .2s; text-decoration:none;
+    }
+    .kit .k-btn-primary { background:var(--k-brand); color:#fff; box-shadow:0 8px 20px rgba(9,146,194,.3); }
+    .kit .k-btn-primary:hover { transform:translateY(-2px); box-shadow:0 12px 26px rgba(9,146,194,.4); }
+    .kit .acc.is-hidden { display:none; }
+    @media (max-width:560px) {
+      .kit-title { font-size:25px; }
+      .kit .acc-bar { padding:16px; }
+      .kit .acc-body { padding:4px 16px 20px; }
     }
 
     /* ── Reduced motion ──────────────────────────────────── */
@@ -493,10 +576,6 @@
       <!-- Action buttons -->
       <div class="actions">
         <div class="actions-left">
-          <a id="btn-practice" class="btn-practice" style="display:none;" role="button">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 9-14 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-            תרגול
-          </a>
           <a id="btn-next" class="btn-next" style="display:none;" role="button">
             השיעור הבא
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
@@ -511,17 +590,65 @@
         </div>
       </div>
 
-      <!-- AI Tutor -->
-      <section class="tutor-section" aria-label="שאל את המורה">
-        <div class="tutor-card">
-          <div class="tutor-card-header">
-            <div class="tutor-card-icon" aria-hidden="true">🎓</div>
-            <div>
-              <div class="tutor-card-title">שאל את המורה על השיעור</div>
-              <div class="tutor-card-sub">מורה AI מעוגן על תוכן השיעור הנוכחי</div>
+      <!-- ═══ ערכת השיעור — אקורדיון (מורה AI / חוברת סיכום / משחק תרגול) ═══ -->
+      <section class="kit" aria-label="ערכת השיעור">
+        <header class="kit-head">
+          <span class="kit-eyebrow" id="kit-eyebrow">השיעור</span>
+          <h2 class="kit-title">ערכת השיעור</h2>
+          <p class="kit-sub">כל מה שצריך כדי להפנים את השיעור — מורה, חוברת ותרגול</p>
+        </header>
+        <div class="acc-stack">
+
+          <!-- מורה AI -->
+          <section class="acc open" data-acc>
+            <div class="acc-bar" data-bar>
+              <div class="acc-ico">🎓</div>
+              <div class="acc-meta">
+                <div class="acc-name">מורה AI</div>
+                <div class="acc-tag">שאל כל שאלה וקבל תשובה מיידית על השיעור</div>
+              </div>
+              <div class="acc-chev" aria-hidden="true">▼</div>
             </div>
-          </div>
-          <div id="tutor-mount"></div>
+            <div class="acc-wrap"><div class="acc-inner"><div class="acc-body">
+              <div id="tutor-mount"></div>
+            </div></div></div>
+          </section>
+
+          <!-- חוברת סיכום -->
+          <section class="acc" data-acc data-kit="workbook">
+            <div class="acc-bar" data-bar>
+              <div class="acc-ico">📘</div>
+              <div class="acc-meta">
+                <div class="acc-name">חוברת סיכום</div>
+                <div class="acc-tag">נקודות המפתח של השיעור במקום אחד</div>
+              </div>
+              <div class="acc-chev" aria-hidden="true">▼</div>
+            </div>
+            <div class="acc-wrap"><div class="acc-inner"><div class="acc-body">
+              <p class="wb-lead">סיכמנו עבורך את הרעיונות המרכזיים מהשיעור כדי שתחזור אליהם בכל רגע:</p>
+              <ul class="keypoints" id="wb-keypoints"></ul>
+              <div class="wb-actions">
+                <a id="btn-workbook" class="k-btn k-btn-primary" role="button" target="_blank" rel="noopener">📘 פתח חוברת להדפסה / PDF</a>
+              </div>
+            </div></div></div>
+          </section>
+
+          <!-- משחק תרגול -->
+          <section class="acc" data-acc data-kit="game">
+            <div class="acc-bar" data-bar>
+              <div class="acc-ico">🎮</div>
+              <div class="acc-meta">
+                <div class="acc-name">משחק תרגול</div>
+                <div class="acc-tag">בדוק את עצמך וצבור נקודות ניסיון</div>
+              </div>
+              <div class="acc-chev" aria-hidden="true">▼</div>
+            </div>
+            <div class="acc-wrap"><div class="acc-inner"><div class="acc-body">
+              <p class="wb-lead">5 שאלות מהשיעור — תרגול קצר שמקבע את החומר וצובר XP.</p>
+              <a id="btn-practice" class="k-btn k-btn-primary" role="button">🚀 התחל תרגול</a>
+            </div></div></div>
+          </section>
+
         </div>
       </section>
 
@@ -699,6 +826,14 @@
       /* נגן (video_url כמו שהוא) */
       buildEmbed(recLesson.video_url);
 
+      /* מסלול מומלץ: אין order/נקודות מפתח → הצג רק מורה, הסתר חוברת+משחק */
+      const kitEyebrowRec = qs('#kit-eyebrow');
+      if (kitEyebrowRec) kitEyebrowRec.textContent = 'שיעור מומלץ';
+      Array.prototype.forEach.call(
+        document.querySelectorAll('.kit .acc[data-kit]'),
+        function (a) { a.classList.add('is-hidden'); }
+      );
+
       /* הצג תוכן, הסתר טעינה; אין key_points לשיעור מומלץ */
       hide(qs('#state-loading'));
       show(qs('#lesson-content'));
@@ -761,7 +896,30 @@
         });
         show(kpBlock);
         show(metaBlock);
+
+        /* אותן נקודות מפתח גם בתוך אקורדיון "חוברת סיכום" (ממוספרות) */
+        const wbList = qs('#wb-keypoints');
+        if (wbList) {
+          lesson.key_points.forEach(function (pt, i) {
+            const li  = document.createElement('li');
+            const num = document.createElement('span');
+            num.className = 'kp-num';
+            num.textContent = String(i + 1);
+            const txt = document.createElement('span');
+            txt.textContent = pt;
+            li.appendChild(num);
+            li.appendChild(txt);
+            wbList.appendChild(li);
+          });
+        }
       }
+
+      /* ערכת השיעור — כותרת + חיווט כפתורים */
+      const kitEyebrow = qs('#kit-eyebrow');
+      if (kitEyebrow) kitEyebrow.textContent = 'שיעור ' + lessonOrder;
+
+      const btnWorkbook = qs('#btn-workbook');
+      if (btnWorkbook) btnWorkbook.href = `workbook.html?order=${lessonOrder}`;
 
       /* Practice button */
       const btnPractice = qs('#btn-practice');
@@ -858,6 +1016,24 @@
     if (el && el.offsetParent !== null && mountTutor()) return;
     if (n > 0) setTimeout(function () { poll(n - 1); }, 250);
   })(40);
+})();
+</script>
+
+<!-- ── אקורדיון ערכת השיעור (פתיחה/סגירה, אחד בכל פעם) ──── -->
+<script>
+(function () {
+  var bars = document.querySelectorAll('.kit [data-bar]');
+  Array.prototype.forEach.call(bars, function (bar) {
+    bar.addEventListener('click', function () {
+      var acc = bar.closest('[data-acc]');
+      var isOpen = acc.classList.contains('open');
+      Array.prototype.forEach.call(
+        document.querySelectorAll('.kit [data-acc]'),
+        function (a) { a.classList.remove('open'); }
+      );
+      if (!isOpen) acc.classList.add('open');
+    });
+  });
 })();
 </script>
 </body>
