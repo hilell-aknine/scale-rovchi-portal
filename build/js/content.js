@@ -23,13 +23,25 @@
   // מפתח לאחסון השיעורים המאוחדים
   let _lessons = [];
 
+  // בסיס נתיב — נגזר ממיקום content.js עצמו, כדי שגם דפים בתת-תיקיות (features/game) יטענו נכון
+  const BASE = (function () {
+    const s = document.currentScript || document.querySelector('script[src*="content.js"]');
+    if (s && s.src) return s.src.replace(/[?#].*$/, '').replace(/js\/content\.js$/, '');
+    return './';
+  })();
+
   // Promise מרכזי — מתממש כשכל הנתונים נטענו
   const ready = (async function loadAll() {
     // שלב 1: טען את רשימת השיעורים הראשית (מקור-אמת לרשימה ולקישורי וידאו)
-    const realLessons = await safeFetch('./data/real-lessons.json');
-    if (!realLessons || !Array.isArray(realLessons)) {
-      // אם real-lessons.json חסר — מערך ריק, לא קורסים
+    const realRaw = await safeFetch(BASE + 'data/real-lessons.json');
+    // תומך גם במערך עירום וגם באובייקט { lessons: [...] }
+    const realLessons = Array.isArray(realRaw)
+      ? realRaw
+      : (realRaw && Array.isArray(realRaw.lessons) ? realRaw.lessons : null);
+    if (!realLessons) {
+      // אם real-lessons.json חסר/לא תקין — מערך ריק, לא קורסים
       _lessons = [];
+      if (typeof console !== 'undefined') console.warn('[SRContent] real-lessons.json לא נטען או לא במבנה צפוי — אין שיעורים');
       return;
     }
 
@@ -51,7 +63,7 @@
     const packagePromises = [];
     for (let i = 1; i <= LESSON_COUNT; i++) {
       const padded = String(i).padStart(2, '0');
-      packagePromises.push(safeFetch(`./data/lessons/lesson-${padded}.json`));
+      packagePromises.push(safeFetch(`${BASE}data/lessons/lesson-${padded}.json`));
     }
     const packages = await Promise.all(packagePromises);
 
