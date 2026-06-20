@@ -1011,11 +1011,12 @@
     }
     return false;
   }
+  /* פולר: מחבר ברגע ש-#tutor-mount ו-SRTutor קיימים (בלי תלות ב-offsetParent —
+     האקורדיון פתוח כברירת מחדל ול-#tutor-mount יש גובה, אז אין צורך בבדיקת נראות) */
   (function poll(n) {
-    var el = document.getElementById('tutor-mount');
-    if (el && el.offsetParent !== null && mountTutor()) return;
-    if (n > 0) setTimeout(function () { poll(n - 1); }, 250);
-  })(40);
+    if (mountTutor()) return;
+    if (n > 0) setTimeout(function () { poll(n - 1); }, 200);
+  })(50);
 })();
 </script>
 
