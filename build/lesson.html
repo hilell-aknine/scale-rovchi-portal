@@ -428,6 +428,12 @@
       color: var(--muted);
       margin-top: 1px;
     }
+    /* גובה אמיתי ל-mount — הווידג'ט המוטמע הוא height:100% ויתכווץ ל-0 בלי זה */
+    #tutor-mount {
+      height: 520px;
+      max-height: 70vh;
+      margin-top: var(--s-2, 8px);
+    }
 
     /* ── Reduced motion ──────────────────────────────────── */
     @media (prefers-reduced-motion: reduce) {
