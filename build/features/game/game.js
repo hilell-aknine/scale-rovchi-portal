@@ -16,10 +16,10 @@
     this.lessonId = opts.lessonId || 'lsn-1';
     this.lessonTitle = opts.lessonTitle || 'תרגול שיעור';
     this.onFinish = opts.onFinish || function () {};
-    // opts.questions מאפשר הזרקה ישירה (נטען מ-SRContent); fallback ל-SRQuestions (mock)
-    this.questions = Array.isArray(opts.questions) && opts.questions.length > 0
-      ? opts.questions
-      : window.SRQuestions.getForLesson(this.lessonId);
+    // opts.questions = הזרקה ישירה מ-SRContent (השאלות האמיתיות).
+    // אין יותר fallback ל-SRQuestions (MOCK) — עדיף ריק (→ "תרגול בהכנה")
+    // מאשר להציג שאלות לא-קשורות מהקובץ questions.js.
+    this.questions = Array.isArray(opts.questions) ? opts.questions : [];
     this._reset();
   }
 
@@ -34,6 +34,16 @@
 
   SRGame.prototype.start = function () {
     this._reset();
+    if (!this.questions || this.questions.length === 0) {
+      // אין שאלות תקינות — הצג מצב "בהכנה" במקום לקרוס
+      this.root.innerHTML =
+        '<div class="g-card g-end">' +
+          '<div class="g-end-emoji">📝</div>' +
+          '<div class="g-end-title">התרגול בהכנה</div>' +
+          '<div class="g-end-sub">החומר מתעדכן בקרוב. חזור מאוחר יותר.</div>' +
+        '</div>';
+      return;
+    }
     this._renderQuestion();
   };
 
@@ -144,7 +154,14 @@
       });
       checkBtn.addEventListener('click', function () {
         if (self.answered || self.orderPick.length !== qd.items.length) return;
-        var ok = self.orderPick.every(function (v, i) { return v === i; });
+        // חוזה: qd.items מוזרקים ברצף הנכון, ולכן הסדר הנכון הוא 0,1,2,…
+        // (שאלות order_steps שאינן עומדות בחוזה מסוננות במקור — ראה mapQuestion).
+        // אם המקור יספק qd.answerOrder (מערך אינדקסים), נכבד אותו.
+        var correctOrder = Array.isArray(qd.answerOrder) && qd.answerOrder.length === qd.items.length
+          ? qd.answerOrder
+          : qd.items.map(function (_, i) { return i; });
+        var ok = self.orderPick.length === correctOrder.length &&
+                 self.orderPick.every(function (v, i) { return v === correctOrder[i]; });
         target.querySelectorAll('.g-chip').forEach(function (c) { c.classList.add(ok ? 'correct' : 'wrong'); });
         checkBtn.style.display = 'none';
         self._resolve(ok, qd.explain);

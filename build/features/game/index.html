@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+  <!--sr-funnel-gate--><script>(function(){try{if(location.search.indexOf("dev=1")>-1)return;var e=localStorage.getItem("sr_user_email");var p=localStorage.getItem("sr_concern")||localStorage.getItem("sr_lesson_id")||localStorage.getItem("sr_access_token");if(!e){location.replace("../../index.html");return;}if(!p){location.replace("../../survey.html");return;}}catch(_){}})();</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>סקייל רווחי — תרגול אינטראקטיבי</title>
@@ -423,12 +424,7 @@
 
   <div class="lesson-pick">
     <span>תרגול עבור שיעור:</span>
-    <select id="lesson-select">
-      <option value="lsn-1">1 · מאיפה מגיעים לידים</option>
-      <option value="lsn-2">2 · מקור לידים יציב</option>
-      <option value="lsn-3">3 · סינון לידים</option>
-      <option value="lsn-4">4 · סגירת עסקאות</option>
-    </select>
+    <select id="lesson-select"></select>
   </div>
 
   <div id="game"></div>
@@ -446,12 +442,14 @@
   document.getElementById('mode-pill').textContent = G.mode;
   G.renderHUD('#hud');
 
-  // ממיר פורמט content.js → פורמט game.js
+  // ממיר פורמט content.js → פורמט game.js.
+  // מחזיר null עבור שאלות שלא ניתן לנקד אותן נכון לפי מבנה הנתונים → יסוננו.
   function mapQuestion(q) {
     var type = q.type;
     if (type === 'multiple_choice') type = 'mc';
     else if (type === 'true_false') type = 'tf';
     else if (type === 'order_steps') type = 'order';
+    else return null; // סוג לא מוכר — דלג
 
     var mapped = {
       type: type,
@@ -460,13 +458,20 @@
     };
 
     if (type === 'mc') {
-      mapped.options = q.options || [];
-      mapped.answer = typeof q.answer_index === 'number' ? q.answer_index : 0;
+      var opts = Array.isArray(q.options) ? q.options : [];
+      if (opts.length < 2) return null;
+      var ai = (typeof q.answer_index === 'number' && q.answer_index >= 0 && q.answer_index < opts.length)
+        ? q.answer_index : 0;
+      mapped.options = opts;
+      mapped.answer = ai;
     } else if (type === 'tf') {
       // answer_index: 0 = נכון, 1 = לא נכון
       mapped.answer = (q.answer_index === 0);
     } else if (type === 'order') {
-      mapped.items = q.options || [];
+      // מבנה ה-order_steps בדאטה אינו מקודד תמורה מלאה תקינה
+      // (ה-options מכילים מסיחים, ו-answer_index אינו רצף) → לא ניתן לנקד אמין.
+      // עדיף לסנן מאשר לסמן תשובה נכונה כשגויה.
+      return null;
     }
 
     return mapped;
@@ -491,49 +496,65 @@
   var params = new URLSearchParams(location.search);
   var sel = document.getElementById('lesson-select');
   var initOrder = parseInt(params.get('order'), 10) || 1;
-
-  // סנכרון הבורר אם order תואם אחת האפשרויות
-  [].forEach.call(sel.options, function (o) {
-    if (parseInt(o.value.replace('lsn-', ''), 10) === initOrder) sel.value = o.value;
-  });
-
   var game;
 
+  // כותרת לשיעור לפי order (מה-SRContent), עם נפילה אלגנטית
+  function titleFor(order) {
+    var lesson = SRContent.getLesson(order);
+    if (lesson && lesson.title) return 'שיעור ' + order + ': ' + lesson.title;
+    return 'שיעור ' + order;
+  }
+
   function launch(order) {
-    var lessonTitle = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : ('שיעור ' + order);
+    var lessonTitle = titleFor(order);
     document.getElementById('game').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted)">טוען שאלות…</div>';
 
-    SRContent.ready.then(function () {
-      var raw = SRContent.getQuestions(order);
+    var raw = SRContent.getQuestions(order);
+    // מיפוי + סינון שאלות שלא ניתן לנקד אמין (mapQuestion מחזיר null)
+    var questions = (raw || []).map(mapQuestion).filter(function (q) { return q; });
 
-      if (!raw || raw.length === 0) {
-        showEmpty(lessonTitle);
-        return;
+    if (questions.length === 0) {
+      showEmpty(lessonTitle);
+      return;
+    }
+
+    // זריקת השאלות ישירות לתוך SRGame (עוקפת את SRQuestions.getForLesson / questions.js)
+    game = new window.SRGame({
+      mount: '#game',
+      lessonId: 'order-' + order,
+      lessonTitle: lessonTitle,
+      questions: questions,
+      onFinish: function (result) {
+        window.location.href = '../../lesson.html?order=' + order;
       }
-
-      var questions = raw.map(mapQuestion);
-
-      // זריקת השאלות ישירות לתוך SRGame (עוקפת את SRQuestions.getForLesson)
-      game = new window.SRGame({
-        mount: '#game',
-        lessonId: 'order-' + order,
-        lessonTitle: lessonTitle,
-        questions: questions,
-        onFinish: function (result) {
-          var backUrl = '../../lesson.html?order=' + order;
-          window.location.href = backUrl;
-        }
-      });
-      game.start();
     });
+    game.start();
   }
 
   sel.addEventListener('change', function () {
-    var order = parseInt(sel.value.replace('lsn-', ''), 10) || 1;
+    var order = parseInt(sel.value, 10) || 1;
     launch(order);
   });
 
-  launch(initOrder);
+  // בניית הבורר דינמית מכל השיעורים בפועל (תמיד תואם את מספר השיעורים האמיתי)
+  SRContent.ready.then(function () {
+    var lessons = SRContent.getLessons() || [];
+    if (lessons.length === 0) {
+      // נפילה: לפחות שיעור אחד כדי שהבורר לא יישאר ריק
+      lessons = [{ order: initOrder, title: '' }];
+    }
+    sel.innerHTML = lessons.map(function (l) {
+      var label = 'שיעור ' + l.order + (l.title ? ': ' + l.title : '');
+      return '<option value="' + l.order + '">' + label + '</option>';
+    }).join('');
+
+    // בחירת השיעור ההתחלתי אם קיים, אחרת הראשון
+    var exists = lessons.some(function (l) { return l.order === initOrder; });
+    var startOrder = exists ? initOrder : (lessons[0] ? lessons[0].order : 1);
+    sel.value = String(startOrder);
+
+    launch(startOrder);
+  });
 </script>
 </body>
 </html>
