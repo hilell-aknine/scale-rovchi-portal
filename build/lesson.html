@@ -434,6 +434,42 @@
       max-height: 70vh;
     }
 
+    /* ═══ ערכת השיעור — 3 כרטיסים אופקיים ═══ */
+    .kit .kit-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .kit .kit-card {
+      display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px;
+      background: #fff; border: 1px solid var(--k-line); border-radius: 16px; padding: 22px 12px;
+      box-shadow: var(--k-shadow); cursor: pointer; text-decoration: none; color: var(--k-navy);
+      font-family: inherit; position: relative; overflow: hidden;
+      transition: transform .15s, box-shadow .2s, border-color .2s;
+    }
+    .kit .kit-card::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--k-brand); opacity: 0; transition: opacity .2s; }
+    .kit .kit-card:hover { transform: translateY(-3px); box-shadow: var(--k-shadow-lg); border-color: transparent; }
+    .kit .kit-card:hover::before { opacity: 1; }
+    .kit .kit-card-ico { width: 54px; height: 54px; border-radius: 16px; display: grid; place-items: center; font-size: 28px; background: rgba(9,146,194,.1); }
+    .kit .kit-card--wb .kit-card-ico { background: rgba(91,153,195,.16); }
+    .kit .kit-card--game .kit-card-ico { background: rgba(191,9,47,.1); }
+    .kit .kit-card-name { font-size: 17px; font-weight: 800; }
+    .kit .kit-card-sub { font-size: 12.5px; color: var(--k-navy); opacity: .6; line-height: 1.4; }
+    .kit .kit-card-cta { margin-top: 8px; font-size: 13.5px; font-weight: 700; color: #fff; background: var(--k-brand); padding: 8px 16px; border-radius: 999px; }
+    .kit .kit-card.is-hidden { display: none; }
+    @media (max-width: 560px) {
+      .kit .kit-cards { gap: 8px; }
+      .kit .kit-card { padding: 16px 6px; border-radius: 14px; }
+      .kit .kit-card-ico { width: 44px; height: 44px; font-size: 22px; }
+      .kit .kit-card-name { font-size: 14px; }
+      .kit .kit-card-sub { font-size: 10.5px; }
+      .kit .kit-card-cta { font-size: 11.5px; padding: 7px 11px; }
+    }
+    /* מורה AI — חלון מודאלי */
+    .tutor-modal { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(12,37,66,.6); backdrop-filter: blur(4px); }
+    .tutor-modal.open { display: flex; }
+    .tutor-modal-card { background: #fff; border-radius: 20px; width: min(440px, 100%); height: min(640px, 86vh); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 24px 60px rgba(12,37,66,.4); }
+    .tutor-modal-head { display: flex; align-items: center; justify-content: space-between; padding: 13px 18px; background: var(--navy); color: #fff; flex: none; }
+    .tutor-modal-title { font-weight: 700; font-size: 16px; }
+    .tutor-modal-close { background: rgba(255,255,255,.15); border: 0; color: #fff; width: 32px; height: 32px; border-radius: 50%; font-size: 20px; cursor: pointer; line-height: 1; }
+    .tutor-modal #tutor-mount { flex: 1; height: auto; max-height: none; }
+
     /* ═══ ערכת השיעור — אקורדיון (10X v4) ═══ */
     .kit {
       --k-navy:#0c2542; --k-blue:#0992c2; --k-blue-light:#5b99c3;
@@ -659,60 +695,45 @@
           <h2 class="kit-title">ערכת השיעור</h2>
           <p class="kit-sub">כל מה שצריך כדי להפנים את השיעור — מורה, חוברת ותרגול</p>
         </header>
-        <div class="acc-stack">
+        <div class="kit-cards">
 
           <!-- מורה AI -->
-          <section class="acc" data-acc>
-            <div class="acc-bar" data-bar>
-              <div class="acc-ico">🎓</div>
-              <div class="acc-meta">
-                <div class="acc-name">מורה AI</div>
-                <div class="acc-tag">שאל כל שאלה וקבל תשובה מיידית על השיעור</div>
-              </div>
-              <div class="acc-chev" aria-hidden="true">▼</div>
-            </div>
-            <div class="acc-wrap"><div class="acc-inner"><div class="acc-body">
-              <div id="tutor-mount"></div>
-            </div></div></div>
-          </section>
+          <button class="kit-card kit-card--tutor" id="card-tutor" type="button">
+            <span class="kit-card-ico">🎓</span>
+            <span class="kit-card-name">מורה AI</span>
+            <span class="kit-card-sub">שאל כל שאלה על השיעור</span>
+            <span class="kit-card-cta">פתח שיחה</span>
+          </button>
 
           <!-- חוברת סיכום -->
-          <section class="acc" data-acc data-kit="workbook">
-            <div class="acc-bar" data-bar>
-              <div class="acc-ico">📘</div>
-              <div class="acc-meta">
-                <div class="acc-name">חוברת סיכום</div>
-                <div class="acc-tag">נקודות המפתח של השיעור במקום אחד</div>
-              </div>
-              <div class="acc-chev" aria-hidden="true">▼</div>
-            </div>
-            <div class="acc-wrap"><div class="acc-inner"><div class="acc-body">
-              <p class="wb-lead">סיכמנו עבורך את הרעיונות המרכזיים מהשיעור כדי שתחזור אליהם בכל רגע:</p>
-              <ul class="keypoints" id="wb-keypoints"></ul>
-              <div class="wb-actions">
-                <a id="btn-workbook" class="k-btn k-btn-primary" role="button" target="_blank" rel="noopener" download>📘 הורד חוברת PDF</a>
-              </div>
-            </div></div></div>
-          </section>
+          <a class="kit-card kit-card--wb" id="btn-workbook" data-kit="workbook" target="_blank" rel="noopener" download>
+            <span class="kit-card-ico">📘</span>
+            <span class="kit-card-name">חוברת סיכום</span>
+            <span class="kit-card-sub">נקודות המפתח כ-PDF</span>
+            <span class="kit-card-cta">הורד PDF</span>
+          </a>
 
           <!-- משחק תרגול -->
-          <section class="acc" data-acc data-kit="game">
-            <div class="acc-bar" data-bar>
-              <div class="acc-ico">🎮</div>
-              <div class="acc-meta">
-                <div class="acc-name">משחק תרגול</div>
-                <div class="acc-tag">בדוק את עצמך וצבור נקודות ניסיון</div>
-              </div>
-              <div class="acc-chev" aria-hidden="true">▼</div>
-            </div>
-            <div class="acc-wrap"><div class="acc-inner"><div class="acc-body">
-              <p class="wb-lead">5 שאלות מהשיעור — תרגול קצר שמקבע את החומר וצובר XP.</p>
-              <a id="btn-practice" class="k-btn k-btn-primary" role="button">🚀 התחל תרגול</a>
-            </div></div></div>
-          </section>
+          <a class="kit-card kit-card--game" id="btn-practice" data-kit="game">
+            <span class="kit-card-ico">🎮</span>
+            <span class="kit-card-name">משחק תרגול</span>
+            <span class="kit-card-sub">בדוק את עצמך וצבור XP</span>
+            <span class="kit-card-cta">התחל תרגול</span>
+          </a>
 
         </div>
       </section>
+
+      <!-- מורה AI — חלון (נפתח מהכרטיס) -->
+      <div class="tutor-modal" id="tutor-modal" aria-hidden="true">
+        <div class="tutor-modal-card" role="dialog" aria-modal="true" aria-label="מורה AI">
+          <div class="tutor-modal-head">
+            <span class="tutor-modal-title">🎓 המורה האישי</span>
+            <button class="tutor-modal-close" id="tutor-modal-close" type="button" aria-label="סגור">×</button>
+          </div>
+          <div id="tutor-mount"></div>
+        </div>
+      </div>
 
       <!-- Description + key points -->
       <div id="lesson-meta" class="lesson-meta" style="display:none;">
@@ -1192,21 +1213,19 @@
 })();
 </script>
 
-<!-- ── אקורדיון ערכת השיעור (פתיחה/סגירה, אחד בכל פעם) ──── -->
+<!-- ── חלון המורה (נפתח מהכרטיס האופקי) ──────────────────── -->
 <script>
 (function () {
-  var bars = document.querySelectorAll('.kit [data-bar]');
-  Array.prototype.forEach.call(bars, function (bar) {
-    bar.addEventListener('click', function () {
-      var acc = bar.closest('[data-acc]');
-      var isOpen = acc.classList.contains('open');
-      Array.prototype.forEach.call(
-        document.querySelectorAll('.kit [data-acc]'),
-        function (a) { a.classList.remove('open'); }
-      );
-      if (!isOpen) acc.classList.add('open');
-    });
-  });
+  var modal = document.getElementById('tutor-modal');
+  var card  = document.getElementById('card-tutor');
+  var close = document.getElementById('tutor-modal-close');
+  if (!modal || !card) return;
+  function open()  { modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false'); }
+  function shut()  { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); }
+  card.addEventListener('click', open);
+  if (close) close.addEventListener('click', shut);
+  modal.addEventListener('click', function (e) { if (e.target === modal) shut(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) shut(); });
 })();
 </script>
 </body>
