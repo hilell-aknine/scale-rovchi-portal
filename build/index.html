@@ -28,7 +28,9 @@
     .header-link:hover { color: #fff; }
 
     /* Hero (navy, dramatic) */
-    .hero { position: relative; background: var(--navy); color: #fff; overflow: hidden; padding-block: var(--s-9) var(--s-8); }
+    .hero { position: relative; background: var(--navy); color: #fff; overflow: hidden; overflow-x: hidden; padding-block: var(--s-9) var(--s-8); }
+    .hero .wrap { padding-inline: 1.25rem; }
+    @media (min-width: 768px) { .hero .wrap { padding-inline: var(--pad-inline-desktop); } }
     .hero .glow-a { width: 520px; height: 520px; top: -220px; right: -120px; }
     .hero .glow-b { width: 420px; height: 420px; bottom: -260px; left: -100px; opacity: .12; }
     .hero .wrap { position: relative; z-index: 2; }
@@ -46,6 +48,7 @@
       font-family: var(--font-display); font-weight: 800;
       font-size: var(--fs-display); line-height: var(--lh-tight); letter-spacing: var(--ls-display);
       color: #fff; margin-bottom: var(--s-5);
+      word-break: break-word; overflow-wrap: break-word;
       transform: translateY(14px);
       animation: hero-rise 800ms var(--smooth) 150ms forwards;
     }
@@ -114,8 +117,9 @@
     .sec-eyebrow { font-size: var(--fs-small); font-weight: 700; letter-spacing: .02em; color: var(--blue);
       display: inline-flex; align-items: center; gap: var(--s-2); margin-bottom: var(--s-3); }
     .sec-eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--grad-brand); }
-    .sec-title { font-family: var(--font-heading); font-weight: 800; font-size: var(--fs-h1); color: var(--navy);
-      line-height: var(--lh-heading); letter-spacing: var(--ls-heading); margin-bottom: var(--s-3); max-width: 22ch; }
+    .sec-title { font-family: var(--font-heading); font-weight: 800; font-size: clamp(1.5rem, 5vw, 3rem); color: var(--navy);
+      line-height: var(--lh-heading); letter-spacing: var(--ls-heading); margin-bottom: var(--s-3); max-width: 22ch;
+      word-break: break-word; overflow-wrap: break-word; }
     .sec-sub { font-size: var(--fs-body-l); color: var(--muted); max-width: 60ch; line-height: var(--lh-relaxed); }
 
     /* Mechanism — pain framing */
@@ -154,8 +158,9 @@
     .convert .wrap { position: relative; z-index: 2; }
     .convert-grid { display: grid; grid-template-columns: 1fr; gap: var(--s-7); align-items: center; }
     @media (min-width: 920px) { .convert-grid { grid-template-columns: 1.05fr .95fr; gap: var(--s-8); } }
-    .convert h2 { font-family: var(--font-display); font-weight: 800; font-size: var(--fs-h1); color: #fff;
-      line-height: var(--lh-heading); letter-spacing: var(--ls-heading); margin-bottom: var(--s-4); }
+    .convert h2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.5rem, 5vw, 3rem); color: #fff;
+      line-height: var(--lh-heading); letter-spacing: var(--ls-heading); margin-bottom: var(--s-4);
+      word-break: break-word; overflow-wrap: break-word; }
     .convert h2 .grad { background: var(--grad-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .convert .lede { font-size: var(--fs-body-l); color: rgba(245,248,252,.82); line-height: var(--lh-relaxed); margin-bottom: var(--s-5); max-width: 46ch; }
     .checklist { display: flex; flex-direction: column; gap: var(--s-3); }
@@ -198,14 +203,27 @@
 
     /* Mobile sticky CTA */
     .sticky-cta { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: var(--s-3) var(--s-4) calc(var(--s-3) + env(safe-area-inset-bottom));
-      background: rgba(12,37,66,.96); backdrop-filter: blur(10px); border-top: 1px solid var(--on-dark-line); display: none; }
+      background: rgba(12,37,66,.96); backdrop-filter: blur(10px); border-top: 1px solid var(--on-dark-line); display: none;
+      transform: translateY(130%); transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+    .sticky-cta.show { transform: translateY(0); }
     .sticky-cta a { display: flex; }
+    /* מובייל: הסרגל קיים אך מוסתר עד שגוללים מעבר ל-CTA של ה-Hero (אחרת כפילות בקיפול הראשון) */
     @media (max-width: 720px) { .sticky-cta { display: block; } body { padding-bottom: 84px; } }
+    @media (prefers-reduced-motion: reduce) { .sticky-cta { transition: none; } }
 
     /* Scroll reveal — hidden state only applies once JS confirms it can reveal (html.js) */
     .reveal { transition: opacity var(--dur-reveal) ease, transform var(--dur-reveal) var(--smooth); }
     html.js .reveal:not(.in) { opacity: 0; transform: translateY(24px); }
     .stagger > * { transition-delay: calc(var(--i, 0) * 80ms); }
+
+    /* ── Mobile responsiveness (<768px) ──────────────────────────────── */
+    @media (max-width: 767.98px) {
+      /* Fix 2: primary hero CTA full-width + centered (RTL-safe) */
+      .cta-row { flex-direction: column; align-items: stretch; }
+      .cta-row .btn { width: 100%; }
+      /* Fix 3: "למה זה קורה" pain cards stack single-column */
+      .pain-grid { grid-template-columns: 1fr; }
+    }
 
     @media (prefers-reduced-motion: reduce) {
       .hero h1, .hero .lede, .hero .fine, .cta-row, .hero-panel { animation: none !important; opacity: 1 !important; filter: none !important; transform: none !important; }
@@ -365,11 +383,11 @@
             <form id="register-form" novalidate>
               <div class="field-group">
                 <label for="email">מייל <span class="req">*</span></label>
-                <input class="field" type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" required>
+                <input class="field" type="email" id="email" name="email" inputmode="email" placeholder="your@email.com" autocomplete="email" required>
               </div>
               <div class="field-group">
                 <label for="phone">טלפון <span class="req">*</span></label>
-                <input class="field" type="tel" id="phone" name="phone" placeholder="050-0000000" autocomplete="tel" required>
+                <input class="field" type="tel" id="phone" name="phone" inputmode="tel" placeholder="050-0000000" autocomplete="tel" required>
               </div>
               <p class="error-msg" id="form-error"></p>
               <button type="submit" class="submit" id="submit-btn">
@@ -456,6 +474,18 @@
         }
       });
     })();
+  </script>
+  <script>
+  /* סרגל CTA דביק מופיע רק אחרי שה-CTA של ה-Hero יוצא מהמסך (מונע 2 כפתורים זהים בקיפול הראשון) */
+  (function () {
+    var sticky = document.querySelector('.sticky-cta');
+    var heroCta = document.querySelector('.hero .cta-row');
+    if (!sticky || !heroCta || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { sticky.classList.toggle('show', !e.isIntersecting); });
+    }, { threshold: 0 });
+    io.observe(heroCta);
+  })();
   </script>
 </body>
 </html>
