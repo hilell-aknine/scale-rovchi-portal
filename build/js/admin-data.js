@@ -232,5 +232,56 @@
         business: businessProfileResult ?? null,
       };
     },
+
+    /**
+     * getCtaPopup() — מחזיר את פופאפ הסיום-שיעור הנוכחי (שורה יחידה),
+     * או null אם אין עדיין. דורש JWT אדמין (RLS: is_admin()).
+     * שדות: { id, title, body, button_label, button_url, active, updated_at }
+     */
+    async getCtaPopup() {
+      try {
+        const { data, error } = await _sb
+          .from('lesson_cta_popup')
+          .select('id,title,body,button_label,button_url,active,updated_at')
+          .order('updated_at', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        if (error) return null;
+        return data ?? null;
+      } catch (_) {
+        return null;
+      }
+    },
+
+    /**
+     * saveCtaPopup(payload) — upsert לפופאפ הסיום-שיעור (דרך JWT אדמין).
+     * אם יש id — update; אחרת insert שורה חדשה.
+     * @param {{ id?, title, body, button_label, button_url, active }} payload
+     * @returns {{ ok: boolean, data?, error?: string }}
+     */
+    async saveCtaPopup(payload) {
+      try {
+        const row = {
+          title:        payload.title ?? null,
+          body:         payload.body ?? null,
+          button_label: payload.button_label ?? null,
+          button_url:   payload.button_url ?? null,
+          active:       payload.active === true,
+          updated_at:   new Date().toISOString(),
+        };
+        if (payload.id) row.id = payload.id;
+
+        const { data, error } = await _sb
+          .from('lesson_cta_popup')
+          .upsert(row, { onConflict: 'id' })
+          .select('id,title,body,button_label,button_url,active,updated_at')
+          .single();
+
+        if (error) return { ok: false, error: error.message };
+        return { ok: true, data };
+      } catch (e) {
+        return { ok: false, error: e.message || 'שגיאה לא צפויה' };
+      }
+    },
   };
 })();

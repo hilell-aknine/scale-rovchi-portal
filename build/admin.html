@@ -547,6 +547,116 @@
     }
     .footer b { color: var(--navy); font-weight: 700; }
 
+    /* ─── ניהול פופאפים ──────────────────────────────────────── */
+    .cta-card { display: flex; flex-direction: column; gap: var(--s-5); }
+    .cta-card-head {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+    }
+    .cta-card-icon {
+      flex: none;
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      display: grid; place-items: center;
+      font-size: 1.3rem;
+      background: var(--blue-fill);
+    }
+    .cta-card-title {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: var(--fs-body-l);
+      color: var(--navy);
+    }
+    .cta-card-sub {
+      font-size: var(--fs-small);
+      color: var(--muted);
+      margin-top: 1px;
+    }
+    .cta-loading { color: var(--muted); font-size: var(--fs-body); }
+    .cta-form { display: flex; flex-direction: column; gap: var(--s-4); }
+    .cta-form .field { margin-bottom: 0; }
+    .cta-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-4);
+    }
+    .cta-form textarea {
+      width: 100%;
+      padding: var(--s-3) var(--s-4);
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-md);
+      font-size: var(--fs-body);
+      font-family: var(--font-body);
+      background: var(--surface);
+      color: var(--ink);
+      resize: vertical;
+      outline: none;
+      transition: border-color var(--dur-hover), box-shadow var(--dur-hover);
+    }
+    .cta-form textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px var(--blue-ring);
+    }
+    body.dark .cta-form textarea { background: #1a2d42; color: var(--ink); border-color: #2e4860; }
+    /* מתג active */
+    .cta-switch {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+      cursor: pointer;
+      user-select: none;
+    }
+    .cta-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .cta-switch-track {
+      flex: none;
+      width: 46px; height: 26px;
+      border-radius: 999px;
+      background: var(--line);
+      position: relative;
+      transition: background var(--dur-hover);
+    }
+    .cta-switch-thumb {
+      position: absolute;
+      top: 3px; right: 3px;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,.3);
+      transition: transform var(--dur-hover);
+    }
+    .cta-switch input:checked + .cta-switch-track { background: var(--success); }
+    .cta-switch input:checked + .cta-switch-track .cta-switch-thumb { transform: translateX(-20px); }
+    .cta-switch input:focus-visible + .cta-switch-track { box-shadow: 0 0 0 3px var(--blue-ring); }
+    .cta-switch-label { font-size: var(--fs-body); color: var(--ink); font-weight: 600; }
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--s-4);
+      flex-wrap: wrap;
+    }
+    .cta-save-btn {
+      min-height: 48px;
+      padding: 0 var(--s-6);
+      border: none;
+      border-radius: var(--radius-md);
+      background: var(--grad-brand);
+      color: #fff;
+      font-size: var(--fs-body);
+      font-weight: 700;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: transform var(--dur-hover), filter var(--dur-hover);
+    }
+    .cta-save-btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.08); }
+    .cta-save-btn:disabled { opacity: .65; cursor: not-allowed; transform: none; }
+    .cta-status { font-size: var(--fs-small); font-weight: 600; }
+    .cta-status.ok  { color: var(--success); }
+    .cta-status.err { color: var(--red); }
+    @media (max-width: 600px) {
+      .cta-form-row { grid-template-columns: 1fr; }
+    }
+
     /* ─── Responsive ─────────────────────────────────────────── */
     @media (max-width: 600px) {
       .dash-body { padding: var(--s-5) var(--s-4); }
@@ -630,6 +740,51 @@
     <div id="leads-container">
       <div class="table-loading">טוען לידים...</div>
     </div>
+
+    <!-- ניהול פופאפים -->
+    <div class="section-title" style="margin-top:2.2rem;">ניהול פופאפים</div>
+    <div class="card cta-card">
+      <div class="cta-card-head">
+        <span class="cta-card-icon" aria-hidden="true">🎯</span>
+        <div>
+          <div class="cta-card-title">פופאפ סיום שיעור</div>
+          <div class="cta-card-sub">מה שהמשתמש רואה אחרי שהוא לוחץ "סיימתי את השיעור"</div>
+        </div>
+      </div>
+
+      <div id="cta-loading" class="cta-loading">טוען...</div>
+
+      <form id="cta-form" class="cta-form" novalidate style="display:none;">
+        <div class="field">
+          <label for="cta-title">כותרת</label>
+          <input type="text" id="cta-title" maxlength="120" placeholder="כל הכבוד! סיימת עוד שיעור 🎉" />
+        </div>
+        <div class="field">
+          <label for="cta-body">טקסט</label>
+          <textarea id="cta-body" rows="3" maxlength="600" placeholder="הודעת עידוד והנעה לפעולה..."></textarea>
+        </div>
+        <div class="cta-form-row">
+          <div class="field">
+            <label for="cta-btn-label">תווית כפתור</label>
+            <input type="text" id="cta-btn-label" maxlength="60" placeholder="דברו איתי" />
+          </div>
+          <div class="field">
+            <label for="cta-btn-url">קישור כפתור</label>
+            <input type="text" id="cta-btn-url" dir="ltr" placeholder="https://wa.me/972549116092" />
+          </div>
+        </div>
+        <label class="cta-switch">
+          <input type="checkbox" id="cta-active" />
+          <span class="cta-switch-track" aria-hidden="true"><span class="cta-switch-thumb"></span></span>
+          <span class="cta-switch-label">פופאפ פעיל (מוצג למשתמשים)</span>
+        </label>
+
+        <div class="cta-actions">
+          <button type="submit" id="cta-save-btn" class="cta-save-btn">שמור פופאפ</button>
+          <span id="cta-status" class="cta-status" role="status"></span>
+        </div>
+      </form>
+    </div>
   </main>
 
   <footer class="footer">נבנה ע"י <b>הלל</b> · סקייל רווחי</footer>
@@ -671,6 +826,17 @@
   const themeToggleBtn  = document.getElementById('theme-toggle-btn');
   const themeIcon       = document.getElementById('theme-icon');
   const themeLabel      = document.getElementById('theme-label');
+  // ניהול פופאפים
+  const ctaLoadingEl    = document.getElementById('cta-loading');
+  const ctaFormEl       = document.getElementById('cta-form');
+  const ctaTitleEl      = document.getElementById('cta-title');
+  const ctaBodyEl       = document.getElementById('cta-body');
+  const ctaBtnLabelEl   = document.getElementById('cta-btn-label');
+  const ctaBtnUrlEl     = document.getElementById('cta-btn-url');
+  const ctaActiveEl     = document.getElementById('cta-active');
+  const ctaSaveBtn      = document.getElementById('cta-save-btn');
+  const ctaStatusEl     = document.getElementById('cta-status');
+  let   ctaCurrentId    = null;
 
   /* ── אתחול AdminData ──────────────────────────────────────── */
   try {
@@ -763,7 +929,60 @@
     } catch (e) {
       leadsEl.innerHTML = '<div class="table-loading" style="color:var(--red)">שגיאה בטעינת לידים</div>';
     }
+
+    // פופאפ סיום שיעור
+    loadCtaPopup();
   }
+
+  /* ══════════════ ניהול פופאפים ═══════════════════════════════ */
+  async function loadCtaPopup() {
+    ctaLoadingEl.style.display = 'block';
+    ctaFormEl.style.display = 'none';
+    ctaStatusEl.textContent = '';
+    ctaStatusEl.className = 'cta-status';
+    try {
+      const cta = await window.AdminData.getCtaPopup();
+      ctaCurrentId           = cta?.id ?? null;
+      ctaTitleEl.value       = cta?.title ?? '';
+      ctaBodyEl.value        = cta?.body ?? '';
+      ctaBtnLabelEl.value    = cta?.button_label ?? '';
+      ctaBtnUrlEl.value      = cta?.button_url ?? '';
+      ctaActiveEl.checked    = cta?.active === true;
+    } catch (_) {
+      ctaCurrentId = null;
+    }
+    ctaLoadingEl.style.display = 'none';
+    ctaFormEl.style.display = 'flex';
+  }
+
+  ctaFormEl.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    ctaStatusEl.textContent = '';
+    ctaStatusEl.className = 'cta-status';
+    ctaSaveBtn.disabled = true;
+    ctaSaveBtn.textContent = 'שומר...';
+
+    const res = await window.AdminData.saveCtaPopup({
+      id:           ctaCurrentId || undefined,
+      title:        ctaTitleEl.value.trim(),
+      body:         ctaBodyEl.value.trim(),
+      button_label: ctaBtnLabelEl.value.trim(),
+      button_url:   ctaBtnUrlEl.value.trim(),
+      active:       ctaActiveEl.checked,
+    });
+
+    ctaSaveBtn.disabled = false;
+    ctaSaveBtn.textContent = 'שמור פופאפ';
+
+    if (res.ok) {
+      ctaCurrentId = res.data?.id ?? ctaCurrentId;
+      ctaStatusEl.textContent = '✅ נשמר בהצלחה';
+      ctaStatusEl.className = 'cta-status ok';
+    } else {
+      ctaStatusEl.textContent = '❌ שמירה נכשלה: ' + (res.error || 'שגיאה');
+      ctaStatusEl.className = 'cta-status err';
+    }
+  });
 
   /* ── קליק שורת ליד ──────────────────────────────────────────── */
   async function onRowClick(id) {
@@ -944,6 +1163,9 @@
     leadsEl.innerHTML     = '';
     detailEl.innerHTML    = '';
     adminEmailEl.textContent = '';
+    ctaFormEl.style.display = 'none';
+    ctaLoadingEl.style.display = 'block';
+    ctaCurrentId = null;
     closeModal();
   });
 

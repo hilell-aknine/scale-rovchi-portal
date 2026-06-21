@@ -342,6 +342,30 @@
   }
 
   // ============================================================
+  // API ציבורי — פופאפ סיום שיעור (קריאה ישירה עם anon; RLS מתיר רק active=true)
+  // ============================================================
+  async function getActiveCtaPopup() {
+    if (IS_MOCK) {
+      return mockDelay({
+        title: 'כל הכבוד! סיימת עוד שיעור 🎉',
+        body: 'אתה צובר תאוצה. רוצה לקחת את זה צעד קדימה?',
+        button_label: 'דברו איתי',
+        button_url: 'https://wa.me/972549116092',
+      });
+    }
+    if (!sb) return null;
+    const { data, error } = await sb
+      .from('lesson_cta_popup')
+      .select('title, body, button_label, button_url, active')
+      .eq('active', true)
+      .order('updated_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (error) { console.error('[portalData] getActiveCtaPopup', error.message); return null; }
+    return data || null;
+  }
+
+  // ============================================================
   // חשיפה גלובלית
   // ============================================================
   window.portalData = {
@@ -356,6 +380,8 @@
     getProgress, markLessonComplete, recordLessonView,
     // גיימיפיקציה
     getXP, addXP, getBadges, getStreak, getLeaderboard, getReferrals,
+    // פופאפ סיום שיעור
+    getActiveCtaPopup,
   };
 
   console.info('[portalData] מצב:', window.portalData._mode);

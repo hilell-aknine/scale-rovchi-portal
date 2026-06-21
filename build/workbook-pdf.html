@@ -62,12 +62,69 @@
       font-size:11pt;
     }
 
-    /* Inner A4 padding band — ~15mm for professional, mobile-readable margins */
+    /* Inner A4 padding band — ~15mm for professional, mobile-readable margins.
+       Extra top/bottom room so the running brand header/footer never collide with content. */
     .page {
-      padding:15mm 15mm 16mm;
+      padding:14mm 15mm 18mm;
       max-width:210mm;
       margin-inline:auto;
     }
+
+    /* ════════════════════════════════════════════════════════
+       RUNNING BRAND HEADER + FOOTER (prints on every A4 page)
+       position:fixed repeats on each printed page in Chromium.
+       ════════════════════════════════════════════════════════ */
+    .run-head, .run-foot {
+      position:fixed;
+      inset-inline:0;
+      z-index:50;
+      pointer-events:none;
+      display:flex;
+      align-items:center;
+    }
+    /* thin brand gradient ribbon pinned to the very top of every page */
+    .run-head {
+      top:0;
+      height:6px;
+      background:var(--grad-brand);
+    }
+    /* footer band: brand name + gradient hairline, on every page */
+    .run-foot {
+      bottom:0;
+      height:11mm;
+      padding:0 15mm;
+      justify-content:space-between;
+      gap:10px;
+      font-size:8pt;
+      color:var(--muted-soft);
+      background:linear-gradient(180deg,rgba(238,243,249,0),var(--bg) 55%);
+    }
+    .run-foot::before {
+      content:"";
+      position:absolute;
+      inset-inline:15mm;
+      top:0;
+      height:2px;
+      border-radius:2px;
+      background:var(--grad-brand);
+      opacity:.55;
+    }
+    .run-foot .brand {
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-weight:800;
+      letter-spacing:.02em;
+      color:var(--navy);
+    }
+    .run-foot .brand .dot {
+      width:13px; height:13px;
+      border-radius:4px;
+      background:var(--grad-brand);
+      display:inline-block;
+      box-shadow:0 2px 5px rgba(191,9,47,.30);
+    }
+    .run-foot .tag { font-weight:600; color:var(--muted); }
 
     svg { display:block; }
 
@@ -107,11 +164,11 @@
     /* decorative emblem watermark */
     .cover .emblem {
       position:absolute;
-      inset-inline-end:-30px;
-      bottom:-34px;
-      width:188px;
-      height:188px;
-      opacity:.09;
+      inset-inline-end:-34px;
+      bottom:-38px;
+      width:208px;
+      height:208px;
+      opacity:.13;
       object-fit:contain;
       pointer-events:none;
       z-index:0;
@@ -125,7 +182,32 @@
       gap:16px;
       margin-bottom:26px;
     }
-    .cover-logo { height:34px; width:auto; display:block; }
+    .cover-logo {
+      height:56px;
+      width:auto;
+      display:block;
+      filter:drop-shadow(0 3px 10px rgba(0,0,0,.28));
+    }
+    /* brand tagline under the logo on the cover */
+    .cover-tagline {
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:center;
+      gap:9px;
+      margin:11px 0 22px;
+      font-size:10.5pt;
+      font-weight:700;
+      letter-spacing:.05em;
+      color:#9ec7e3;
+    }
+    .cover-tagline::before {
+      content:"";
+      width:26px; height:3px;
+      border-radius:2px;
+      background:var(--grad-brand);
+      flex:none;
+    }
     .cover-eyebrow {
       font-size:9.5pt;
       font-weight:700;
@@ -203,10 +285,23 @@
     }
     .section-head .ico svg { width:18px; height:18px; }
     .section-head h2 {
+      position:relative;
       font-size:14.5pt;
       font-weight:800;
       color:var(--navy);
       letter-spacing:-.01em;
+      padding-bottom:5px;
+    }
+    /* brand gradient underline on every section title */
+    .section-head h2::after {
+      content:"";
+      position:absolute;
+      inset-inline-start:0;
+      bottom:0;
+      width:46px;
+      height:3px;
+      border-radius:2px;
+      background:var(--grad-brand);
     }
     .section-head .count {
       margin-inline-start:auto;
@@ -590,8 +685,16 @@
 </head>
 <body>
 
+<!-- Running brand header/footer — repeat on every printed A4 page -->
+<div class="run-head" aria-hidden="true"></div>
+
 <div class="page">
   <div id="content" hidden></div>
+</div>
+
+<div class="run-foot" aria-hidden="true">
+  <span class="brand"><span class="dot"></span>סקייל רווחי</span>
+  <span class="tag">עסק שיוצר חופש</span>
 </div>
 
 <!-- ── Scripts: same loader chain as workbook.html ── -->
@@ -776,6 +879,7 @@
           '<img class="cover-logo" src="assets/logo-horizontal-white.png" alt="סקייל רווחי" />' +
           '<span class="cover-eyebrow">חוברת עבודה</span>' +
         '</div>' +
+        '<div class="cover-tagline">עסק שיוצר חופש</div>' +
         '<div class="cover-meta">' +
           '<span class="cover-lessonnum"><span class="lbl">שיעור</span><span class="n">' + order + '</span></span>' +
           '<span class="rule"></span>' +
@@ -788,7 +892,7 @@
       renderNotes() +
       '<footer class="pdf-close">' +
         '<span class="mark">' + ICON.star + '</span>' +
-        '<span class="txt"><b>סקייל רווחי</b> · חוברת העבודה שלך לשיעור ' + order + '. עבור על הנקודות, תרגל, ויישם בעסק.</span>' +
+        '<span class="txt"><b>סקייל רווחי</b> · עסק שיוצר חופש · חוברת העבודה שלך לשיעור ' + order + '. עבור על הנקודות, תרגל, ויישם בעסק.</span>' +
         '<img class="logo" src="assets/logo-horizontal-white.png" alt="סקייל רווחי" />' +
       '</footer>';
 
