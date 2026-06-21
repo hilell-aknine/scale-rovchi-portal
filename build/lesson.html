@@ -826,15 +826,42 @@
       /* נגן (video_url כמו שהוא) */
       buildEmbed(recLesson.video_url);
 
-      /* מסלול מומלץ: אין order/נקודות מפתח → הצג רק מורה, הסתר חוברת+משחק */
+      /* מסלול מומלץ: מציג את כל 3 הכלים ומחבר חוברת+משחק לשיעור הפורטל המתאים לנושא */
+      const recOrderMap = {
+        no_leads: 2,                  // Personal Brand
+        irrelevant_leads_paid: 6,     // מודעות ממומנות (וידאו זהה לשיעור 6)
+        irrelevant_leads_no_paid: 3,  // פורמטים להנגשת תוכן (וידאו זהה לשיעור 3)
+        hard_to_sell: 1               // משפך = מדרגות אמון שמנטרל התנגדויות
+      };
+      const recOrder = recOrderMap[recParam] || 1;
+
       const kitEyebrowRec = qs('#kit-eyebrow');
       if (kitEyebrowRec) kitEyebrowRec.textContent = 'שיעור מומלץ';
-      Array.prototype.forEach.call(
-        document.querySelectorAll('.kit .acc[data-kit]'),
-        function (a) { a.classList.add('is-hidden'); }
-      );
 
-      /* הצג תוכן, הסתר טעינה; אין key_points לשיעור מומלץ */
+      /* חיווט חוברת + משחק לשיעור המתאים */
+      const recBtnWb = qs('#btn-workbook');
+      if (recBtnWb) recBtnWb.href = `workbook.html?order=${recOrder}`;
+      const recBtnPr = qs('#btn-practice');
+      if (recBtnPr) { recBtnPr.href = `features/game/index.html?order=${recOrder}`; show(recBtnPr); }
+
+      /* נקודות מפתח לאקורדיון החוברת — מהשיעור המתאים */
+      try {
+        if (window.SRContent && window.SRContent.ready) {
+          await window.SRContent.ready;
+          const recContent = window.SRContent.getLesson(recOrder);
+          const recWbList = qs('#wb-keypoints');
+          if (recContent && Array.isArray(recContent.key_points) && recWbList) {
+            recContent.key_points.forEach(function (pt, i) {
+              const li  = document.createElement('li');
+              const num = document.createElement('span'); num.className = 'kp-num'; num.textContent = String(i + 1);
+              const txt = document.createElement('span'); txt.textContent = pt;
+              li.appendChild(num); li.appendChild(txt); recWbList.appendChild(li);
+            });
+          }
+        }
+      } catch (e) { /* אם SRContent לא נטען — החוברת עדיין מקשרת לדף החוברת */ }
+
+      /* הצג תוכן */
       hide(qs('#state-loading'));
       show(qs('#lesson-content'));
       return;
