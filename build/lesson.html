@@ -440,9 +440,11 @@
       display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px;
       background: #fff; border: 1px solid var(--k-line); border-radius: 16px; padding: 22px 12px;
       box-shadow: var(--k-shadow); cursor: pointer; text-decoration: none; color: var(--k-navy);
-      font-family: inherit; position: relative; overflow: hidden;
+      font-family: inherit; position: relative; overflow: hidden; min-width: 0;
       transition: transform .15s, box-shadow .2s, border-color .2s;
     }
+    .kit .kit-card-name, .kit .kit-card-sub, .kit .kit-card-cta { max-width: 100%; }
+    .kit .kit-card-cta { white-space: nowrap; }
     .kit .kit-card::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--k-brand); opacity: 0; transition: opacity .2s; }
     .kit .kit-card:hover { transform: translateY(-3px); box-shadow: var(--k-shadow-lg); border-color: transparent; }
     .kit .kit-card:hover::before { opacity: 1; }
