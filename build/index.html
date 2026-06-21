@@ -382,6 +382,10 @@
             <p class="form-sub">5 שאלות קצרות מחכות לך מצד שני.</p>
             <form id="register-form" novalidate>
               <div class="field-group">
+                <label for="first-name">שם פרטי <span class="req">*</span></label>
+                <input class="field" type="text" id="first-name" name="first-name" placeholder="איך לפנות אליך?" autocomplete="given-name" style="direction:rtl;text-align:right" required>
+              </div>
+              <div class="field-group">
                 <label for="email">מייל <span class="req">*</span></label>
                 <input class="field" type="email" id="email" name="email" inputmode="email" placeholder="your@email.com" autocomplete="email" required>
               </div>
@@ -444,8 +448,10 @@
       form.addEventListener('submit', async function (e) {
         e.preventDefault();
         clearError();
+        var name = document.getElementById('first-name').value.trim();
         var email = document.getElementById('email').value.trim();
         var phone = document.getElementById('phone').value.trim();
+        if (!name) { showError('נא למלא שם פרטי.'); return; }
         if (!email || !phone) { showError('נא למלא מייל וטלפון.'); return; }
         if (!email.includes('@')) { showError('כתובת המייל לא תקינה.'); return; }
 
@@ -453,8 +459,12 @@
         submitBtn.textContent = 'רושם...';
 
         try {
+          // שם פרטי נשמר תמיד מקומית (משמש לפנייה אישית בפרופיל/מרכז).
+          // הוא נשלח גם ל-registerLead; אם אין עמודת name בליד/ב-Edge Function
+          // הוא פשוט יתעלם — אבל ה-localStorage מבטיח פנייה "שלום, [שם]".
+          localStorage.setItem('sr_user_name', name);
           if (window.portalData && typeof window.portalData.registerLead === 'function') {
-            await window.portalData.registerLead({ email: email, phone: phone });
+            await window.portalData.registerLead({ email: email, phone: phone, name: name });
             localStorage.setItem('sr_user_email', email);
             window.location.href = 'survey.html';
             return;

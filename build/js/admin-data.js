@@ -166,16 +166,22 @@
 
       return leads.map((lead) => {
         const sv = surveyMap[lead.email] || {};
+        const lessons = lessonCount[lead.email] || 0;
         return {
           id: lead.id,
           email: lead.email,
           phone: lead.phone ?? null,
           status: lead.status ?? null,
           created_at: lead.created_at,
-          concern: sv.marketing_concern ?? null,
+          // מפתחות שה-renderer (admin-views.js) קורא בשם המקורי מה-DB
+          marketing_concern: sv.marketing_concern ?? null,
           income_goal: sv.income_goal ?? null,
           has_team: sv.has_team ?? null,
-          lessons_done: lessonCount[lead.email] || 0,
+          // lessons_count = השם שטבלת AdminViews קוראת; lessons_done = שם הפולבק ב-admin.html
+          lessons_count: lessons,
+          lessons_done: lessons,
+          // concern נשמר כ-alias לאחור-תאימות
+          concern: sv.marketing_concern ?? null,
           heat: _calcHeat(lead.email, surveyEmails, hotEmails),
         };
       });

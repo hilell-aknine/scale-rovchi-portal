@@ -340,8 +340,13 @@
     var viewer = window.access.getViewer();
     document.getElementById('viewer-email').textContent = viewer || '—';
 
-    // חלץ שם פרטי מהמייל לברכה (לפני @)
-    if (viewer && viewer.includes('@')) {
+    // ברכה אישית: עדיף את השם הפרטי שנאסף בטופס (sr_user_name);
+    // נפילה למה שלפני ה-@ במייל רק אם אין שם שמור.
+    var storedName = '';
+    try { storedName = (localStorage.getItem('sr_user_name') || '').trim(); } catch (_) {}
+    if (storedName) {
+      document.getElementById('viewer-first-name').textContent = storedName;
+    } else if (viewer && viewer.includes('@')) {
       var firstName = viewer.split('@')[0].replace(/[._\-\d]/g, ' ').trim().split(' ')[0];
       if (firstName) {
         document.getElementById('viewer-first-name').textContent =

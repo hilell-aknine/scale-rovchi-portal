@@ -416,9 +416,19 @@
       return;
     }
 
-    /* ---- בניית כתובת URL לשיעור המומלץ ---- */
-    var lessonHref = concern
-      ? 'lesson.html?rec=' + encodeURIComponent(concern)
+    /* ---- בניית כתובת URL לשיעור המומלץ ----
+       מיפוי concern → order של שיעור פורטל אמיתי.
+       שולחים ל-?order=<N> (לא ?rec=) כדי שהווידאו + החוברת + המשחק
+       יהיו כולם של אותו שיעור פורטל = עקביות מלאה. */
+    var SR_CONCERN_ORDER = {
+      no_leads: 2,                  // Personal Brand
+      irrelevant_leads_paid: 6,     // מודעות ממומנות
+      irrelevant_leads_no_paid: 3,  // פורמטים להנגשת תוכן
+      hard_to_sell: 1               // משפך / שיחת מכירה
+    };
+    var recOrder = SR_CONCERN_ORDER[concern];
+    var lessonHref = recOrder
+      ? 'lesson.html?order=' + recOrder
       : 'courses.html';
 
     /* ---- meta boxes (goal + recommendation) ---- */

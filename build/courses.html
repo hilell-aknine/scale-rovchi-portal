@@ -287,6 +287,23 @@
     .lesson-card.is-done .done-badge { display: inline-flex; }
     .done-badge svg { width: 11px; height: 11px; stroke: currentColor; stroke-width: 2.5; fill: none; flex-shrink: 0; }
 
+    /* Recommended-for-you badge (driven by the survey concern) */
+    .rec-badge {
+      display: inline-flex; align-items: center; gap: var(--s-1);
+      background: var(--grad-brand); color: #fff;
+      font-size: var(--fs-micro); font-weight: var(--fw-bold);
+      padding: 3px 10px; border-radius: var(--radius-pill);
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(12,37,66,.18);
+    }
+    /* Persistent brand accent + ring so the recommended card stands out */
+    .lesson-card.is-recommended { border-color: var(--blue); }
+    .lesson-card.is-recommended::before { transform: scaleX(1); }
+    /* If a card is both recommended AND done, keep the done (green) line */
+    .lesson-card.is-recommended.is-done::before {
+      background: linear-gradient(120deg, var(--success), #34d399);
+    }
+
     /* Card body */
     .lesson-title {
       font-family: var(--font-heading);
@@ -656,11 +673,30 @@
     trackEl.setAttribute('aria-valuenow', pct);
     pctEl.textContent  = pct + '% הושלם (' + doneLessons + ' מתוך ' + totalLessons + ' שיעורים)';
 
+    /* ---------- concern → order (שיעור פורטל מומלץ מהשאלון) ---------- */
+    var SR_CONCERN_ORDER = {
+      no_leads: 2,                  // Personal Brand
+      irrelevant_leads_paid: 6,     // מודעות ממומנות
+      irrelevant_leads_no_paid: 3,  // פורמטים להנגשת תוכן
+      hard_to_sell: 1               // משפך / שיחת מכירה
+    };
+    var srConcern  = localStorage.getItem('sr_concern');
+    var recOrder   = SR_CONCERN_ORDER[srConcern] || null;
+    /* קיים בקטלוג בפועל? */
+    var recLesson  = recOrder
+      ? lessons.find(function(l){ return String(l.order) === String(recOrder); })
+      : null;
+    var recDone    = recLesson ? completedSet.has(String(recOrder)) : true;
+
     /* ---------- resume banner ---------- */
-    const nextLesson = lessons.find(function(l){ return !completedSet.has(String(l.order)); });
-    if (nextLesson) {
-      el('resume-lesson-title').textContent = nextLesson.title || 'שיעור הבא';
-      el('resume-link').href = 'lesson.html?order=' + nextLesson.order;
+    /* אם יש שיעור מומלץ מהשאלון שעוד לא הושלם — הכפתור מצביע אליו.
+       אחרת — מתנהג כרגיל: השיעור הלא-מושלם הראשון (לינארי). */
+    var resumeLesson = (recLesson && !recDone)
+      ? recLesson
+      : lessons.find(function(l){ return !completedSet.has(String(l.order)); });
+    if (resumeLesson) {
+      el('resume-lesson-title').textContent = resumeLesson.title || 'שיעור הבא';
+      el('resume-link').href = 'lesson.html?order=' + resumeLesson.order;
       el('resume-banner').style.display = '';
     }
 
@@ -726,6 +762,7 @@
     lessons.forEach(function(lesson, idx) {
       var done = completedSet.has(String(lesson.order));
       var orderLabel = String(lesson.order);
+      var isRecommended = recOrder && String(lesson.order) === String(recOrder);
 
       /* כותרת מודול לפני הקבוצה */
       var mi = moduleOf(lesson.order);
@@ -739,13 +776,16 @@
 
       var card = document.createElement('a');
       card.href      = 'lesson.html?order=' + lesson.order;
-      card.className = 'lesson-card reveal' + (done ? ' is-done' : '');
+      card.className = 'lesson-card reveal' + (done ? ' is-done' : '') + (isRecommended ? ' is-recommended' : '');
       card.style.setProperty('--i', idx);
-      card.setAttribute('aria-label', (done ? 'הושלם — ' : '') + (lesson.title || 'שיעור'));
+      card.setAttribute('aria-label', (isRecommended ? 'מומלץ עבורך — ' : '') + (done ? 'הושלם — ' : '') + (lesson.title || 'שיעור'));
 
       card.innerHTML =
         '<div class="card-header">' +
           '<span class="lesson-num" aria-hidden="true">' + escHtml(orderLabel) + '</span>' +
+          (isRecommended
+            ? '<span class="rec-badge" aria-label="מומלץ עבורך לפי השאלון">⭐ מומלץ עבורך</span>'
+            : '') +
           '<span class="done-badge" aria-label="שיעור הושלם">' +
             '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5 11-11" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
             'הושלם' +
