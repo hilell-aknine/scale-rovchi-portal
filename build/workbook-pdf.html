@@ -17,20 +17,30 @@
        ════════════════════════════════════════════════════════ */
     :root {
       --navy:#0c2542;
+      --navy-2:#143458;
       --blue:#0992c2;
       --blue-light:#5b99c3;
       --red:#bf092f;
       --red-dark:#911220;
-      --bg:#f5f8fc;
+      --bg:#eef3f9;
       --surface:#ffffff;
-      --ink:#22221e;
+      --ink:#1d2733;
       --muted:#5a6b7a;
-      --line:rgba(12,37,66,.12);
+      --muted-soft:#7d8b98;
+      --line:rgba(12,37,66,.10);
+      --line-strong:rgba(12,37,66,.16);
       --success:#10b981;
-      --blue-fill:rgba(9,146,194,.10);
-      --blue-ring:rgba(9,146,194,.28);
-      --success-fill:rgba(16,185,129,.12);
-      --grad-brand:linear-gradient(120deg,#0992c2 0%,#5b99c3 45%,#bf092f 75%,#911220 100%);
+      --blue-fill:rgba(9,146,194,.08);
+      --blue-fill-2:rgba(9,146,194,.14);
+      --blue-ring:rgba(9,146,194,.26);
+      --red-fill:rgba(191,9,47,.07);
+      --red-ring:rgba(191,9,47,.22);
+      --success-fill:rgba(16,185,129,.10);
+      --grad-brand:linear-gradient(120deg,#0992c2 0%,#5b99c3 45%,#bf092f 78%,#911220 100%);
+      --grad-navy:linear-gradient(135deg,#0c2542 0%,#143458 60%,#0c2542 100%);
+      --grad-blue:linear-gradient(135deg,#0992c2 0%,#5b99c3 100%);
+      --shadow-card:0 2px 10px rgba(12,37,66,.05);
+      --shadow-soft:0 6px 22px rgba(12,37,66,.10);
       --font:'Heebo',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     }
 
@@ -46,239 +56,392 @@
       font-family:var(--font);
       color:var(--ink);
       background:var(--bg);
-      line-height:1.6;
+      line-height:1.62;
       -webkit-print-color-adjust:exact;
       print-color-adjust:exact;
-      font-size:11.5pt;
+      font-size:11pt;
     }
 
-    /* Inner A4 padding band */
+    /* Inner A4 padding band — ~15mm for professional, mobile-readable margins */
     .page {
-      padding:18mm;
+      padding:15mm 15mm 16mm;
       max-width:210mm;
       margin-inline:auto;
     }
+
+    svg { display:block; }
 
     /* ════════════════════════════════════════════════════════
        COVER BAND
        ════════════════════════════════════════════════════════ */
     .cover {
       position:relative;
-      background:var(--navy);
-      border-radius:14px;
+      background:var(--grad-navy);
+      border-radius:18px;
       overflow:hidden;
-      padding:26px 28px 28px;
-      margin-bottom:26px;
+      padding:28px 30px 30px;
+      margin-bottom:24px;
       break-inside:avoid;
       page-break-inside:avoid;
-      box-shadow:0 10px 30px rgba(12,37,66,.18);
+      box-shadow:var(--shadow-soft);
     }
     /* gradient ribbon along the top edge */
     .cover::before {
       content:"";
       position:absolute;
       inset:0 0 auto 0;
-      height:8px;
+      height:7px;
       background:var(--grad-brand);
+    }
+    /* soft geometric glow */
+    .cover::after {
+      content:"";
+      position:absolute;
+      inset-inline-start:-80px;
+      top:-90px;
+      width:260px; height:260px;
+      border-radius:50%;
+      background:radial-gradient(circle,rgba(9,146,194,.30) 0%,rgba(9,146,194,0) 70%);
+      pointer-events:none;
     }
     /* decorative emblem watermark */
     .cover .emblem {
       position:absolute;
-      inset-inline-end:-26px;
-      bottom:-30px;
-      width:180px;
-      height:180px;
-      opacity:.10;
+      inset-inline-end:-30px;
+      bottom:-34px;
+      width:188px;
+      height:188px;
+      opacity:.09;
       object-fit:contain;
       pointer-events:none;
+      z-index:0;
     }
     .cover-top {
+      position:relative;
+      z-index:1;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:16px;
-      margin-bottom:22px;
+      margin-bottom:26px;
     }
-    .cover-logo { height:32px; width:auto; display:block; }
+    .cover-logo { height:34px; width:auto; display:block; }
     .cover-eyebrow {
-      font-size:11pt;
+      font-size:9.5pt;
       font-weight:700;
-      letter-spacing:.14em;
-      color:#fff;
-      background:rgba(255,255,255,.10);
-      border:1px solid rgba(255,255,255,.18);
-      padding:5px 14px;
+      letter-spacing:.16em;
+      color:#dbeaf5;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.16);
+      padding:6px 15px;
       border-radius:999px;
       white-space:nowrap;
     }
-    .cover-lessonnum {
+    .cover-meta {
       position:relative;
       z-index:1;
-      display:inline-block;
-      font-size:13pt;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:16px;
+    }
+    .cover-lessonnum {
+      display:inline-flex;
+      align-items:baseline;
+      gap:7px;
       font-weight:800;
       color:#fff;
       background:var(--grad-brand);
-      padding:6px 16px;
-      border-radius:10px;
-      margin-bottom:14px;
-      box-shadow:0 6px 18px rgba(191,9,47,.30);
+      padding:7px 17px;
+      border-radius:11px;
+      box-shadow:0 6px 18px rgba(191,9,47,.28);
+    }
+    .cover-lessonnum .lbl { font-size:9.5pt; letter-spacing:.06em; opacity:.92; }
+    .cover-lessonnum .n { font-size:16pt; }
+    .cover-meta .rule {
+      flex:1;
+      height:1px;
+      background:linear-gradient(90deg,rgba(255,255,255,.22),rgba(255,255,255,0));
     }
     .cover-title {
       position:relative;
       z-index:1;
-      font-size:24pt;
+      font-size:23pt;
       font-weight:800;
       color:#fff;
-      line-height:1.25;
-      max-width:78%;
+      line-height:1.28;
+      max-width:80%;
+      letter-spacing:-.01em;
     }
 
     /* ════════════════════════════════════════════════════════
        SECTION TITLES
        ════════════════════════════════════════════════════════ */
-    .section { margin-bottom:24px; }
+    .section { margin-bottom:22px; }
     .section-head {
       display:flex;
       align-items:center;
-      gap:10px;
-      margin-bottom:14px;
+      gap:11px;
+      margin-bottom:15px;
     }
-    .section-head .dot {
+    .section-head .ico {
       flex:none;
-      width:30px; height:30px;
-      border-radius:50%;
+      width:34px; height:34px;
+      border-radius:10px;
       display:grid; place-items:center;
-      background:var(--grad-brand);
+      background:var(--grad-blue);
       color:#fff;
-      font-size:13pt;
-      font-weight:800;
+      box-shadow:0 4px 12px rgba(9,146,194,.26);
     }
+    .section-head .ico.red {
+      background:linear-gradient(135deg,#bf092f 0%,#911220 100%);
+      box-shadow:0 4px 12px rgba(191,9,47,.26);
+    }
+    .section-head .ico.navy {
+      background:var(--grad-navy);
+      box-shadow:0 4px 12px rgba(12,37,66,.26);
+    }
+    .section-head .ico svg { width:18px; height:18px; }
     .section-head h2 {
-      font-size:15pt;
+      font-size:14.5pt;
       font-weight:800;
       color:var(--navy);
+      letter-spacing:-.01em;
+    }
+    .section-head .count {
+      margin-inline-start:auto;
+      font-size:9pt;
+      font-weight:700;
+      color:var(--muted);
+      background:var(--blue-fill);
+      border:1px solid var(--line);
+      padding:3px 11px;
+      border-radius:999px;
     }
 
     /* ── Intro card ── */
     .intro {
+      position:relative;
       background:var(--surface);
       border:1px solid var(--line);
-      border-inline-start:4px solid var(--blue);
-      border-radius:12px;
-      padding:16px 18px;
-      font-size:11.5pt;
-      line-height:1.7;
+      border-radius:14px;
+      padding:18px 20px 18px 22px;
+      font-size:11pt;
+      line-height:1.74;
       color:var(--ink);
+      box-shadow:var(--shadow-card);
       break-inside:avoid;
       page-break-inside:avoid;
+    }
+    .intro::before {
+      content:"";
+      position:absolute;
+      inset:0 auto 0 0;
+      width:5px;
+      border-radius:0 14px 14px 0;
+      background:var(--grad-blue);
+    }
+    .intro .quote-mark {
+      position:absolute;
+      top:8px; inset-inline-start:14px;
+      font-size:34pt;
+      line-height:1;
+      font-weight:900;
+      color:var(--blue-fill-2);
+      font-family:Georgia,serif;
     }
 
     /* ════════════════════════════════════════════════════════
-       KEY POINTS
+       KEY POINTS — infographic cards
        ════════════════════════════════════════════════════════ */
-    .kp { list-style:none; display:flex; flex-direction:column; gap:10px; }
+    .kp { list-style:none; display:flex; flex-direction:column; gap:11px; }
     .kp li {
+      position:relative;
       display:flex;
-      align-items:flex-start;
-      gap:14px;
+      align-items:stretch;
+      gap:0;
       background:var(--surface);
       border:1px solid var(--line);
-      border-radius:12px;
-      padding:14px 16px;
+      border-radius:13px;
+      overflow:hidden;
+      box-shadow:var(--shadow-card);
       break-inside:avoid;
       page-break-inside:avoid;
     }
-    .kp .num {
+    .kp .num-band {
       flex:none;
-      width:30px; height:30px;
-      border-radius:50%;
-      background:var(--navy);
+      width:54px;
+      display:grid;
+      place-items:center;
+      background:var(--grad-navy);
       color:#fff;
-      display:grid; place-items:center;
-      font-size:12pt;
-      font-weight:800;
+      position:relative;
     }
-    .kp .num.alt { background:var(--grad-brand); }
+    .kp li:nth-child(even) .num-band { background:var(--grad-blue); }
+    .kp li:nth-child(3n) .num-band { background:linear-gradient(135deg,#bf092f 0%,#911220 100%); }
+    .kp .num-band .n {
+      font-size:19pt;
+      font-weight:900;
+      line-height:1;
+    }
+    .kp .body {
+      flex:1;
+      display:flex;
+      align-items:center;
+      gap:13px;
+      padding:14px 16px;
+    }
+    .kp .body .tick {
+      flex:none;
+      width:22px; height:22px;
+      color:var(--blue);
+    }
+    .kp li:nth-child(3n) .body .tick { color:var(--red); }
     .kp .txt {
-      font-size:11.5pt;
-      line-height:1.65;
+      font-size:11pt;
+      line-height:1.62;
       color:var(--ink);
-      padding-top:3px;
+      font-weight:500;
     }
+
+    /* ── Steps flow (infographic diagram derived from key points when 3-6 items) ── */
+    .flow {
+      display:flex;
+      align-items:stretch;
+      gap:0;
+      margin:2px 0 18px;
+      break-inside:avoid;
+      page-break-inside:avoid;
+    }
+    .flow .step {
+      flex:1;
+      position:relative;
+      text-align:center;
+      padding:0 4px;
+    }
+    .flow .step .bubble {
+      width:38px; height:38px;
+      margin:0 auto 7px;
+      border-radius:50%;
+      display:grid; place-items:center;
+      color:#fff;
+      font-size:13pt;
+      font-weight:900;
+      background:var(--grad-blue);
+      box-shadow:0 3px 9px rgba(9,146,194,.30);
+      position:relative;
+      z-index:1;
+    }
+    .flow .step:nth-child(even) .bubble { background:var(--grad-navy); }
+    .flow .step .cap {
+      font-size:8.5pt;
+      font-weight:700;
+      color:var(--muted);
+      line-height:1.35;
+    }
+    /* connector line behind bubbles */
+    .flow .step::before {
+      content:"";
+      position:absolute;
+      top:19px;
+      inset-inline-start:50%;
+      width:100%;
+      height:2px;
+      background:repeating-linear-gradient(90deg,var(--blue-ring) 0 5px,transparent 5px 10px);
+      z-index:0;
+    }
+    .flow .step:last-child::before { display:none; }
 
     /* ════════════════════════════════════════════════════════
        PRACTICE QUESTIONS
        ════════════════════════════════════════════════════════ */
-    .q { display:flex; flex-direction:column; gap:18px; }
+    .q { display:flex; flex-direction:column; gap:16px; }
     .q-item {
+      position:relative;
       background:var(--surface);
       border:1px solid var(--line);
-      border-radius:14px;
-      padding:18px 18px 16px;
+      border-radius:15px;
+      padding:18px 20px 17px;
+      box-shadow:var(--shadow-card);
       break-inside:avoid;
       page-break-inside:avoid;
     }
-    .q-stem {
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      font-size:12.5pt;
-      font-weight:700;
-      color:var(--navy);
-      line-height:1.5;
-      margin-bottom:14px;
+    .q-item::before {
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:4px;
+      border-radius:15px 15px 0 0;
+      background:var(--grad-brand);
+      opacity:.85;
     }
-    .q-stem .q-num {
+    .q-top {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:12px;
+    }
+    .q-num {
       flex:none;
-      min-width:26px; height:26px;
-      border-radius:7px;
-      background:var(--blue-fill);
-      color:var(--blue);
+      min-width:30px; height:30px;
+      border-radius:9px;
+      background:var(--grad-navy);
+      color:#fff;
       display:grid; place-items:center;
-      font-size:11pt;
+      font-size:12pt;
       font-weight:800;
-      padding:0 6px;
+      padding:0 7px;
+      box-shadow:0 3px 9px rgba(12,37,66,.22);
     }
     .q-tag {
-      display:inline-block;
-      font-size:8.5pt;
-      font-weight:700;
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+      font-size:8pt;
+      font-weight:800;
       color:var(--blue);
       background:var(--blue-fill);
       border:1px solid var(--blue-ring);
       border-radius:999px;
-      padding:2px 10px;
-      margin-bottom:12px;
-      letter-spacing:.04em;
+      padding:3px 10px;
+      letter-spacing:.03em;
+    }
+    .q-tag svg { width:11px; height:11px; }
+    .q-stem {
+      font-size:12pt;
+      font-weight:700;
+      color:var(--navy);
+      line-height:1.55;
+      margin-bottom:13px;
     }
     .opts { list-style:none; display:flex; flex-direction:column; gap:8px; }
     .opts li {
       display:flex;
-      align-items:flex-start;
+      align-items:center;
       gap:12px;
-      font-size:11pt;
+      font-size:10.5pt;
       line-height:1.5;
       color:var(--ink);
-      padding:9px 12px;
-      border:1px solid var(--line);
-      border-radius:9px;
+      padding:10px 13px;
+      border:1px solid var(--line-strong);
+      border-radius:11px;
       background:#fff;
     }
     .opts li.correct {
       border-color:var(--success);
       background:var(--success-fill);
+      font-weight:600;
     }
     .opts .marker {
       flex:none;
-      width:24px; height:24px;
+      width:25px; height:25px;
       border:1.5px solid var(--blue-ring);
-      border-radius:50%;
+      border-radius:8px;
       display:grid; place-items:center;
       font-size:10pt;
       font-weight:800;
       color:var(--muted);
-      background:#fff;
+      background:var(--blue-fill);
     }
     .opts li.correct .marker {
       border-color:var(--success);
@@ -288,86 +451,123 @@
     .opts .check {
       flex:none;
       margin-inline-start:auto;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
       color:var(--success);
       font-weight:800;
-      font-size:11pt;
+      font-size:9.5pt;
     }
+    .opts .check svg { width:13px; height:13px; }
 
-    /* answer callout */
+    /* answer callout — highlight box */
     .answer {
-      margin-top:14px;
-      background:var(--blue-fill);
+      margin-top:13px;
+      position:relative;
+      background:linear-gradient(135deg,rgba(9,146,194,.10),rgba(9,146,194,.04));
       border:1px solid var(--blue-ring);
-      border-inline-start:4px solid var(--blue);
-      border-radius:10px;
-      padding:12px 14px;
+      border-radius:12px;
+      padding:13px 15px 13px 17px;
+      overflow:hidden;
+    }
+    .answer::before {
+      content:"";
+      position:absolute;
+      inset:0 auto 0 0;
+      width:5px;
+      background:var(--grad-blue);
     }
     .answer .lbl {
-      font-size:9pt;
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+      font-size:8.5pt;
       font-weight:800;
-      letter-spacing:.10em;
+      letter-spacing:.08em;
       color:var(--blue);
-      margin-bottom:5px;
+      margin-bottom:7px;
+      text-transform:uppercase;
     }
+    .answer .lbl svg { width:13px; height:13px; }
     .answer .correct-line {
       font-size:11pt;
-      font-weight:700;
+      font-weight:800;
       color:var(--navy);
       margin-bottom:6px;
     }
     .answer .exp {
-      font-size:10.5pt;
-      line-height:1.6;
+      font-size:10pt;
+      line-height:1.62;
       color:var(--muted);
     }
     /* order_steps: thinking prompt with no marked answer */
-    .think-lines { margin-top:12px; display:flex; flex-direction:column; gap:0; }
-    .think-lines .ln { border-bottom:1px solid var(--line); height:30px; }
+    .think-lines { margin-top:13px; display:flex; flex-direction:column; gap:0; }
+    .think-lines .ln {
+      border-bottom:1.5px dotted var(--blue-ring);
+      height:32px;
+    }
 
     /* ════════════════════════════════════════════════════════
        PERSONAL NOTES
        ════════════════════════════════════════════════════════ */
     .notes {
+      position:relative;
       border:1.5px dashed var(--blue-ring);
-      border-radius:14px;
-      padding:18px 18px 8px;
-      background:#fff;
+      border-radius:15px;
+      padding:18px 20px 10px;
+      background:linear-gradient(180deg,rgba(9,146,194,.03),#fff);
       break-inside:avoid;
       page-break-inside:avoid;
     }
     .notes .hint {
-      font-size:10.5pt;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:10pt;
+      font-weight:600;
       color:var(--muted);
-      margin-bottom:14px;
+      margin-bottom:15px;
     }
+    .notes .hint svg { width:16px; height:16px; flex:none; color:var(--blue); }
     .notes .ln {
-      border-bottom:1px solid var(--line);
-      height:34px;
+      border-bottom:1px solid var(--line-strong);
+      height:33px;
     }
 
     /* ════════════════════════════════════════════════════════
-       FOOTER
+       CLOSING BAND (replaces credit footer — no "built by" text)
        ════════════════════════════════════════════════════════ */
-    .pdf-footer {
-      margin-top:30px;
-      padding-top:14px;
-      text-align:center;
+    .pdf-close {
+      margin-top:26px;
       position:relative;
+      background:var(--grad-navy);
+      border-radius:14px;
+      overflow:hidden;
+      padding:16px 22px;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      break-inside:avoid;
+      page-break-inside:avoid;
     }
-    .pdf-footer::before {
+    .pdf-close::before {
       content:"";
       position:absolute;
       inset:0 0 auto 0;
-      height:3px;
-      border-radius:3px;
+      height:4px;
       background:var(--grad-brand);
     }
-    .pdf-footer .credit {
-      font-size:10pt;
-      color:var(--muted);
-      padding-top:6px;
+    .pdf-close .mark {
+      flex:none;
+      width:30px; height:30px;
+      color:#5b99c3;
     }
-    .pdf-footer .credit b { color:var(--navy); font-weight:800; }
+    .pdf-close .txt { font-size:10pt; color:#cfe0ee; line-height:1.5; }
+    .pdf-close .txt b { color:#fff; font-weight:800; }
+    .pdf-close .logo {
+      margin-inline-start:auto;
+      height:22px; width:auto; opacity:.9;
+    }
 
     /* ── Not-found state ── */
     .notfound {
@@ -379,6 +579,13 @@
 
     /* While loading, keep page blank-ish (Chrome captures after JS) */
     #content[hidden] { display:none; }
+
+    /* Mobile read of the produced PDF / on-screen preview */
+    @media screen and (max-width:520px) {
+      .page { padding:18px 16px 22px; }
+      .cover-title { max-width:100%; font-size:20pt; }
+      .flow .step .cap { font-size:8pt; }
+    }
   </style>
 </head>
 <body>
@@ -398,6 +605,16 @@
   var HE_LETTERS = ['א','ב','ג','ד','ה','ו','ז','ח','ט','י'];
   var root = document.getElementById('content');
 
+  /* ── inline SVG icon set (brand-tinted via currentColor) ── */
+  var ICON = {
+    bulb: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/></svg>',
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    pencil: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+    quiz: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12" y2="17"/><circle cx="12" cy="12" r="10"/></svg>',
+    brain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.99.13 4 4 0 0 0-2.5 5.62A4 4 0 0 0 6 17a3 3 0 0 0 6 0Z"/><path d="M12 5a3 3 0 1 1 5.99.13 4 4 0 0 1 2.5 5.62A4 4 0 0 1 18 17a3 3 0 0 1-6 0Z"/></svg>',
+    star: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l7.1-1.01L12 2z"/></svg>'
+  };
+
   function esc(s) {
     return String(s == null ? '' : s)
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -415,16 +632,45 @@
     root.hidden = false;
   }
 
+  /* short caption for the steps-flow diagram: first ~4 meaningful words */
+  function shortCap(s) {
+    var t = String(s == null ? '' : s).replace(/\s+/g, ' ').trim();
+    var words = t.split(' ').slice(0, 4).join(' ');
+    if (t.split(' ').length > 4) words += '…';
+    return esc(words);
+  }
+
   function renderKeyPoints(points) {
     if (!Array.isArray(points) || !points.length) return '';
+
+    // Steps flow diagram — only when it reads like a sequence (3–6 concise points)
+    var flow = '';
+    var concise = points.every(function (p) { return String(p).length <= 90; });
+    if (points.length >= 3 && points.length <= 6 && concise) {
+      flow = '<div class="flow">' + points.map(function (pt, i) {
+        return '<div class="step"><div class="bubble">' + (i + 1) + '</div>' +
+               '<div class="cap">' + shortCap(pt) + '</div></div>';
+      }).join('') + '</div>';
+    }
+
     var items = points.map(function (pt, i) {
-      var altClass = (i % 2 === 1) ? ' alt' : '';
-      return '<li><span class="num' + altClass + '">' + (i + 1) + '</span>' +
-             '<span class="txt">' + esc(pt) + '</span></li>';
+      return '<li>' +
+               '<div class="num-band"><span class="n">' + (i + 1) + '</span></div>' +
+               '<div class="body">' +
+                 '<span class="tick">' + ICON.check + '</span>' +
+                 '<span class="txt">' + esc(pt) + '</span>' +
+               '</div>' +
+             '</li>';
     }).join('');
+
     return '' +
       '<section class="section">' +
-        '<div class="section-head"><span class="dot">1</span><h2>נקודות מפתח</h2></div>' +
+        '<div class="section-head">' +
+          '<span class="ico">' + ICON.bulb + '</span>' +
+          '<h2>נקודות מפתח</h2>' +
+          '<span class="count">' + points.length + ' עקרונות</span>' +
+        '</div>' +
+        flow +
         '<ul class="kp">' + items + '</ul>' +
       '</section>';
   }
@@ -439,12 +685,14 @@
                       typeof q.answer_index === 'number' &&
                       opts[q.answer_index] !== undefined;
 
-      var tag = '';
-      if (isOrder) tag = '<span class="q-tag">שאלת חשיבה</span>';
+      var top =
+        '<div class="q-top"><span class="q-num">' + (qi + 1) + '</span>' +
+        (isOrder
+          ? '<span class="q-tag">' + ICON.brain + 'שאלת חשיבה</span>'
+          : '<span class="q-tag">' + ICON.quiz + 'תרגול</span>') +
+        '</div>';
 
-      var stem =
-        '<div class="q-stem"><span class="q-num">' + (qi + 1) + '</span>' +
-        '<span>' + esc(q.q) + '</span></div>';
+      var stem = '<div class="q-stem">' + esc(q.q) + '</div>';
 
       var optsHtml = '';
       if (opts.length) {
@@ -454,7 +702,7 @@
           return '<li' + (correct ? ' class="correct"' : '') + '>' +
                    '<span class="marker">' + letter + '</span>' +
                    '<span>' + esc(opt) + '</span>' +
-                   (correct ? '<span class="check">&#10004; נכון</span>' : '') +
+                   (correct ? '<span class="check">' + ICON.check + 'נכון</span>' : '') +
                  '</li>';
         }).join('') + '</ul>';
       }
@@ -477,17 +725,21 @@
           ? '<div class="exp">' + esc(q.explanation) + '</div>' : '';
         tail =
           '<div class="answer">' +
-            '<div class="lbl">התשובה הנכונה</div>' +
+            '<div class="lbl">' + ICON.star + 'התשובה הנכונה</div>' +
             correctLine + expLine +
           '</div>';
       }
 
-      return '<div class="q-item">' + tag + stem + optsHtml + tail + '</div>';
+      return '<div class="q-item">' + top + stem + optsHtml + tail + '</div>';
     }).join('');
 
     return '' +
       '<section class="section">' +
-        '<div class="section-head"><span class="dot">2</span><h2>שאלות לתרגול עצמי</h2></div>' +
+        '<div class="section-head">' +
+          '<span class="ico red">' + ICON.quiz + '</span>' +
+          '<h2>שאלות לתרגול עצמי</h2>' +
+          '<span class="count">' + questions.length + ' שאלות</span>' +
+        '</div>' +
         '<div class="q">' + items + '</div>' +
       '</section>';
   }
@@ -497,9 +749,12 @@
     for (var i = 0; i < 6; i++) lines += '<div class="ln"></div>';
     return '' +
       '<section class="section">' +
-        '<div class="section-head"><span class="dot">3</span><h2>הערות אישיות</h2></div>' +
+        '<div class="section-head">' +
+          '<span class="ico navy">' + ICON.pencil + '</span>' +
+          '<h2>הערות אישיות</h2>' +
+        '</div>' +
         '<div class="notes">' +
-          '<p class="hint">מה לקחתי מהשיעור? מה איישם השבוע בעסק שלי?</p>' +
+          '<p class="hint">' + ICON.pencil + 'מה לקחתי מהשיעור? מה איישם השבוע בעסק שלי?</p>' +
           lines +
         '</div>' +
       '</section>';
@@ -510,7 +765,8 @@
     document.title = 'חוברת סיכום — שיעור ' + order + ': ' + title + ' — סקייל רווחי';
 
     var intro = lesson.description
-      ? '<section class="section"><div class="intro">' + esc(lesson.description) + '</div></section>'
+      ? '<section class="section"><div class="intro"><span class="quote-mark">&#8221;</span>' +
+        esc(lesson.description) + '</div></section>'
       : '';
 
     var html =
@@ -518,16 +774,23 @@
         '<img class="emblem" src="assets/sr-emblem-white.png" alt="" />' +
         '<div class="cover-top">' +
           '<img class="cover-logo" src="assets/logo-horizontal-white.png" alt="סקייל רווחי" />' +
-          '<span class="cover-eyebrow">חוברת סיכום</span>' +
+          '<span class="cover-eyebrow">חוברת עבודה</span>' +
         '</div>' +
-        '<span class="cover-lessonnum">שיעור ' + order + '</span>' +
+        '<div class="cover-meta">' +
+          '<span class="cover-lessonnum"><span class="lbl">שיעור</span><span class="n">' + order + '</span></span>' +
+          '<span class="rule"></span>' +
+        '</div>' +
         '<h1 class="cover-title">' + esc(title) + '</h1>' +
       '</header>' +
       intro +
       renderKeyPoints(lesson.key_points) +
       renderQuestions(lesson.practice_questions) +
       renderNotes() +
-      '<footer class="pdf-footer"><p class="credit">נבנה ע&quot;י <b>הלל</b></p></footer>';
+      '<footer class="pdf-close">' +
+        '<span class="mark">' + ICON.star + '</span>' +
+        '<span class="txt"><b>סקייל רווחי</b> · חוברת העבודה שלך לשיעור ' + order + '. עבור על הנקודות, תרגל, ויישם בעסק.</span>' +
+        '<img class="logo" src="assets/logo-horizontal-white.png" alt="סקייל רווחי" />' +
+      '</footer>';
 
     root.innerHTML = html;
     root.hidden = false;

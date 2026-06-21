@@ -395,6 +395,93 @@
     }
     .g-back:hover { border-color: var(--navy); transform: translateY(-1px); }
 
+    /* ── End-screen leaderboard ── */
+    .g-lb {
+      margin: var(--s-5) 0 var(--s-4);
+      text-align: right;
+    }
+    .g-lb-title {
+      font-family: var(--font-display);
+      font-size: var(--fs-body-l);
+      font-weight: var(--fw-black);
+      color: var(--navy);
+      margin-bottom: var(--s-1);
+      display: flex;
+      align-items: center;
+      gap: var(--s-1);
+    }
+    .g-lb-sub {
+      font-size: var(--fs-micro);
+      color: var(--muted);
+      margin-bottom: var(--s-3);
+    }
+    .g-lb-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .g-lb-row {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+      padding: var(--s-2) var(--s-3);
+      border-radius: var(--radius-md);
+      background: var(--bg);
+      border: 1px solid transparent;
+    }
+    .g-lb-row.me {
+      border-color: var(--blue);
+      background: var(--blue-fill);
+    }
+    .g-lb-rank {
+      flex: 0 0 26px;
+      text-align: center;
+      font-weight: var(--fw-black);
+      color: var(--muted);
+      font-size: var(--fs-small);
+    }
+    .g-lb-name {
+      flex: 1;
+      text-align: right;
+      font-weight: var(--fw-semibold);
+      color: var(--navy);
+      font-size: var(--fs-small);
+      display: flex;
+      align-items: center;
+      gap: var(--s-1);
+    }
+    .g-lb-you {
+      font-size: var(--fs-micro);
+      background: var(--blue);
+      color: #fff;
+      padding: 1px 8px;
+      border-radius: var(--radius-pill);
+      font-weight: var(--fw-bold);
+    }
+    .g-lb-val {
+      font-weight: var(--fw-black);
+      color: var(--navy);
+      font-size: var(--fs-small);
+    }
+    .g-lb-val .u { font-size: var(--fs-micro); color: var(--muted); font-weight: var(--fw-semibold); }
+    .g-lb-placeholder { opacity: .55; }
+    .g-lb-note {
+      font-size: var(--fs-micro);
+      color: var(--muted);
+      margin-top: var(--s-2);
+    }
+    .g-lb-link {
+      display: inline-block;
+      margin-top: var(--s-3);
+      font-size: var(--fs-small);
+      font-weight: var(--fw-bold);
+      color: var(--blue);
+      text-decoration: none;
+      border-bottom: 1.5px solid var(--blue-ring);
+      padding-bottom: 1px;
+    }
+    .g-lb-link:hover { border-color: var(--blue); }
+
     /* ── Footer ── */
     footer {
       padding: var(--s-4);
@@ -415,7 +502,7 @@
 </head>
 <body>
 <header>
-  <img src="../../../מותג/ScaleRivhi-LogoPack-NewColors/אתרים,אונליין,ווב,אפליקציות-SVG/Vector_Horizontal_Black.svg" alt="סקייל רווחי">
+  <img src="../../assets/logo-horizontal-black.png" alt="סקייל רווחי">
   <span class="mode-pill" id="mode-pill">MOCK</span>
 </header>
 
@@ -433,6 +520,7 @@
 <footer>נבנה ע"י הלל</footer>
 
 <script src="../gamification/gamification.js"></script>
+<script src="../leaderboard/leaderboard.js"></script>
 <script src="questions.js"></script>
 <script src="../../js/content.js"></script>
 <script src="game.js"></script>

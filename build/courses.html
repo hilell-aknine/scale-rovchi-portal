@@ -650,6 +650,49 @@
       el('resume-banner').style.display = '';
     }
 
+    /* ---------- scroll-reveal (shared, reusable) ---------- */
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var hasIO = ('IntersectionObserver' in window);
+    var revealObserver = null;
+    if (!reduceMotion && hasIO) {
+      revealObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) { e.target.classList.add('in'); revealObserver.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+    }
+    // Reveal a list of .reveal elements.
+    //  - If motion is reduced / IO is unavailable → show them immediately.
+    //  - "critical" elements (the lesson cards) are NEVER gated behind the
+    //    scroll observer: they animate in once and are then guaranteed
+    //    visible & clickable, no matter the scroll position. This is the fix
+    //    for the P0 mobile bug where cards below the fold stayed at opacity:0
+    //    (and so looked like "clicking does nothing"). Content visibility is
+    //    non-negotiable; the entrance animation is the only thing we trade.
+    //  - non-critical (decorative) elements keep the scroll-reveal behaviour,
+    //    with a rAF safety-net so anything already near the viewport shows.
+    function revealAll(nodeList, critical) {
+      var items = Array.prototype.slice.call(nodeList);
+      if (critical || reduceMotion || !revealObserver) {
+        // double rAF so the browser paints the opacity:0 start frame first,
+        // letting the entrance transition actually play.
+        requestAnimationFrame(function(){
+          requestAnimationFrame(function(){
+            items.forEach(function(e){ e.classList.add('in'); });
+          });
+        });
+        return;
+      }
+      items.forEach(function(e){ revealObserver.observe(e); });
+      requestAnimationFrame(function() {
+        var vh = window.innerHeight || document.documentElement.clientHeight;
+        items.forEach(function(e) {
+          var r = e.getBoundingClientRect();
+          if (r.top < vh * 1.1) { e.classList.add('in'); revealObserver.unobserve(e); }
+        });
+      });
+    }
+
     /* ---------- render lesson cards ---------- */
     const container = el('courses-container');
 
@@ -689,20 +732,13 @@
     el('tools-section').style.display  = '';
 
     /* ---------- scroll-reveal ---------- */
-    (function() {
-      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var els = document.querySelectorAll('.reveal');
-      if (reduce || !('IntersectionObserver' in window)) {
-        els.forEach(function(e){ e.classList.add('in'); });
-        return;
-      }
-      var io = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) {
-          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-        });
-      }, { threshold: 0.12 });
-      els.forEach(function(e){ io.observe(e); });
-    })();
+    // Now that the content is visible (getBoundingClientRect is accurate):
+    //  1. Lesson cards = CRITICAL → revealed immediately, always visible &
+    //     clickable (fixes the P0 mobile bug). They still animate in once.
+    revealAll(container.querySelectorAll('.lesson-card.reveal'), true);
+    //  2. Everything else (eyebrows, tools section, headings) keeps the
+    //     normal scroll-reveal behaviour.
+    revealAll(document.querySelectorAll('.reveal:not(.lesson-card)'), false);
 
   })();
   </script>

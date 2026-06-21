@@ -244,14 +244,89 @@
           '<div class="g-end-stat"><div class="v">' + (perfect ? '🏆' : (MAX_LIVES - this.mistakes) + '❤️') + '</div><div class="l">' + (perfect ? 'ללא טעויות' : 'לבבות שנותרו') + '</div></div>' +
         '</div>' +
         (perfect ? '<div class="g-end-badge">🌟 פתחת את התג "תרגול מושלם"</div>' : '') +
+        '<div class="g-lb" id="g-lb"></div>' +
         '<div class="g-end-actions">' +
           '<button class="g-restart" id="g-again">תרגל שוב</button>' +
           '<button class="g-back" id="g-back">חזרה לשיעור</button>' +
         '</div>' +
       '</div>';
 
+    this._renderLeaderboard(this.root.querySelector('#g-lb'));
+
     this.root.querySelector('#g-again').addEventListener('click', function () { self.start(); });
     this.root.querySelector('#g-back').addEventListener('click', function () { self.onFinish({ correct: self.correct, total: total, perfect: perfect, xp: xpEarned }); });
+  };
+
+  /* ---------- טבלת מובילים מוטמעת במסך הסיום ---------- */
+  // משתמש באותו מקור נתונים כמו דף הלידרבורד (SRLeaderboard מ-leaderboard.js),
+  // שמושך XP חי מ-SRGamification ומשלב את השחקן הנוכחי בדירוג.
+  // אם המנוע לא נטען — מציג placeholder מסומן + קישור לדף המלא.
+  var LB_FULL_URL = '../leaderboard/index.html';
+  var LB_TOP_N = 5;
+
+  SRGame.prototype._renderLeaderboard = function (el) {
+    if (!el) return;
+    // שם תצוגה לשחקן הנוכחי: נגזר מה-viewerId (המייל) אם קיים, אחרת "אתה"
+    var meName = 'אתה';
+    try {
+      var vid = (window.SRGamification && window.SRGamification.viewerId) ||
+                localStorage.getItem('sr_user_email');
+      if (vid && String(vid).indexOf('@') > 0) meName = String(vid).split('@')[0];
+    } catch (_) {}
+
+    var rows = null;
+    try {
+      if (typeof window.SRLeaderboard === 'function') {
+        // אינסטנס זמני רק כדי לקבל את שורות הדירוג (XP) — אותו מנגנון כמו דף הלידרבורד
+        var lb = new window.SRLeaderboard({ mount: document.createElement('div'), metric: 'xp', meName: meName });
+        rows = lb._rows().slice().sort(function (a, b) { return b.xp - a.xp; });
+      }
+    } catch (_) { rows = null; }
+
+    var head =
+      '<div class="g-lb-title">🏆 טבלת המובילים</div>' +
+      '<div class="g-lb-sub">איפה אתה עומד מול שאר הלומדים החודש (לפי XP)</div>';
+
+    if (rows && rows.length) {
+      var meRank = rows.findIndex(function (r) { return r.isMe; }) + 1;
+      var top = rows.slice(0, LB_TOP_N);
+      // ודא שהשחקן הנוכחי מופיע גם אם הוא מחוץ ל-Top N
+      var meInTop = top.some(function (r) { return r.isMe; });
+      var listSrc = top.slice();
+      if (!meInTop && meRank > 0) listSrc.push(rows[meRank - 1]);
+
+      var list = listSrc.map(function (r) {
+        var rank = rows.indexOf(r) + 1;
+        return '<div class="g-lb-row' + (r.isMe ? ' me' : '') + '">' +
+            '<div class="g-lb-rank">' + (rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#' + rank) + '</div>' +
+            '<div class="g-lb-name">' + esc(r.name) + (r.isMe ? ' <span class="g-lb-you">אתה</span>' : '') + '</div>' +
+            '<div class="g-lb-val">' + r.xp + ' <span class="u">XP</span></div>' +
+          '</div>';
+      }).join('');
+
+      el.innerHTML = head +
+        '<div class="g-lb-list">' + list + '</div>' +
+        (meRank > 0 ? '<div class="g-lb-note">הדירוג שלך החודש: <strong>#' + meRank + '</strong></div>' : '') +
+        '<a class="g-lb-link" href="' + LB_FULL_URL + '">לטבלת המובילים המלאה ←</a>';
+    } else {
+      // נפילה אלגנטית — מצב טעינה/placeholder מסומן בבירור + קישור לדף המלא
+      var ph = [
+        { name: 'מאיה בר', xp: 1610 },
+        { name: 'שירה גולן', xp: 1490 },
+        { name: 'רותם לוי', xp: 1240 }
+      ];
+      var phList = ph.map(function (r, i) {
+        return '<div class="g-lb-row g-lb-placeholder">' +
+            '<div class="g-lb-rank">' + (i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉') + '</div>' +
+            '<div class="g-lb-name">' + esc(r.name) + '</div>' +
+            '<div class="g-lb-val">' + r.xp + ' <span class="u">XP</span></div>' +
+          '</div>';
+      }).join('');
+      el.innerHTML = head +
+        '<div class="g-lb-list">' + phList + '</div>' +
+        '<div class="g-lb-note">⏳ נתוני הדגמה — הטבלה החיה נטענת בדף המובילים.</div>' +
+        '<a class="g-lb-link" href="' + LB_FULL_URL + '">לטבלת המובילים המלאה ←</a>';
+    }
   };
 
   /* ---------- עזרים ---------- */
