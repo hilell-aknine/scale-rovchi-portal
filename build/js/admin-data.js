@@ -25,14 +25,70 @@
     }
   }
 
-  // ─── חישוב דרגת חום לכל ליד ──────────────────────────────────────────────────
-  // hot  = יש לו לפחות רשומת progress עם completed=true
-  // warm = יש survey אך אין התקדמות
-  // cold = רק ליד
-  function _calcHeat(email, surveyEmails, hotEmails) {
-    if (hotEmails.has(email)) return 'hot';
-    if (surveyEmails.has(email)) return 'warm';
+  // ─── חישוב דרגת חום לכל ליד (v2 — מבוסס עומק + רקנסי) ────────────────────────
+  // hot  = השלים ≥1 שיעור וגם היה פעיל ב-HEAT_RECENCY_DAYS הימים האחרונים
+  // warm = הביע עניין אמיתי אך לא חם כרגע:
+  //        השלים שיעור אך התקרר (לא פעיל מעל החלון) / מילא שאלון / נגע בקורס בלי להשלים
+  // cold = ליד בלבד — בלי שאלון ובלי שום פעילות
+  const HEAT_RECENCY_DAYS = 30; // חלון "טריות" — אפשר לכוונן
+
+  // סורק שדות-תאריך נפוצים בשורה ומחזיר timestamp במילישניות, או 0 אם אין
+  function _rowTs(row) {
+    const keys = ['completed_at', 'last_viewed_at', 'last_seen_at', 'updated_at',
+                  'created_at', 'inserted_at', 'event_at', 'occurred_at', 'ts'];
+    for (const k of keys) {
+      const v = row && row[k];
+      if (v) {
+        const t = Date.parse(v);
+        if (!isNaN(t)) return t;
+      }
+    }
+    return 0;
+  }
+
+  // ctx = { surveyEmails:Set, completedMap:Map, activeEmails:Set, lastActiveMap:Map, now:number, windowMs:number }
+  function _calcHeat(email, ctx) {
+    const completed = ctx.completedMap.get(email) || 0;
+    const lastTs    = ctx.lastActiveMap.get(email) || 0;
+    const recent    = lastTs > 0 && (ctx.now - lastTs) <= ctx.windowMs;
+
+    if (completed >= 1 && recent) return 'hot';
+    if (completed >= 1 || ctx.surveyEmails.has(email) || ctx.activeEmails.has(email)) return 'warm';
     return 'cold';
+  }
+
+  // בונה את כל מבני העזר לחישוב חום ממערכי progress + xp הגולמיים
+  function _buildHeatCtx(surveys, progress, xpEvents) {
+    const surveyEmails = new Set(surveys.map((s) => s.user_email).filter(Boolean));
+    const completedMap = new Map();   // email -> מספר שיעורים שהושלמו
+    const activeEmails = new Set();   // email -> נגע בקורס (progress/xp כלשהם)
+    const lastActiveMap = new Map();  // email -> timestamp אחרון של פעילות
+
+    const touch = (email, ts) => {
+      if (!email) return;
+      activeEmails.add(email);
+      if (ts > (lastActiveMap.get(email) || 0)) lastActiveMap.set(email, ts);
+    };
+
+    for (const p of progress) {
+      const email = p.viewer_id;
+      touch(email, _rowTs(p));
+      if (email && p.completed === true) {
+        completedMap.set(email, (completedMap.get(email) || 0) + 1);
+      }
+    }
+    for (const ev of xpEvents) {
+      touch(ev.viewer_id, _rowTs(ev));
+    }
+
+    return {
+      surveyEmails,
+      completedMap,
+      activeEmails,
+      lastActiveMap,
+      now: Date.now(),
+      windowMs: HEAT_RECENCY_DAYS * 24 * 60 * 60 * 1000,
+    };
   }
 
   // ─── API ציבורי ───────────────────────────────────────────────────────────────
@@ -93,20 +149,15 @@
       const [leads, surveys, progress, xpEvents] = await Promise.all([
         _safeSelect('lead', _sb.from('lead').select('id,email')),
         _safeSelect('survey_response', _sb.from('survey_response').select('user_email')),
-        _safeSelect('lesson_progress', _sb.from('lesson_progress').select('viewer_id,completed')),
+        _safeSelect('lesson_progress', _sb.from('lesson_progress').select('*')),
         _safeSelect('xp_event', _sb.from('xp_event').select('*')),
       ]);
 
-      const surveyEmails = new Set(surveys.map((s) => s.user_email).filter(Boolean));
-
-      // hot = מיילים שיש להם completed=true
-      const hotEmails = new Set(
-        progress.filter((p) => p.completed === true).map((p) => p.viewer_id).filter(Boolean)
-      );
+      const heatCtx = _buildHeatCtx(surveys, progress, xpEvents);
 
       let hot = 0, warm = 0, cold = 0;
       for (const lead of leads) {
-        const h = _calcHeat(lead.email, surveyEmails, hotEmails);
+        const h = _calcHeat(lead.email, heatCtx);
         if (h === 'hot') hot++;
         else if (h === 'warm') warm++;
         else cold++;
@@ -138,10 +189,11 @@
      * @returns {Array<{id,email,phone,status,created_at,concern,income_goal,has_team,lessons_done,heat}>}
      */
     async getLeads() {
-      const [leads, surveys, progress] = await Promise.all([
+      const [leads, surveys, progress, xpEvents] = await Promise.all([
         _safeSelect('lead', _sb.from('lead').select('id,email,phone,status,created_at').order('created_at', { ascending: false })),
         _safeSelect('survey_response', _sb.from('survey_response').select('user_email,marketing_concern,income_goal,has_team')),
-        _safeSelect('lesson_progress', _sb.from('lesson_progress').select('viewer_id,completed')),
+        _safeSelect('lesson_progress', _sb.from('lesson_progress').select('*')),
+        _safeSelect('xp_event', _sb.from('xp_event').select('*')),
       ]);
 
       // אינדקסים מהירים
@@ -150,23 +202,15 @@
         if (s.user_email) surveyMap[s.user_email] = s;
       }
 
-      const surveyEmails = new Set(Object.keys(surveyMap));
-
-      const hotEmails = new Set(
-        progress.filter((p) => p.completed === true).map((p) => p.viewer_id).filter(Boolean)
-      );
-
-      // מספר שיעורים שהושלמו לכל מייל
-      const lessonCount = {};
-      for (const p of progress) {
-        if (p.viewer_id && p.completed === true) {
-          lessonCount[p.viewer_id] = (lessonCount[p.viewer_id] || 0) + 1;
-        }
-      }
+      const heatCtx = _buildHeatCtx(surveys, progress, xpEvents);
 
       return leads.map((lead) => {
         const sv = surveyMap[lead.email] || {};
-        const lessons = lessonCount[lead.email] || 0;
+        const lessons = heatCtx.completedMap.get(lead.email) || 0;
+        const lastTs = heatCtx.lastActiveMap.get(lead.email) || 0;
+        const daysInactive = lastTs > 0
+          ? Math.floor((heatCtx.now - lastTs) / (24 * 60 * 60 * 1000))
+          : null;
         return {
           id: lead.id,
           email: lead.email,
@@ -182,7 +226,10 @@
           lessons_done: lessons,
           // concern נשמר כ-alias לאחור-תאימות
           concern: sv.marketing_concern ?? null,
-          heat: _calcHeat(lead.email, surveyEmails, hotEmails),
+          heat: _calcHeat(lead.email, heatCtx),
+          // מטא-דאטה לרקנסי — לשימוש עתידי בטבלה ("פעיל לפני X ימים")
+          last_active: lastTs > 0 ? new Date(lastTs).toISOString() : null,
+          days_inactive: daysInactive,
         };
       });
     },
@@ -287,6 +334,34 @@
         return { ok: true, data };
       } catch (e) {
         return { ok: false, error: e.message || 'שגיאה לא צפויה' };
+      }
+    },
+
+    /**
+     * getReminderStats() — ספירות תזכורות (דרך RPC מגודר ב-is_admin).
+     * @returns {{ opted_in_active, unsubscribed, paused, sent_7d, failed_7d, pending_queue }}
+     */
+    async getReminderStats() {
+      try {
+        const { data, error } = await _sb.rpc('reminder_admin_stats');
+        if (error) return {};
+        return data ?? {};
+      } catch (_) {
+        return {};
+      }
+    },
+
+    /**
+     * getReminderRecent() — 10 ההודעות האחרונות (דרך RPC מגודר ב-is_admin).
+     * @returns {Array<{ display_name, template, status, created_at }>}
+     */
+    async getReminderRecent() {
+      try {
+        const { data, error } = await _sb.rpc('reminder_admin_recent', { p_limit: 10 });
+        if (error) return [];
+        return Array.isArray(data) ? data : [];
+      } catch (_) {
+        return [];
       }
     },
   };
