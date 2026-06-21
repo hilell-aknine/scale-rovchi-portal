@@ -192,6 +192,20 @@
       .lessons-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
+    /* ── Module headers (קיבוץ שיעורים למודולים) ──────────────── */
+    .module-head {
+      grid-column: 1 / -1;
+      display: flex; align-items: center; gap: 14px;
+      margin: var(--s-5) 0 var(--s-1);
+    }
+    .module-head:first-child { margin-top: 0; }
+    .module-title {
+      font-family: var(--font-heading);
+      font-size: var(--fs-h3, 1.375rem); font-weight: 800;
+      color: var(--navy, #0c2542); white-space: nowrap;
+    }
+    .module-line { flex: 1; height: 2px; background: var(--grad-brand); opacity: .28; border-radius: 2px; }
+
     /* ── Individual lesson card ─────────────────────────────── */
     .lesson-card {
       position: relative;
@@ -696,9 +710,32 @@
     /* ---------- render lesson cards ---------- */
     const container = el('courses-container');
 
+    /* קיבוץ למודולים נושאיים (ברירת-מחדל — רותם יכולה לאשר/לשנות שמות).
+       שומר על סדר השיעורים 1→7, מוסיף כותרת מודול לפני קבוצה חדשה. */
+    var MODULES = [
+      { title: 'מודול 1 · יסודות: המשפך והמיתוג', orders: [1, 2] },
+      { title: 'מודול 2 · תוכן שמושך לקוחות',       orders: [3, 4, 5] },
+      { title: 'מודול 3 · ממומן וקהלים',            orders: [6, 7] }
+    ];
+    function moduleOf(order) {
+      for (var i = 0; i < MODULES.length; i++) { if (MODULES[i].orders.indexOf(order) > -1) return i; }
+      return -1;
+    }
+    var lastModule = -2;
+
     lessons.forEach(function(lesson, idx) {
       var done = completedSet.has(String(lesson.order));
       var orderLabel = String(lesson.order);
+
+      /* כותרת מודול לפני הקבוצה */
+      var mi = moduleOf(lesson.order);
+      if (mi !== lastModule && MODULES[mi]) {
+        var mh = document.createElement('div');
+        mh.className = 'module-head';
+        mh.innerHTML = '<span class="module-title">' + escHtml(MODULES[mi].title) + '</span><span class="module-line"></span>';
+        container.appendChild(mh);
+        lastModule = mi;
+      }
 
       var card = document.createElement('a');
       card.href      = 'lesson.html?order=' + lesson.order;
