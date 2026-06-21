@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <!--sr-funnel-gate--><script>(function(){try{if(location.search.indexOf("dev=1")>-1)return;var e=localStorage.getItem("sr_user_email");var p=localStorage.getItem("sr_concern")||localStorage.getItem("sr_lesson_id")||localStorage.getItem("sr_access_token");if(!e){location.replace("index.html");return;}if(!p){location.replace("survey.html");return;}}catch(_){}})();</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>חוברת סיכום — סקייל רווחי</title>
+
+  <!-- Heebo (Google Fonts) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ════════════════════════════════════════════════════════
+       BRAND TOKENS (local — no external CSS so PDF is self-contained)
+       ════════════════════════════════════════════════════════ */
+    :root {
+      --navy:#0c2542;
+      --blue:#0992c2;
+      --blue-light:#5b99c3;
+      --red:#bf092f;
+      --red-dark:#911220;
+      --bg:#f5f8fc;
+      --surface:#ffffff;
+      --ink:#22221e;
+      --muted:#5a6b7a;
+      --line:rgba(12,37,66,.12);
+      --success:#10b981;
+      --blue-fill:rgba(9,146,194,.10);
+      --blue-ring:rgba(9,146,194,.28);
+      --success-fill:rgba(16,185,129,.12);
+      --grad-brand:linear-gradient(120deg,#0992c2 0%,#5b99c3 45%,#bf092f 75%,#911220 100%);
+      --font:'Heebo',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+    /* ── Print page setup (this is the whole point of the file) ── */
+    @page { size:A4; margin:0; }
+
+    html { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+    body {
+      font-family:var(--font);
+      color:var(--ink);
+      background:var(--bg);
+      line-height:1.6;
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+      font-size:11.5pt;
+    }
+
+    /* Inner A4 padding band */
+    .page {
+      padding:18mm;
+      max-width:210mm;
+      margin-inline:auto;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       COVER BAND
+       ════════════════════════════════════════════════════════ */
+    .cover {
+      position:relative;
+      background:var(--navy);
+      border-radius:14px;
+      overflow:hidden;
+      padding:26px 28px 28px;
+      margin-bottom:26px;
+      break-inside:avoid;
+      page-break-inside:avoid;
+      box-shadow:0 10px 30px rgba(12,37,66,.18);
+    }
+    /* gradient ribbon along the top edge */
+    .cover::before {
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:8px;
+      background:var(--grad-brand);
+    }
+    /* decorative emblem watermark */
+    .cover .emblem {
+      position:absolute;
+      inset-inline-end:-26px;
+      bottom:-30px;
+      width:180px;
+      height:180px;
+      opacity:.10;
+      object-fit:contain;
+      pointer-events:none;
+    }
+    .cover-top {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:22px;
+    }
+    .cover-logo { height:32px; width:auto; display:block; }
+    .cover-eyebrow {
+      font-size:11pt;
+      font-weight:700;
+      letter-spacing:.14em;
+      color:#fff;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.18);
+      padding:5px 14px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    .cover-lessonnum {
+      position:relative;
+      z-index:1;
+      display:inline-block;
+      font-size:13pt;
+      font-weight:800;
+      color:#fff;
+      background:var(--grad-brand);
+      padding:6px 16px;
+      border-radius:10px;
+      margin-bottom:14px;
+      box-shadow:0 6px 18px rgba(191,9,47,.30);
+    }
+    .cover-title {
+      position:relative;
+      z-index:1;
+      font-size:24pt;
+      font-weight:800;
+      color:#fff;
+      line-height:1.25;
+      max-width:78%;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       SECTION TITLES
+       ════════════════════════════════════════════════════════ */
+    .section { margin-bottom:24px; }
+    .section-head {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:14px;
+    }
+    .section-head .dot {
+      flex:none;
+      width:30px; height:30px;
+      border-radius:50%;
+      display:grid; place-items:center;
+      background:var(--grad-brand);
+      color:#fff;
+      font-size:13pt;
+      font-weight:800;
+    }
+    .section-head h2 {
+      font-size:15pt;
+      font-weight:800;
+      color:var(--navy);
+    }
+
+    /* ── Intro card ── */
+    .intro {
+      background:var(--surface);
+      border:1px solid var(--line);
+      border-inline-start:4px solid var(--blue);
+      border-radius:12px;
+      padding:16px 18px;
+      font-size:11.5pt;
+      line-height:1.7;
+      color:var(--ink);
+      break-inside:avoid;
+      page-break-inside:avoid;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       KEY POINTS
+       ════════════════════════════════════════════════════════ */
+    .kp { list-style:none; display:flex; flex-direction:column; gap:10px; }
+    .kp li {
+      display:flex;
+      align-items:flex-start;
+      gap:14px;
+      background:var(--surface);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:14px 16px;
+      break-inside:avoid;
+      page-break-inside:avoid;
+    }
+    .kp .num {
+      flex:none;
+      width:30px; height:30px;
+      border-radius:50%;
+      background:var(--navy);
+      color:#fff;
+      display:grid; place-items:center;
+      font-size:12pt;
+      font-weight:800;
+    }
+    .kp .num.alt { background:var(--grad-brand); }
+    .kp .txt {
+      font-size:11.5pt;
+      line-height:1.65;
+      color:var(--ink);
+      padding-top:3px;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       PRACTICE QUESTIONS
+       ════════════════════════════════════════════════════════ */
+    .q { display:flex; flex-direction:column; gap:18px; }
+    .q-item {
+      background:var(--surface);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:18px 18px 16px;
+      break-inside:avoid;
+      page-break-inside:avoid;
+    }
+    .q-stem {
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      font-size:12.5pt;
+      font-weight:700;
+      color:var(--navy);
+      line-height:1.5;
+      margin-bottom:14px;
+    }
+    .q-stem .q-num {
+      flex:none;
+      min-width:26px; height:26px;
+      border-radius:7px;
+      background:var(--blue-fill);
+      color:var(--blue);
+      display:grid; place-items:center;
+      font-size:11pt;
+      font-weight:800;
+      padding:0 6px;
+    }
+    .q-tag {
+      display:inline-block;
+      font-size:8.5pt;
+      font-weight:700;
+      color:var(--blue);
+      background:var(--blue-fill);
+      border:1px solid var(--blue-ring);
+      border-radius:999px;
+      padding:2px 10px;
+      margin-bottom:12px;
+      letter-spacing:.04em;
+    }
+    .opts { list-style:none; display:flex; flex-direction:column; gap:8px; }
+    .opts li {
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      font-size:11pt;
+      line-height:1.5;
+      color:var(--ink);
+      padding:9px 12px;
+      border:1px solid var(--line);
+      border-radius:9px;
+      background:#fff;
+    }
+    .opts li.correct {
+      border-color:var(--success);
+      background:var(--success-fill);
+    }
+    .opts .marker {
+      flex:none;
+      width:24px; height:24px;
+      border:1.5px solid var(--blue-ring);
+      border-radius:50%;
+      display:grid; place-items:center;
+      font-size:10pt;
+      font-weight:800;
+      color:var(--muted);
+      background:#fff;
+    }
+    .opts li.correct .marker {
+      border-color:var(--success);
+      background:var(--success);
+      color:#fff;
+    }
+    .opts .check {
+      flex:none;
+      margin-inline-start:auto;
+      color:var(--success);
+      font-weight:800;
+      font-size:11pt;
+    }
+
+    /* answer callout */
+    .answer {
+      margin-top:14px;
+      background:var(--blue-fill);
+      border:1px solid var(--blue-ring);
+      border-inline-start:4px solid var(--blue);
+      border-radius:10px;
+      padding:12px 14px;
+    }
+    .answer .lbl {
+      font-size:9pt;
+      font-weight:800;
+      letter-spacing:.10em;
+      color:var(--blue);
+      margin-bottom:5px;
+    }
+    .answer .correct-line {
+      font-size:11pt;
+      font-weight:700;
+      color:var(--navy);
+      margin-bottom:6px;
+    }
+    .answer .exp {
+      font-size:10.5pt;
+      line-height:1.6;
+      color:var(--muted);
+    }
+    /* order_steps: thinking prompt with no marked answer */
+    .think-lines { margin-top:12px; display:flex; flex-direction:column; gap:0; }
+    .think-lines .ln { border-bottom:1px solid var(--line); height:30px; }
+
+    /* ════════════════════════════════════════════════════════
+       PERSONAL NOTES
+       ════════════════════════════════════════════════════════ */
+    .notes {
+      border:1.5px dashed var(--blue-ring);
+      border-radius:14px;
+      padding:18px 18px 8px;
+      background:#fff;
+      break-inside:avoid;
+      page-break-inside:avoid;
+    }
+    .notes .hint {
+      font-size:10.5pt;
+      color:var(--muted);
+      margin-bottom:14px;
+    }
+    .notes .ln {
+      border-bottom:1px solid var(--line);
+      height:34px;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       FOOTER
+       ════════════════════════════════════════════════════════ */
+    .pdf-footer {
+      margin-top:30px;
+      padding-top:14px;
+      text-align:center;
+      position:relative;
+    }
+    .pdf-footer::before {
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:3px;
+      border-radius:3px;
+      background:var(--grad-brand);
+    }
+    .pdf-footer .credit {
+      font-size:10pt;
+      color:var(--muted);
+      padding-top:6px;
+    }
+    .pdf-footer .credit b { color:var(--navy); font-weight:800; }
+
+    /* ── Not-found state ── */
+    .notfound {
+      text-align:center;
+      padding:60px 24px;
+      color:var(--muted);
+    }
+    .notfound h1 { font-size:18pt; color:var(--navy); margin-bottom:8px; }
+
+    /* While loading, keep page blank-ish (Chrome captures after JS) */
+    #content[hidden] { display:none; }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <div id="content" hidden></div>
+</div>
+
+<!-- ── Scripts: same loader chain as workbook.html ── -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/content.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var HE_LETTERS = ['א','ב','ג','ד','ה','ו','ז','ח','ט','י'];
+  var root = document.getElementById('content');
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function getOrder() {
+    var raw = parseInt(new URLSearchParams(location.search).get('order') || '', 10);
+    return (!isNaN(raw) && raw >= 1) ? raw : null;
+  }
+
+  function notFound(msg) {
+    root.innerHTML =
+      '<div class="notfound"><h1>השיעור לא נמצא</h1><p>' +
+      esc(msg || 'ייתכן שמספר השיעור אינו קיים בקורס.') + '</p></div>';
+    root.hidden = false;
+  }
+
+  function renderKeyPoints(points) {
+    if (!Array.isArray(points) || !points.length) return '';
+    var items = points.map(function (pt, i) {
+      var altClass = (i % 2 === 1) ? ' alt' : '';
+      return '<li><span class="num' + altClass + '">' + (i + 1) + '</span>' +
+             '<span class="txt">' + esc(pt) + '</span></li>';
+    }).join('');
+    return '' +
+      '<section class="section">' +
+        '<div class="section-head"><span class="dot">1</span><h2>נקודות מפתח</h2></div>' +
+        '<ul class="kp">' + items + '</ul>' +
+      '</section>';
+  }
+
+  function renderQuestions(questions) {
+    if (!Array.isArray(questions) || !questions.length) return '';
+
+    var items = questions.map(function (q, qi) {
+      var opts = Array.isArray(q.options) ? q.options : [];
+      var isOrder = (q.type === 'order_steps');
+      var hasAnswer = !isOrder &&
+                      typeof q.answer_index === 'number' &&
+                      opts[q.answer_index] !== undefined;
+
+      var tag = '';
+      if (isOrder) tag = '<span class="q-tag">שאלת חשיבה</span>';
+
+      var stem =
+        '<div class="q-stem"><span class="q-num">' + (qi + 1) + '</span>' +
+        '<span>' + esc(q.q) + '</span></div>';
+
+      var optsHtml = '';
+      if (opts.length) {
+        optsHtml = '<ul class="opts">' + opts.map(function (opt, oi) {
+          var correct = (!isOrder && hasAnswer && oi === q.answer_index);
+          var letter = HE_LETTERS[oi] || String(oi + 1);
+          return '<li' + (correct ? ' class="correct"' : '') + '>' +
+                   '<span class="marker">' + letter + '</span>' +
+                   '<span>' + esc(opt) + '</span>' +
+                   (correct ? '<span class="check">&#10004; נכון</span>' : '') +
+                 '</li>';
+        }).join('') + '</ul>';
+      }
+
+      var tail = '';
+      if (isOrder) {
+        // thinking question — no marked answer, give writing lines
+        tail =
+          '<div class="think-lines">' +
+            '<div class="ln"></div><div class="ln"></div><div class="ln"></div>' +
+          '</div>';
+      } else if (hasAnswer || q.explanation) {
+        var correctLine = '';
+        if (hasAnswer) {
+          var l = HE_LETTERS[q.answer_index] || String(q.answer_index + 1);
+          correctLine = '<div class="correct-line">' + esc(l) + '. ' +
+                        esc(opts[q.answer_index]) + '</div>';
+        }
+        var expLine = q.explanation
+          ? '<div class="exp">' + esc(q.explanation) + '</div>' : '';
+        tail =
+          '<div class="answer">' +
+            '<div class="lbl">התשובה הנכונה</div>' +
+            correctLine + expLine +
+          '</div>';
+      }
+
+      return '<div class="q-item">' + tag + stem + optsHtml + tail + '</div>';
+    }).join('');
+
+    return '' +
+      '<section class="section">' +
+        '<div class="section-head"><span class="dot">2</span><h2>שאלות לתרגול עצמי</h2></div>' +
+        '<div class="q">' + items + '</div>' +
+      '</section>';
+  }
+
+  function renderNotes() {
+    var lines = '';
+    for (var i = 0; i < 6; i++) lines += '<div class="ln"></div>';
+    return '' +
+      '<section class="section">' +
+        '<div class="section-head"><span class="dot">3</span><h2>הערות אישיות</h2></div>' +
+        '<div class="notes">' +
+          '<p class="hint">מה לקחתי מהשיעור? מה איישם השבוע בעסק שלי?</p>' +
+          lines +
+        '</div>' +
+      '</section>';
+  }
+
+  function render(order, lesson) {
+    var title = lesson.title || '';
+    document.title = 'חוברת סיכום — שיעור ' + order + ': ' + title + ' — סקייל רווחי';
+
+    var intro = lesson.description
+      ? '<section class="section"><div class="intro">' + esc(lesson.description) + '</div></section>'
+      : '';
+
+    var html =
+      '<header class="cover">' +
+        '<img class="emblem" src="assets/sr-emblem-white.png" alt="" />' +
+        '<div class="cover-top">' +
+          '<img class="cover-logo" src="assets/logo-horizontal-white.png" alt="סקייל רווחי" />' +
+          '<span class="cover-eyebrow">חוברת סיכום</span>' +
+        '</div>' +
+        '<span class="cover-lessonnum">שיעור ' + order + '</span>' +
+        '<h1 class="cover-title">' + esc(title) + '</h1>' +
+      '</header>' +
+      intro +
+      renderKeyPoints(lesson.key_points) +
+      renderQuestions(lesson.practice_questions) +
+      renderNotes() +
+      '<footer class="pdf-footer"><p class="credit">נבנה ע&quot;י <b>הלל</b></p></footer>';
+
+    root.innerHTML = html;
+    root.hidden = false;
+  }
+
+  async function init() {
+    var order = getOrder();
+    if (!order) { notFound('לא צוין מספר שיעור.'); return; }
+
+    try {
+      if (typeof window.SRContent === 'undefined' || typeof window.SRContent.ready === 'undefined') {
+        throw new Error('content.js לא נטען.');
+      }
+      await window.SRContent.ready;
+      var lesson = window.SRContent.getLesson(order);
+      if (!lesson) { notFound(); return; }
+      render(order, lesson);
+    } catch (err) {
+      notFound('שגיאה בטעינה: ' + err.message);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

@@ -628,7 +628,7 @@
               <p class="wb-lead">סיכמנו עבורך את הרעיונות המרכזיים מהשיעור כדי שתחזור אליהם בכל רגע:</p>
               <ul class="keypoints" id="wb-keypoints"></ul>
               <div class="wb-actions">
-                <a id="btn-workbook" class="k-btn k-btn-primary" role="button" target="_blank" rel="noopener">📘 פתח חוברת להדפסה / PDF</a>
+                <a id="btn-workbook" class="k-btn k-btn-primary" role="button" target="_blank" rel="noopener" download>📘 הורד חוברת PDF</a>
               </div>
             </div></div></div>
           </section>
@@ -840,7 +840,7 @@
 
       /* חיווט חוברת + משחק לשיעור המתאים */
       const recBtnWb = qs('#btn-workbook');
-      if (recBtnWb) recBtnWb.href = `workbook.html?order=${recOrder}`;
+      if (recBtnWb) recBtnWb.href = `workbooks/lesson-${recOrder}.pdf`;
       const recBtnPr = qs('#btn-practice');
       if (recBtnPr) { recBtnPr.href = `features/game/index.html?order=${recOrder}`; show(recBtnPr); }
 
@@ -946,7 +946,7 @@
       if (kitEyebrow) kitEyebrow.textContent = 'שיעור ' + lessonOrder;
 
       const btnWorkbook = qs('#btn-workbook');
-      if (btnWorkbook) btnWorkbook.href = `workbook.html?order=${lessonOrder}`;
+      if (btnWorkbook) btnWorkbook.href = `workbooks/lesson-${lessonOrder}.pdf`;
 
       /* Practice button */
       const btnPractice = qs('#btn-practice');
