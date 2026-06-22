@@ -4,7 +4,7 @@
   <!--sr-funnel-gate--><script>(function(){try{if(location.search.indexOf("dev=1")>-1)return;var e=localStorage.getItem("sr_user_email");var p=localStorage.getItem("sr_concern")||localStorage.getItem("sr_lesson_id")||localStorage.getItem("sr_access_token");if(!e){location.replace("index.html");return;}if(!p){location.replace("survey.html");return;}}catch(_){}})();</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>סקייל רווחי — מרכז הלמידה</title>
+  <title>סקייל רווחי, מרכז הלמידה</title>
   <link rel="stylesheet" href="ds/styles.css">
   <style>
     /* ── Reset & base ──────────────────────────────────────── */
@@ -521,8 +521,7 @@
 
       <!-- Progress -->
       <h1>
-        הקורסים שלי —
-        <span class="grad">מרכז הלמידה</span>
+        הקורסים שלי, <span class="grad">מרכז הלמידה</span>
       </h1>
 
       <div class="progress-wrap" role="region" aria-label="התקדמות כללית">
@@ -652,7 +651,7 @@
       el('courses-container').innerHTML =
         '<div class="empty-state">' +
           '<p>אין שיעורים זמינים כרגע.</p>' +
-          '<small>החומרים יתווספו בקרוב — חזור מאוחר יותר.</small>' +
+          '<small>החומרים יתווספו בקרוב, חזור מאוחר יותר.</small>' +
         '</div>';
       return;
     }
@@ -691,8 +690,8 @@
     var recDone    = recLesson ? completedSet.has(String(recOrder)) : true;
 
     /* ---------- resume banner ---------- */
-    /* אם יש שיעור מומלץ מהשאלון שעוד לא הושלם — הכפתור מצביע אליו.
-       אחרת — מתנהג כרגיל: השיעור הלא-מושלם הראשון (לינארי). */
+    /* אם יש שיעור מומלץ מהשאלון שעוד לא הושלם, הכפתור מצביע אליו.
+       אחרת, מתנהג כרגיל: השיעור הלא-מושלם הראשון (לינארי). */
     var resumeLesson = (recLesson && !recDone)
       ? recLesson
       : availableLessons.find(function(l){ return !completedSet.has(String(l.order)); });
@@ -769,13 +768,13 @@
         var isRecommended = recOrder && String(lesson.order) === String(recOrder);
         var dur = durLabel(lesson.duration_minutes);
 
-        /* שיעור שממתין לסרטון מהלקוח — כרטיס "בקרוב", לא לחיץ */
+        /* שיעור שממתין לסרטון מהלקוח, כרטיס "בקרוב", לא לחיץ */
         if (lesson.pending_video) {
           var pcard = document.createElement('div');
           pcard.className = 'lesson-card reveal is-pending';
           pcard.style.setProperty('--i', cardIdx++);
           pcard.style.opacity = '.72';
-          pcard.setAttribute('aria-label', (lesson.title || 'שיעור') + ' — התוכן בהכנה');
+          pcard.setAttribute('aria-label', (lesson.title || 'שיעור') + ', התוכן בהכנה');
           pcard.innerHTML =
             '<div class="card-header">' +
               '<span class="lesson-num" aria-hidden="true">' + escHtml(String(pos)) + '</span>' +
@@ -792,7 +791,7 @@
         card.href      = 'lesson.html?order=' + lesson.order;
         card.className = 'lesson-card reveal' + (done ? ' is-done' : '') + (isRecommended ? ' is-recommended' : '');
         card.style.setProperty('--i', cardIdx++);
-        card.setAttribute('aria-label', (isRecommended ? 'מומלץ עבורך — ' : '') + (done ? 'הושלם — ' : '') + (lesson.title || 'שיעור'));
+        card.setAttribute('aria-label', (isRecommended ? 'מומלץ עבורך, ' : '') + (done ? 'הושלם, ' : '') + (lesson.title || 'שיעור'));
 
         card.innerHTML =
           '<div class="card-header">' +
@@ -821,7 +820,7 @@
     if (courses.length > 0) {
       courses.forEach(renderCourse);
     } else {
-      /* נפילה לאחור — רשימה שטוחה אם אין הגדרת קורסים */
+      /* נפילה לאחור, רשימה שטוחה אם אין הגדרת קורסים */
       lessons.forEach(function(lesson) {
         if (lesson.pending_video) return;
         var done = completedSet.has(String(lesson.order));

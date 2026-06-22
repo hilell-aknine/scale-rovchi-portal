@@ -1,11 +1,11 @@
-<!-- @dsCard group="Portal" viewport="1280x900" name="Landing — דף נחיתה" subtitle="Flagship redesign · lead funnel · preserves registerLead flow" -->
+<!-- @dsCard group="Portal" viewport="1280x900" name="Landing, דף נחיתה" subtitle="Flagship redesign · lead funnel · preserves registerLead flow" -->
 <!-- @startingPoint section="Portal" subtitle="Hero · mechanism · value cards · conversion form" viewport="1280x900" -->
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>סקייל רווחי — קורס חינמי</title>
+  <title>סקייל רווחי, קורס חינמי</title>
   <link rel="stylesheet" href="ds/styles.css">
   <style>
     /* ── Landing-local layout (tokens from styles.css) ───────────────── */
@@ -88,7 +88,7 @@
       stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw-line 2200ms var(--smooth) 200ms forwards; }
     @keyframes draw-line { to { stroke-dashoffset: 0; } }
 
-    /* Hero panel — proof card on navy */
+    /* Hero panel, proof card on navy */
     .hero-panel {
       background: var(--on-dark-surface); border: 1px solid var(--on-dark-line);
       border-radius: var(--radius); padding: var(--s-6); backdrop-filter: blur(6px);
@@ -122,7 +122,7 @@
       word-break: break-word; overflow-wrap: break-word; }
     .sec-sub { font-size: var(--fs-body-l); color: var(--muted); max-width: 60ch; line-height: var(--lh-relaxed); }
 
-    /* Mechanism — pain framing */
+    /* Mechanism, pain framing */
     .pain-grid { display: grid; grid-template-columns: 1fr; gap: var(--s-5); margin-top: var(--s-7); }
     @media (min-width: 760px) { .pain-grid { grid-template-columns: repeat(3, 1fr); } }
     .pain-card { position: relative; background: var(--surface); border: 1px solid var(--line);
@@ -135,7 +135,7 @@
     .pain-card p { font-size: var(--fs-body); color: var(--muted); line-height: var(--lh-body); }
     .pain-ico { width: 30px; height: 30px; stroke: var(--blue); stroke-width: 2; fill: none; margin-bottom: var(--s-4); }
 
-    /* Value cards — what's inside */
+    /* Value cards, what's inside */
     .value-head { display: flex; flex-direction: column; gap: var(--s-3); align-items: center; text-align: center; }
     .value-head .sec-title, .value-head .sec-sub { max-width: 40ch; margin-inline: auto; }
     .value-grid { display: grid; grid-template-columns: 1fr; gap: var(--s-5); margin-top: var(--s-7); }
@@ -152,7 +152,7 @@
     .value-card p { font-size: var(--fs-body); color: var(--muted); line-height: var(--lh-body); }
     .value-tag { font-size: var(--fs-micro); font-weight: 700; color: var(--blue); }
 
-    /* Conversion — navy closing */
+    /* Conversion, navy closing */
     .convert { position: relative; background: var(--navy); color: #fff; overflow: hidden; }
     .convert .glow-c { width: 460px; height: 460px; top: -180px; left: -120px; }
     .convert .wrap { position: relative; z-index: 2; }
@@ -211,7 +211,7 @@
     @media (max-width: 720px) { .sticky-cta { display: block; } body { padding-bottom: 84px; } }
     @media (prefers-reduced-motion: reduce) { .sticky-cta { transition: none; } }
 
-    /* Scroll reveal — hidden state only applies once JS confirms it can reveal (html.js) */
+    /* Scroll reveal, hidden state only applies once JS confirms it can reveal (html.js) */
     .reveal { transition: opacity var(--dur-reveal) ease, transform var(--dur-reveal) var(--smooth); }
     html.js .reveal:not(.in) { opacity: 0; transform: translateY(24px); }
     .stagger > * { transition-delay: calc(var(--i, 0) * 80ms); }
@@ -265,8 +265,8 @@
       <div class="hero-grid">
         <div class="hero-copy">
           <span class="eyebrow"><span class="dot"></span>פורטל לימוד חינמי · משפך שיווקי</span>
-          <h1>תגלה למה השיווק שלך לא עובד — <span class="grad">ואיך לתקן את זה</span></h1>
-          <p class="lede">קורס חינמי מותאם אישית לבעלי עסקים שרוצים לידים איכותיים ומכירות אמיתיות. אבחון מדויק לפי המצב שלך — לא קורס גנרי.</p>
+          <h1>תגלה למה השיווק שלך לא עובד, <span class="grad">ואיך לתקן את זה</span></h1>
+          <p class="lede">קורס חינמי מותאם אישית לבעלי עסקים שרוצים לידים איכותיים ומכירות אמיתיות. אבחון מדויק לפי המצב שלך, לא קורס גנרי.</p>
           <p class="fine">5 שאלות קצרות · בלי תשלום · בלי כרטיס אשראי</p>
           <div class="cta-row">
             <a class="btn btn-grad" href="#register">
@@ -300,23 +300,23 @@
   <section class="block" id="mechanism">
     <div class="wrap">
       <span class="sec-eyebrow reveal"><span class="dot"></span>למה זה קורה</span>
-      <h2 class="sec-title reveal">השיווק לא נשבר במקרה — יש לזה מנגנון</h2>
+      <h2 class="sec-title reveal">השיווק לא נשבר במקרה, יש לזה מנגנון</h2>
       <p class="sec-sub reveal">רוב בעלי העסקים תקועים באחת משלוש נקודות. האבחון מזהה את שלך, והקורס פותר בדיוק אותה.</p>
       <div class="pain-grid stagger">
         <article class="pain-card reveal" style="--i:0">
           <svg class="pain-ico" viewBox="0 0 24 24"><path d="M3 3v18h18" stroke-linecap="round"/><path d="M7 14l3-3 3 2 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <h3>אין לידים</h3>
-          <p>אתה מעלה תוכן אבל אין זרימה קבועה של אנשים שרוצים לקנות. התוכן מקצועי — אבל מרגיש כללי מדי.</p>
+          <p>אתה מעלה תוכן אבל אין זרימה קבועה של אנשים שרוצים לקנות. התוכן מקצועי, אבל מרגיש כללי מדי.</p>
         </article>
         <article class="pain-card reveal" style="--i:1">
           <svg class="pain-ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke-linecap="round"/><path d="M21 21l-4-4" stroke-linecap="round"/></svg>
           <h3>לידים לא רלוונטיים</h3>
-          <p>מגיעים אנשים — אבל לא הנכונים. הבעיה לרוב לא בכמות החשיפה אלא במה שהתוכן גורם לאנשים להבין עליך.</p>
+          <p>מגיעים אנשים, אבל לא הנכונים. הבעיה לרוב לא בכמות החשיפה אלא במה שהתוכן גורם לאנשים להבין עליך.</p>
         </article>
         <article class="pain-card reveal" style="--i:2">
           <svg class="pain-ico" viewBox="0 0 24 24"><path d="M12 2l2.4 6.9H21l-5.3 4.1 2 6.9L12 16l-5.7 3.9 2-6.9L3 8.9h6.6z" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <h3>קשה במכירות</h3>
-          <p>הבעיה לא בשיחת המכירה — אלא בשיווק שמגיע לפניה. שיווק טוב מנטרל התנגדויות מראש ובונה אמון.</p>
+          <p>הבעיה לא בשיחת המכירה, אלא בשיווק שמגיע לפניה. שיווק טוב מנטרל התנגדויות מראש ובונה אמון.</p>
         </article>
       </div>
     </div>
@@ -328,13 +328,13 @@
       <div class="value-head">
         <span class="sec-eyebrow reveal"><span class="dot"></span>מה מקבלים בפנים</span>
         <h2 class="sec-title reveal">משפך לימוד חינמי שבנוי כדי להזיז אותך קדימה</h2>
-        <p class="sec-sub reveal">לא ספריית וידאו עוד אחת — מסע מודרך עם תרגול ומורה אישי.</p>
+        <p class="sec-sub reveal">לא ספריית וידאו עוד אחת, מסע מודרך עם תרגול ומורה אישי.</p>
       </div>
       <div class="value-grid stagger">
         <article class="value-card reveal" style="--i:0">
           <div class="value-ico-wrap"><svg class="value-ico" viewBox="0 0 24 24" stroke="var(--blue)"><path d="M5 4l14 8-14 8z" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
           <h3>שיעורים אמיתיים</h3>
-          <p>7 שיעורי וידאו — מ"איזה משפך מתאים לך" ועד מודעות לקהל קר. תוכן מהשטח, לא תיאוריה.</p>
+          <p>7 שיעורי וידאו, מ"איזה משפך מתאים לך" ועד מודעות לקהל קר. תוכן מהשטח, לא תיאוריה.</p>
           <span class="value-tag">וידאו · מעשי</span>
         </article>
         <article class="value-card reveal" style="--i:1">
@@ -346,13 +346,13 @@
         <article class="value-card reveal" style="--i:2">
           <div class="value-ico-wrap hot"><svg class="value-ico" viewBox="0 0 24 24" stroke="var(--red)"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M8 12h3M9.5 10.5v3M15 11h.01M17.5 13h.01" stroke-linecap="round"/></svg></div>
           <h3>משחק תרגול</h3>
-          <p>תרחישים אינטראקטיביים עם משוב מיידי, XP ורצף — שמחזירים את הידע מהשיעור לפעולה.</p>
+          <p>תרחישים אינטראקטיביים עם משוב מיידי, XP ורצף, שמחזירים את הידע מהשיעור לפעולה.</p>
           <span class="value-tag">XP · רצף</span>
         </article>
         <article class="value-card reveal" style="--i:3">
           <div class="value-ico-wrap"><svg class="value-ico" viewBox="0 0 24 24" stroke="var(--blue)"><path d="M4 18l5-5 4 3 7-8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="20" cy="8" r="1.6"/></svg></div>
           <h3>מסלול מותאם</h3>
-          <p>האבחון בונה לך נקודת פתיחה אישית — אתה מתחיל בדיוק מהשיעור שיזיז אותך הכי הרבה.</p>
+          <p>האבחון בונה לך נקודת פתיחה אישית, אתה מתחיל בדיוק מהשיעור שיזיז אותך הכי הרבה.</p>
           <span class="value-tag">לפי האבחון</span>
         </article>
       </div>
@@ -366,7 +366,7 @@
       <div class="convert-grid">
         <div class="convert-copy">
           <span class="eyebrow"><span class="dot"></span>הצעד הראשון</span>
-          <h2>השאר פרטים — והאבחון <span class="grad">יחכה לך</span></h2>
+          <h2>השאר פרטים, והאבחון <span class="grad">יחכה לך</span></h2>
           <p class="lede">מייל וטלפון, וזהו. תוך 60 שניות תהיה בתוך השאלון שבונה לך מסלול אישי. בלי תשלום, בלי כרטיס אשראי.</p>
           <ul class="checklist">
             <li><span class="check"><svg viewBox="0 0 24 24"><path d="M4 12l5 5 11-11" stroke-linecap="round" stroke-linejoin="round"/></svg></span>גישה מלאה למשפך הלימוד החינמי</li>
@@ -434,7 +434,7 @@
       els.forEach(function (e) { io.observe(e); });
     })();
 
-    /* Conversion form — preserves the original registerLead → survey.html contract,
+    /* Conversion form, preserves the original registerLead → survey.html contract,
        with a graceful demo fallback so it works in the design-system preview. */
     (function () {
       var form = document.getElementById('register-form');
@@ -461,7 +461,7 @@
         try {
           // שם פרטי נשמר תמיד מקומית (משמש לפנייה אישית בפרופיל/מרכז).
           // הוא נשלח גם ל-registerLead; אם אין עמודת name בליד/ב-Edge Function
-          // הוא פשוט יתעלם — אבל ה-localStorage מבטיח פנייה "שלום, [שם]".
+          // הוא פשוט יתעלם, אבל ה-localStorage מבטיח פנייה "שלום, [שם]".
           localStorage.setItem('sr_user_name', name);
           if (window.portalData && typeof window.portalData.registerLead === 'function') {
             await window.portalData.registerLead({ email: email, phone: phone, name: name });
@@ -475,7 +475,7 @@
             '<div class="form-success">' +
               '<div class="ok-ring"><svg viewBox="0 0 24 24"><path d="M4 12l5 5 11-11" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
               '<h3>נרשמת בהצלחה!</h3>' +
-              '<p class="form-sub">בפרודקשן תועבר עכשיו ל-survey.html — לשאלון בן 5 השאלות.</p>' +
+              '<p class="form-sub">בפרודקשן תועבר עכשיו ל-survey.html, לשאלון בן 5 השאלות.</p>' +
             '</div>';
         } catch (err) {
           showError('אירעה שגיאה. נסה שוב.');

@@ -4,7 +4,7 @@
   <!--sr-funnel-gate--><script>(function(){try{if(location.search.indexOf("dev=1")>-1)return;var e=localStorage.getItem("sr_user_email");var p=localStorage.getItem("sr_concern")||localStorage.getItem("sr_lesson_id")||localStorage.getItem("sr_access_token");if(!e){location.replace("index.html");return;}if(!p){location.replace("survey.html");return;}}catch(_){}})();</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>חוברת סיכום — סקייל רווחי</title>
+  <title>חוברת סיכום, סקייל רווחי</title>
   <link rel="stylesheet" href="ds/styles.css" />
   <style>
     /* ── Reset ───────────────────────────────────────────── */
@@ -287,7 +287,7 @@
       color: var(--muted);
     }
 
-    /* answer reveal block — visible on screen, prints when expanded */
+    /* answer reveal block, visible on screen, prints when expanded */
     .q-answer {
       margin-top: var(--s-4);
       background: var(--success-fill);
@@ -372,7 +372,7 @@
     }
 
     /* ════════════════════════════════════════════════════════
-       PRINT — A4, ink-friendly, clean page breaks
+       PRINT, A4, ink-friendly, clean page breaks
        ════════════════════════════════════════════════════════ */
     @media print {
       @page { size: A4; margin: 16mm 14mm; }
@@ -571,9 +571,9 @@
       }
 
       /* ── Title ── */
-      const titleText = 'חוברת סיכום — שיעור ' + lessonOrder + ': ' + (lesson.title || '');
+      const titleText = 'חוברת סיכום, שיעור ' + lessonOrder + ': ' + (lesson.title || '');
       qs('#wb-title').textContent = 'שיעור ' + lessonOrder + ': ' + (lesson.title || '');
-      document.title = titleText + ' — סקייל רווחי';
+      document.title = titleText + ', סקייל רווחי';
 
       /* ── Intro (description) ── */
       if (lesson.description) {

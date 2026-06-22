@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>סקייל רווחי — ניהול</title>
+  <title>סקייל רווחי, ניהול</title>
   <link rel="stylesheet" href="ds/styles.css" />
   <style>
     /* ─── ריסט ובסיס ─────────────────────────────────────────── */
@@ -113,7 +113,7 @@
       width: 100%;
       overflow: hidden;
     }
-    /* קו אנרגיה דו-צבעי עליון — חתימת המותג */
+    /* קו אנרגיה דו-צבעי עליון, חתימת המותג */
     .login-box::before {
       content: "";
       position: absolute;
@@ -170,7 +170,7 @@
       border-color: rgba(191,9,47,.4);
       color: #ff8da0;
     }
-    /* כפתור כניסה ראשי — גרדיינט מותג */
+    /* כפתור כניסה ראשי, גרדיינט מותג */
     #login-btn {
       width: 100%;
       min-height: 56px;
@@ -741,6 +741,21 @@
       <div class="table-loading">טוען לידים...</div>
     </div>
 
+    <!-- תזכורות וואטסאפ -->
+    <style>
+      .rem-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:.8rem; }
+      .rem-stat { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md,12px); padding:1rem; text-align:center; }
+      .rem-stat .n { font-size:1.7rem; font-weight:800; color:var(--blue,#0992c2); line-height:1; }
+      .rem-stat .l { font-size:.8rem; color:var(--muted,#5b6b73); margin-top:.4rem; }
+      .rem-recent { margin-top:1rem; font-size:.85rem; }
+      .rem-recent div { display:flex; justify-content:space-between; gap:.6rem; padding:.4rem 0; border-bottom:1px solid var(--line); }
+      .rem-recent .ok { color:#0a7d2c; } .rem-recent .bad { color:#bf092f; }
+    </style>
+    <div class="section-title" style="margin-top:2.2rem;">תזכורות וואטסאפ</div>
+    <div id="reminders-container" class="card" style="padding:1.2rem;">
+      <div class="overview-loading">טוען נתוני תזכורות...</div>
+    </div>
+
     <!-- ניהול פופאפים -->
     <div class="section-title" style="margin-top:2.2rem;">ניהול פופאפים</div>
     <div class="card cta-card">
@@ -932,6 +947,41 @@
 
     // פופאפ סיום שיעור
     loadCtaPopup();
+
+    // תזכורות וואטסאפ
+    loadReminders();
+  }
+
+  /* ══════════════ תזכורות וואטסאפ ═══════════════════════════════ */
+  async function loadReminders() {
+    const el = document.getElementById('reminders-container');
+    if (!el) return;
+    try {
+      const [stats, recent] = await Promise.all([
+        window.AdminData.getReminderStats(),
+        window.AdminData.getReminderRecent(),
+      ]);
+      const card = (n, l) => `<div class="rem-stat"><div class="n">${n ?? 0}</div><div class="l">${l}</div></div>`;
+      let html = '<div class="rem-grid">' +
+        card(stats?.opted_in_active, 'מאושרים פעילים') +
+        card(stats?.sent_7d, 'נשלחו (7 ימים)') +
+        card(stats?.failed_7d, 'נכשלו (7 ימים)') +
+        card(stats?.pending_queue, 'בתור') +
+        card(stats?.unsubscribed, 'הוסרו') +
+        '</div>';
+      if (Array.isArray(recent) && recent.length) {
+        html += '<div class="rem-recent">';
+        for (const r of recent) {
+          const cls = r.status === 'sent' ? 'ok' : 'bad';
+          const when = new Date(r.created_at).toLocaleString('he-IL', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+          html += `<div><span>${r.display_name || ', '} · ${r.template || ''}</span><span class="${cls}">${r.status} · ${when}</span></div>`;
+        }
+        html += '</div>';
+      }
+      el.innerHTML = html;
+    } catch (e) {
+      el.innerHTML = '<div class="overview-loading" style="color:var(--red)">שגיאה בטעינת נתוני תזכורות</div>';
+    }
   }
 
   /* ══════════════ ניהול פופאפים ═══════════════════════════════ */
@@ -1008,7 +1058,7 @@
   }
 
   function _fmtDate(iso) {
-    if (!iso) return '—';
+    if (!iso) return ', ';
     const d = new Date(iso);
     return d.toLocaleDateString('he-IL', { day: '2-digit', month: '2-digit', year: '2-digit' });
   }
@@ -1037,8 +1087,8 @@
     }
     const rows = leads.map(l =>
       `<tr class="lead-row" data-id="${l.id}">
-         <td class="email-cell">${l.email ?? '—'}</td>
-         <td>${l.phone ?? '—'}</td>
+         <td class="email-cell">${l.email ?? ', '}</td>
+         <td>${l.phone ?? ', '}</td>
          <td>${_heatChip(l.heat)}</td>
          <td>${l.lessons_done ?? 0}</td>
          <td class="date-cell">${_fmtDate(l.created_at)}</td>
@@ -1075,9 +1125,9 @@
     const surveyHtml = survey
       ? `<div class="detail-section">
            <h4>סקר</h4>
-           <div class="detail-row"><span class="detail-key">אתגר שיווק</span><span class="detail-val">${survey.marketing_concern ?? '—'}</span></div>
-           <div class="detail-row"><span class="detail-key">יעד הכנסה</span><span class="detail-val">${survey.income_goal ?? '—'}</span></div>
-           <div class="detail-row"><span class="detail-key">יש צוות?</span><span class="detail-val">${survey.has_team != null ? (survey.has_team ? 'כן' : 'לא') : '—'}</span></div>
+           <div class="detail-row"><span class="detail-key">אתגר שיווק</span><span class="detail-val">${survey.marketing_concern ?? ', '}</span></div>
+           <div class="detail-row"><span class="detail-key">יעד הכנסה</span><span class="detail-val">${survey.income_goal ?? ', '}</span></div>
+           <div class="detail-row"><span class="detail-key">יש צוות?</span><span class="detail-val">${survey.has_team != null ? (survey.has_team ? 'כן' : 'לא') : ', '}</span></div>
          </div>`
       : '<div class="detail-section"><h4>סקר</h4><div style="color:var(--muted);font-size:.88rem">לא מילא סקר</div></div>';
 
@@ -1088,7 +1138,7 @@
              ${progress.map(p =>
                `<li class="progress-item">
                  <span class="progress-dot ${p.completed ? 'done' : 'undone'}"></span>
-                 <span>${p.lesson_id ?? p.id ?? '—'}</span>
+                 <span>${p.lesson_id ?? p.id ?? ', '}</span>
                </li>`
              ).join('')}
            </ul>
@@ -1099,8 +1149,8 @@
       <div class="detail-email">${lead.email}</div>
       <div class="detail-section">
         <h4>פרטים</h4>
-        <div class="detail-row"><span class="detail-key">טלפון</span><span class="detail-val">${lead.phone ?? '—'}</span></div>
-        <div class="detail-row"><span class="detail-key">סטטוס</span><span class="detail-val">${lead.status ?? '—'}</span></div>
+        <div class="detail-row"><span class="detail-key">טלפון</span><span class="detail-val">${lead.phone ?? ', '}</span></div>
+        <div class="detail-row"><span class="detail-key">סטטוס</span><span class="detail-val">${lead.status ?? ', '}</span></div>
         <div class="detail-row"><span class="detail-key">תאריך רישום</span><span class="detail-val">${_fmtDate(lead.created_at)}</span></div>
         <div class="detail-row"><span class="detail-key">XP כולל</span><span class="detail-val">${xp ?? 0}</span></div>
       </div>

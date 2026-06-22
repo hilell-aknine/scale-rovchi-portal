@@ -4,7 +4,7 @@
   <!--sr-funnel-gate--><script>(function(){try{if(location.search.indexOf("dev=1")>-1)return;if(!localStorage.getItem("sr_user_email")){location.replace("index.html");}}catch(_){}})();</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>שאלון התאמה — סקייל רווחי</title>
+  <title>שאלון התאמה, סקייל רווחי</title>
   <link rel="stylesheet" href="ds/styles.css">
   <style>
     /* ── Survey-local layout (tokens from ds/styles.css) ───────────────── */
@@ -118,7 +118,7 @@
       gap: var(--s-4);
     }
 
-    /* Back button — ghost */
+    /* Back button, ghost */
     .btn-back {
       background: none;
       border: none;
@@ -171,6 +171,32 @@
       .progress-fill { transition: none; }
       .option-btn { transition: none; }
     }
+
+    /* ── Reminders opt-in (final survey step) ── */
+    .ro-sub { color: var(--muted); font-size: var(--fs-body); line-height: var(--lh-body); margin: 0 0 var(--s-6); }
+    .ro-toggle { display: flex; align-items: center; gap: var(--s-3); cursor: pointer; margin-bottom: var(--s-5); user-select: none; }
+    .ro-toggle input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .ro-track { width: 48px; height: 28px; border-radius: 99px; background: var(--line); position: relative; transition: background var(--dur-hover) ease; flex-shrink: 0; }
+    .ro-track::after { content: ''; position: absolute; top: 3px; right: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform var(--dur-hover) ease; }
+    .ro-toggle input:checked + .ro-track { background: var(--grad-brand); }
+    .ro-toggle input:checked + .ro-track::after { transform: translateX(-20px); }
+    .ro-toggle input:focus-visible + .ro-track { outline: 3px solid rgba(9,146,194,.45); outline-offset: 2px; }
+    .ro-toggle-label { font-weight: 700; color: var(--navy); font-size: var(--fs-body); }
+    #roDetails { transition: opacity var(--dur-hover) ease; }
+    .ro-field { margin-bottom: var(--s-5); }
+    .ro-field-label { display: block; font-size: var(--fs-small); font-weight: 700; color: var(--navy); margin-bottom: var(--s-3); }
+    .ro-hours { display: flex; align-items: center; gap: var(--s-3); }
+    .ro-hours select { flex: 1; min-height: 48px; padding: 0 var(--s-4); border: 2px solid var(--line); border-radius: var(--radius-md); background: var(--bg); color: var(--navy); font-family: var(--font-body); font-size: var(--fs-body); font-weight: 600; }
+    .ro-hours select:focus-visible { outline: 3px solid rgba(9,146,194,.45); outline-offset: 2px; border-color: var(--blue); }
+    .ro-dash { color: var(--muted); font-weight: 600; font-size: var(--fs-small); }
+    .ro-days { display: flex; gap: var(--s-2); flex-wrap: wrap; }
+    .ro-day { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--line); background: var(--bg); color: var(--navy); font-weight: 700; font-size: var(--fs-body); cursor: pointer; transition: all var(--dur-hover) ease; }
+    .ro-day:hover { border-color: var(--blue); }
+    .ro-day.on { border-color: var(--blue); background: var(--surface); box-shadow: 0 0 0 3px rgba(9,146,194,.15); color: var(--blue); }
+    .ro-cta { width: 100%; min-height: 54px; margin-top: var(--s-6); background: var(--grad-brand); color: #fff; border: none; border-radius: var(--radius-md); font-family: var(--font-display); font-weight: 800; font-size: var(--fs-body); cursor: pointer; transition: transform var(--dur-hover) ease, box-shadow var(--dur-hover) ease; }
+    .ro-cta:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+    .ro-cta:disabled { opacity: .7; pointer-events: none; }
+    .ro-skip { display: block; width: 100%; text-align: center; margin-top: var(--s-3); }
   </style>
 </head>
 <body>
@@ -200,6 +226,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-client.js"></script>
   <script src="js/survey-config.js"></script>
+  <script src="js/reminder-prefs.js"></script>
   <script>
     (function () {
       var QUESTIONS = window.SURVEY.QUESTIONS;
@@ -286,11 +313,82 @@
           if (lessonEntry && lessonEntry.lesson_id) {
             localStorage.setItem('sr_lesson_id', lessonEntry.lesson_id);
           }
-          window.location.href = 'analysis.html';
+          showReminderOptIn();   // צעד אחרון: אישור תזכורות, ואז analysis.html
         } catch (err) {
           setState('משהו השתבש בשמירה. נסה שוב בעוד רגע.', true);
           qLabel.textContent = 'שאלון התאמה';
         }
+      }
+
+      // ── צעד אחרון: אישור תזכורות וואטסאפ אישיות ──
+      function showReminderOptIn() {
+        var shell = document.getElementById('shell');
+        var dayNames = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'];
+        var selDays = [0, 1, 2, 3, 4];            // א'–ה' כברירת מחדל
+        var hours = '';
+        for (var h = 8; h <= 20; h++) hours += '<option value="' + h + '">' + h + ':00</option>';
+
+        shell.innerHTML =
+          '<span class="eyebrow"><span class="dot"></span><span>כמעט שם</span></span>' +
+          '<h1 class="q-label">רוצה שנזכיר לך להתקדם?</h1>' +
+          '<p class="ro-sub">נשלח לך בוואטסאפ תזכורת קצרה ואישית עם הצעד הבא שמתאים בדיוק למטרה שלך. אתה בוחר מתי, ואפשר להסיר בכל רגע.</p>' +
+          '<label class="ro-toggle"><input type="checkbox" id="roOptIn" checked><span class="ro-track"></span><span class="ro-toggle-label">כן, שלחו לי תזכורות</span></label>' +
+          '<div id="roDetails">' +
+            '<div class="ro-field"><span class="ro-field-label">באילו שעות נוח לך לקבל?</span>' +
+              '<div class="ro-hours"><select id="roFrom" aria-label="משעה">' + hours + '</select><span class="ro-dash">עד</span><select id="roTo" aria-label="עד שעה">' + hours + '</select></div>' +
+            '</div>' +
+            '<div class="ro-field"><span class="ro-field-label">באילו ימים?</span><div class="ro-days" id="roDays"></div></div>' +
+          '</div>' +
+          '<button class="ro-cta" id="roContinue">המשך לתוכן ←</button>' +
+          '<button class="btn-back ro-skip" id="roSkip">דלג, בלי תזכורות</button>' +
+          '<div class="state-msg" id="stateMsg2" style="display:none;"></div>';
+
+        document.getElementById('roFrom').value = '9';
+        document.getElementById('roTo').value = '20';
+
+        var daysWrap = document.getElementById('roDays');
+        dayNames.forEach(function (nm, i) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'ro-day' + (selDays.indexOf(i) > -1 ? ' on' : '');
+          b.textContent = nm;
+          b.addEventListener('click', function () {
+            var pos = selDays.indexOf(i);
+            if (pos > -1) { selDays.splice(pos, 1); b.classList.remove('on'); }
+            else { selDays.push(i); b.classList.add('on'); }
+          });
+          daysWrap.appendChild(b);
+        });
+
+        var optIn = document.getElementById('roOptIn');
+        var details = document.getElementById('roDetails');
+        optIn.addEventListener('change', function () {
+          details.style.opacity = optIn.checked ? '1' : '.4';
+          details.style.pointerEvents = optIn.checked ? 'auto' : 'none';
+        });
+
+        function go() { window.location.href = 'analysis.html'; }
+        document.getElementById('roSkip').addEventListener('click', go);
+
+        document.getElementById('roContinue').addEventListener('click', async function () {
+          this.disabled = true; this.textContent = 'שומר...';
+          try {
+            if (window.SRReminders) {
+              if (optIn.checked) {
+                var from = parseInt(document.getElementById('roFrom').value, 10);
+                var to = parseInt(document.getElementById('roTo').value, 10);
+                if (to <= from) to = Math.min(20, from + 1);
+                await window.SRReminders.save({
+                  opted_in: true, send_hour_start: from, send_hour_end: to,
+                  days_of_week: selDays.length ? selDays : [0, 1, 2, 3, 4],
+                });
+              } else {
+                await window.SRReminders.save({ opted_in: false });
+              }
+            }
+          } catch (e) { /* שמירה לא חוסמת את ההמשך לתוכן */ }
+          go();
+        });
       }
 
       render();

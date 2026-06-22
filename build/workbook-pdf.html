@@ -4,7 +4,7 @@
   <!--sr-funnel-gate--><script>(function(){try{if(location.search.indexOf("dev=1")>-1)return;var e=localStorage.getItem("sr_user_email");var p=localStorage.getItem("sr_concern")||localStorage.getItem("sr_lesson_id")||localStorage.getItem("sr_access_token");if(!e){location.replace("index.html");return;}if(!p){location.replace("survey.html");return;}}catch(_){}})();</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>חוברת סיכום — סקייל רווחי</title>
+  <title>חוברת סיכום, סקייל רווחי</title>
 
   <!-- Heebo (Google Fonts) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,7 +13,7 @@
 
   <style>
     /* ════════════════════════════════════════════════════════
-       BRAND TOKENS (local — no external CSS so PDF is self-contained)
+       BRAND TOKENS (local, no external CSS so PDF is self-contained)
        ════════════════════════════════════════════════════════ */
     :root {
       --navy:#0c2542;
@@ -62,7 +62,7 @@
       font-size:11pt;
     }
 
-    /* Inner A4 padding band — ~15mm for professional, mobile-readable margins.
+    /* Inner A4 padding band, ~15mm for professional, mobile-readable margins.
        Extra top/bottom room so the running brand header/footer never collide with content. */
     .page {
       padding:14mm 15mm 18mm;
@@ -347,7 +347,7 @@
     }
 
     /* ════════════════════════════════════════════════════════
-       KEY POINTS — infographic cards
+       KEY POINTS, infographic cards
        ════════════════════════════════════════════════════════ */
     .kp { list-style:none; display:flex; flex-direction:column; gap:11px; }
     .kp li {
@@ -555,7 +555,7 @@
     }
     .opts .check svg { width:13px; height:13px; }
 
-    /* answer callout — highlight box */
+    /* answer callout, highlight box */
     .answer {
       margin-top:13px;
       position:relative;
@@ -630,7 +630,7 @@
     }
 
     /* ════════════════════════════════════════════════════════
-       CLOSING BAND (replaces credit footer — no "built by" text)
+       CLOSING BAND (replaces credit footer, no "built by" text)
        ════════════════════════════════════════════════════════ */
     .pdf-close {
       margin-top:26px;
@@ -685,7 +685,7 @@
 </head>
 <body>
 
-<!-- Running brand header/footer — repeat on every printed A4 page -->
+<!-- Running brand header/footer, repeat on every printed A4 page -->
 <div class="run-head" aria-hidden="true"></div>
 
 <div class="page">
@@ -746,7 +746,7 @@
   function renderKeyPoints(points) {
     if (!Array.isArray(points) || !points.length) return '';
 
-    // Steps flow diagram — only when it reads like a sequence (3–6 concise points)
+    // Steps flow diagram, only when it reads like a sequence (3–6 concise points)
     var flow = '';
     var concise = points.every(function (p) { return String(p).length <= 90; });
     if (points.length >= 3 && points.length <= 6 && concise) {
@@ -812,7 +812,7 @@
 
       var tail = '';
       if (isOrder) {
-        // thinking question — no marked answer, give writing lines
+        // thinking question, no marked answer, give writing lines
         tail =
           '<div class="think-lines">' +
             '<div class="ln"></div><div class="ln"></div><div class="ln"></div>' +
@@ -865,7 +865,7 @@
 
   function render(order, lesson) {
     var title = lesson.title || '';
-    document.title = 'חוברת סיכום — שיעור ' + order + ': ' + title + ' — סקייל רווחי';
+    document.title = 'חוברת סיכום, שיעור ' + order + ': ' + title + ', סקייל רווחי';
 
     var intro = lesson.description
       ? '<section class="section"><div class="intro"><span class="quote-mark">&#8221;</span>' +

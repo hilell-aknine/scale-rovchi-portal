@@ -4,7 +4,7 @@
   <!--sr-funnel-gate--><script>(function(){try{if(location.search.indexOf("dev=1")>-1)return;var e=localStorage.getItem("sr_user_email");var p=localStorage.getItem("sr_concern")||localStorage.getItem("sr_lesson_id")||localStorage.getItem("sr_access_token");if(!e){location.replace("index.html");return;}if(!p){location.replace("survey.html");return;}}catch(_){}})();</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>שיעור — סקייל רווחי</title>
+  <title>שיעור, סקייל רווחי</title>
   <link rel="stylesheet" href="ds/styles.css" />
   <style>
     /* ── Reset ───────────────────────────────────────────── */
@@ -298,7 +298,7 @@
       align-items: center;
     }
 
-    /* Practice button — brand gradient CTA */
+    /* Practice button, brand gradient CTA */
     .btn-practice {
       display: inline-flex;
       align-items: center;
@@ -318,7 +318,7 @@
     .btn-practice:hover { filter: brightness(1.08); transform: translateY(-2px); }
     .btn-practice svg { width: 16px; height: 16px; stroke: currentColor; fill: none; flex: none; }
 
-    /* Next lesson — outline style */
+    /* Next lesson, outline style */
     .btn-next {
       display: inline-flex;
       align-items: center;
@@ -428,13 +428,13 @@
       color: var(--muted);
       margin-top: 1px;
     }
-    /* גובה אמיתי ל-mount — הווידג'ט המוטמע הוא height:100% ויתכווץ ל-0 בלי זה */
+    /* גובה אמיתי ל-mount, הווידג'ט המוטמע הוא height:100% ויתכווץ ל-0 בלי זה */
     #tutor-mount {
       height: 520px;
       max-height: 70vh;
     }
 
-    /* ═══ ערכת השיעור — 3 כרטיסים אופקיים ═══ */
+    /* ═══ ערכת השיעור, 3 כרטיסים אופקיים ═══ */
     .kit .kit-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
     .kit .kit-card {
       display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px;
@@ -463,7 +463,7 @@
       .kit .kit-card-sub { font-size: 10.5px; }
       .kit .kit-card-cta { font-size: 11.5px; padding: 7px 11px; }
     }
-    /* מורה AI — חלון מודאלי */
+    /* מורה AI, חלון מודאלי */
     .tutor-modal { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(12,37,66,.6); backdrop-filter: blur(4px); }
     .tutor-modal.open { display: flex; }
     .tutor-modal-card { background: #fff; border-radius: 20px; width: min(440px, 100%); height: min(640px, 86vh); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 24px 60px rgba(12,37,66,.4); }
@@ -472,7 +472,7 @@
     .tutor-modal-close { background: rgba(255,255,255,.15); border: 0; color: #fff; width: 32px; height: 32px; border-radius: 50%; font-size: 20px; cursor: pointer; line-height: 1; }
     .tutor-modal #tutor-mount { flex: 1; height: auto; max-height: none; }
 
-    /* ═══ ערכת השיעור — אקורדיון (10X v4) ═══ */
+    /* ═══ ערכת השיעור, אקורדיון (10X v4) ═══ */
     .kit {
       --k-navy:#0c2542; --k-blue:#0992c2; --k-blue-light:#5b99c3;
       --k-red:#bf092f; --k-line:#e3ecf5;
@@ -690,12 +690,12 @@
       <!-- Video / prompt / fallback goes here -->
       <div id="embed-area"></div>
 
-      <!-- ═══ ערכת השיעור — אקורדיון (מורה AI / חוברת סיכום / משחק תרגול) ═══ -->
+      <!-- ═══ ערכת השיעור, אקורדיון (מורה AI / חוברת סיכום / משחק תרגול) ═══ -->
       <section class="kit" aria-label="ערכת השיעור">
         <header class="kit-head">
           <span class="kit-eyebrow" id="kit-eyebrow">השיעור</span>
           <h2 class="kit-title">ערכת השיעור</h2>
-          <p class="kit-sub">כל מה שצריך כדי להפנים את השיעור — מורה, חוברת ותרגול</p>
+          <p class="kit-sub">כל מה שצריך כדי להפנים את השיעור, מורה, חוברת ותרגול</p>
         </header>
         <div class="kit-cards">
 
@@ -726,7 +726,7 @@
         </div>
       </section>
 
-      <!-- מורה AI — חלון (נפתח מהכרטיס) -->
+      <!-- מורה AI, חלון (נפתח מהכרטיס) -->
       <div class="tutor-modal" id="tutor-modal" aria-hidden="true">
         <div class="tutor-modal-card" role="dialog" aria-modal="true" aria-label="מורה AI">
           <div class="tutor-modal-head">
@@ -839,24 +839,24 @@
   const viewer = localStorage.getItem('sr_user_email') || null;
 
   /* ──────────────────────────────────────────────
-   * buildEmbed(embedUrl) — multi-provider core
+   * buildEmbed(embedUrl), multi-provider core
    *
    * Receives embed_url from SRContent (already a player URL).
    * For Vimeo with private hash the value is already:
    *   https://player.vimeo.com/video/<id>?h=<hash>
-   * so we use it as-is in the iframe src — no URL reconstruction.
+   * so we use it as-is in the iframe src, no URL reconstruction.
    *
    * Also handles raw share URLs for Loom / YouTube / Vimeo
    * in case embed_url contains a share link instead.
    *
    * Handles:
-   *   player.vimeo.com/video/...  — already a player URL → use directly
-   *   Loom   — loom.com/share/<id> OR loom.com/embed/<id>
-   *   Vimeo  — vimeo.com/<id>  (numeric id, optional /hash)
-   *   YouTube — youtube.com/watch?v=<id>  OR youtu.be/<id>
+   *   player.vimeo.com/video/..., already a player URL → use directly
+   *   Loom, loom.com/share/<id> OR loom.com/embed/<id>
+   *   Vimeo, vimeo.com/<id>  (numeric id, optional /hash)
+   *   YouTube, youtube.com/watch?v=<id>  OR youtu.be/<id>
    *             OR youtube.com/embed/<id>
-   *   Prompt — starts with  prompt:  → PromptCopyTool card
-   *   Fallback — external link card
+   *   Prompt, starts with  prompt:  → PromptCopyTool card
+   *   Fallback, external link card
    * ────────────────────────────────────────────── */
   function buildEmbed(rawUrl) {
     const area = qs('#embed-area');
@@ -945,7 +945,7 @@
   async function init() {
 
     /* ═══════════════════════════════════════════════════
-     * ?rec=<concern>  — שיעור מומלץ מהשאלון
+     * ?rec=<concern>, שיעור מומלץ מהשאלון
      *
      * concern ∈ { no_leads | irrelevant_leads_paid |
      *             irrelevant_leads_no_paid | hard_to_sell }
@@ -953,7 +953,7 @@
      * מקור: window.SURVEY.lessonMap[concern]
      *   → { title: string, video_url: string }
      *   video_url מגיע **כמו שהוא** מ-survey-config.js
-     *   (player.vimeo.com עם ?h= או בלי) — מועבר ישר ל-buildEmbed.
+     *   (player.vimeo.com עם ?h= או בלי), מועבר ישר ל-buildEmbed.
      * ═══════════════════════════════════════════════════ */
     if (recParam) {
       const validConcerns = ['no_leads', 'irrelevant_leads_paid', 'irrelevant_leads_no_paid', 'hard_to_sell'];
@@ -977,7 +977,7 @@
       /* כותרת */
       const title = recLesson.title || 'שיעור מומלץ';
       qs('#lesson-title').textContent = title;
-      document.title = title + ' — סקייל רווחי';
+      document.title = title + ', סקייל רווחי';
 
       /* נגן (video_url כמו שהוא) */
       buildEmbed(recLesson.video_url);
@@ -1000,7 +1000,7 @@
       const recBtnPr = qs('#btn-practice');
       if (recBtnPr) { recBtnPr.href = `features/game/index.html?order=${recOrder}`; show(recBtnPr); }
 
-      /* נקודות מפתח לאקורדיון החוברת — מהשיעור המתאים */
+      /* נקודות מפתח לאקורדיון החוברת, מהשיעור המתאים */
       try {
         if (window.SRContent && window.SRContent.ready) {
           await window.SRContent.ready;
@@ -1015,7 +1015,7 @@
             });
           }
         }
-      } catch (e) { /* אם SRContent לא נטען — החוברת עדיין מקשרת לדף החוברת */ }
+      } catch (e) { /* אם SRContent לא נטען, החוברת עדיין מקשרת לדף החוברת */ }
 
       /* הצג תוכן */
       hide(qs('#state-loading'));
@@ -1024,7 +1024,7 @@
     }
 
     /* ═══════════════════════════════════════════════════
-     * מסלול רגיל — ?order=N דרך SRContent
+     * מסלול רגיל, ?order=N דרך SRContent
      * ═══════════════════════════════════════════════════ */
     try {
       /* Wait for SRContent to finish loading its data */
@@ -1042,9 +1042,9 @@
 
       /* Render title */
       qs('#lesson-title').textContent = lesson.title || 'שיעור';
-      document.title = (lesson.title || 'שיעור') + ' — סקייל רווחי';
+      document.title = (lesson.title || 'שיעור') + ', סקייל רווחי';
 
-      /* Build embed from embed_url (used as-is — includes private Vimeo hash) */
+      /* Build embed from embed_url (used as-is, includes private Vimeo hash) */
       const embedUrl = lesson.embed_url || '';
       if (embedUrl) {
         buildEmbed(embedUrl);
@@ -1097,18 +1097,18 @@
         }
       }
 
-      /* ערכת השיעור — כותרת + חיווט כפתורים */
+      /* ערכת השיעור, כותרת + חיווט כפתורים */
       const kitEyebrow = qs('#kit-eyebrow');
       if (kitEyebrow) kitEyebrow.textContent = 'שיעור ' + lessonOrder;
 
-      /* חוברת — רק אם קיים תוכן מעובד (נקודות מפתח) לשיעור; אחרת מסתירים את הכרטיס */
+      /* חוברת, רק אם קיים תוכן מעובד (נקודות מפתח) לשיעור; אחרת מסתירים את הכרטיס */
       const btnWorkbook = qs('#btn-workbook');
       if (btnWorkbook) {
         if (lesson.has_workbook) { btnWorkbook.href = `workbooks/lesson-${lessonOrder}.pdf`; }
         else { btnWorkbook.classList.add('is-hidden'); }
       }
 
-      /* משחק תרגול — רק אם יש שאלות תרגול לשיעור */
+      /* משחק תרגול, רק אם יש שאלות תרגול לשיעור */
       const btnPractice = qs('#btn-practice');
       if (lesson.has_questions) {
         btnPractice.href = `features/game/index.html?order=${lessonOrder}`;
@@ -1117,7 +1117,7 @@
         btnPractice.classList.add('is-hidden');
       }
 
-      /* Next lesson button — check if next exists */
+      /* Next lesson button, check if next exists */
       const nextLesson = window.SRContent.getLesson(lessonOrder + 1);
       if (nextLesson) {
         const btnNext = qs('#btn-next');
@@ -1150,7 +1150,7 @@
             <svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;flex:none"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             הושלם`;
 
-          /* פופאפ הנעה-לפעולה (אם הוגדר פעיל ע"י האדמין) — אחרת ההודעה הרגילה */
+          /* פופאפ הנעה-לפעולה (אם הוגדר פעיל ע"י האדמין), אחרת ההודעה הרגילה */
           let shown = false;
           try {
             if (typeof pd?.getActiveCtaPopup === 'function') {
@@ -1160,7 +1160,7 @@
                 shown = true;
               }
             }
-          } catch (_) { /* נפילה שקטה — נשארים עם ההודעה הרגילה */ }
+          } catch (_) { /* נפילה שקטה, נשארים עם ההודעה הרגילה */ }
           if (!shown) completeMsg.style.display = 'block';
         } catch (e) {
           btnComplete.disabled = false;
@@ -1195,13 +1195,13 @@
 <script src="features/ai-assistant/ai-assistant.js"></script>
 <script>
 (function () {
-  /* lessonOrder ו-recParam נקראים מ-URL — זהה לסקריפט הראשי */
+  /* lessonOrder ו-recParam נקראים מ-URL, זהה לסקריפט הראשי */
   var params     = new URLSearchParams(location.search);
   var recParam   = params.get('rec');
   var orderRaw   = parseInt(params.get('order') || '1', 10);
   var lessonOrder = (!isNaN(orderRaw) && orderRaw >= 1) ? orderRaw : 1;
 
-  /* אם זה מסלול ?rec= — אין order מספרי, מורה כללי */
+  /* אם זה מסלול ?rec=, אין order מספרי, מורה כללי */
   var order = recParam ? null : lessonOrder;
 
   /* mount עמיד: ממתין ש-#tutor-mount ייווצר ויהיה גלוי (התוכן נטען אסינכרונית) */
@@ -1214,8 +1214,7 @@
     }
     return false;
   }
-  /* פולר: מחבר ברגע ש-#tutor-mount ו-SRTutor קיימים (בלי תלות ב-offsetParent —
-     האקורדיון פתוח כברירת מחדל ול-#tutor-mount יש גובה, אז אין צורך בבדיקת נראות) */
+  /* פולר: מחבר ברגע ש-#tutor-mount ו-SRTutor קיימים (בלי תלות ב-offsetParent, האקורדיון פתוח כברירת מחדל ול-#tutor-mount יש גובה, אז אין צורך בבדיקת נראות) */
   (function poll(n) {
     if (mountTutor()) return;
     if (n > 0) setTimeout(function () { poll(n - 1); }, 200);

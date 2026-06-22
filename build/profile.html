@@ -4,7 +4,7 @@
   <!--sr-funnel-gate--><script>(function(){try{if(location.search.indexOf("dev=1")>-1)return;var e=localStorage.getItem("sr_user_email");var p=localStorage.getItem("sr_concern")||localStorage.getItem("sr_lesson_id")||localStorage.getItem("sr_access_token");if(!e){location.replace("index.html");return;}if(!p){location.replace("survey.html");return;}}catch(_){}})();</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>האזור האישי שלך — סקייל רווחי</title>
+  <title>האזור האישי שלך, סקייל רווחי</title>
   <link rel="stylesheet" href="ds/styles.css">
   <style>
     /* ── Profile-local layout (tokens from ds/styles.css) ── */
@@ -42,7 +42,7 @@
       .page-main { padding-inline: var(--pad-inline-desktop, 2.5rem); }
     }
 
-    /* ── Page hero — greeting area ── */
+    /* ── Page hero, greeting area ── */
     .page-hero {
       margin-bottom: var(--s-8, 3rem);
     }
@@ -240,7 +240,7 @@
   <!-- ── Header ── -->
   <header class="site-header">
     <div class="wrap">
-      <a class="brand-lockup" href="courses.html" aria-label="סקייל רווחי — מרכז הלמידה">
+      <a class="brand-lockup" href="courses.html" aria-label="סקייל רווחי, מרכז הלמידה">
         <img src="assets/logo-horizontal-white.png" alt="סקייל רווחי">
       </a>
       <a class="header-link" href="courses.html">← חזרה למרכז הלמידה</a>
@@ -255,7 +255,7 @@
       <span class="eyebrow"><span class="dot" aria-hidden="true"></span>האזור האישי</span>
       <h1 class="page-title">שלום, <span class="grad" id="viewer-first-name">למד</span> 👋</h1>
       <p class="viewer-greeting">
-        הנה סיכום ההתקדמות שלך ב<strong>סקייל רווחי</strong> — ומורה AI שזמין לך בכל רגע.
+        הנה סיכום ההתקדמות שלך ב<strong>סקייל רווחי</strong>, ומורה AI שזמין לך בכל רגע.
       </p>
     </section>
 
@@ -281,6 +281,46 @@
       <p class="error-msg" id="progress-error" style="display:none" role="alert"></p>
     </div>
 
+    <!-- Reminders card -->
+    <style>
+      .rc-card .rc-head { display:flex; align-items:center; justify-content:space-between; gap:.75rem; margin-bottom:.5rem; }
+      .rc-card h2 { margin:0; font-size:1.05rem; }
+      .rc-sub { color: var(--muted, #5b6b73); font-size:.9rem; line-height:1.5; margin:.25rem 0 1rem; }
+      .rc-toggle { display:flex; align-items:center; gap:.6rem; cursor:pointer; user-select:none; }
+      .rc-toggle input { position:absolute; opacity:0; width:0; height:0; }
+      .rc-track { width:46px; height:26px; border-radius:99px; background:#cdd8dc; position:relative; transition:background .2s; flex-shrink:0; }
+      .rc-track::after { content:''; position:absolute; top:3px; right:3px; width:20px; height:20px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.25); transition:transform .2s; }
+      .rc-toggle input:checked + .rc-track { background: linear-gradient(135deg,#0992c2,#10b3c6); }
+      .rc-toggle input:checked + .rc-track::after { transform:translateX(-20px); }
+      .rc-details { margin-top:1rem; transition:opacity .2s; }
+      .rc-field { margin-bottom:1rem; }
+      .rc-field-label { display:block; font-size:.82rem; font-weight:700; margin-bottom:.5rem; }
+      .rc-hours { display:flex; align-items:center; gap:.6rem; }
+      .rc-hours select { flex:1; min-height:44px; padding:0 .7rem; border:2px solid #d7e0e3; border-radius:10px; background:#fff; font:inherit; font-weight:600; }
+      .rc-dash { color:var(--muted,#5b6b73); font-size:.85rem; }
+      .rc-days { display:flex; gap:.4rem; flex-wrap:wrap; }
+      .rc-day { width:40px; height:40px; border-radius:50%; border:2px solid #d7e0e3; background:#fff; font-weight:700; cursor:pointer; transition:all .15s; }
+      .rc-day.on { border-color:#0992c2; color:#0992c2; box-shadow:0 0 0 3px rgba(9,146,194,.15); }
+      .rc-save { min-height:46px; padding:0 1.4rem; margin-top:.5rem; background:linear-gradient(135deg,#0992c2,#10b3c6); color:#fff; border:none; border-radius:10px; font-weight:800; cursor:pointer; }
+      .rc-save:disabled { opacity:.7; pointer-events:none; }
+      .rc-status { font-size:.85rem; font-weight:600; color:#0a7d2c; margin-top:.6rem; min-height:1.1em; }
+    </style>
+    <div class="card rc-card" role="region" aria-label="תזכורות וואטסאפ">
+      <div class="rc-head">
+        <h2>תזכורות וואטסאפ 🔔</h2>
+        <label class="rc-toggle"><input type="checkbox" id="rc-optin"><span class="rc-track"></span></label>
+      </div>
+      <p class="rc-sub">תזכורת קצרה ואישית עם הצעד הבא שמתאים למטרה שלך. אתה בוחר מתי, ואפשר לכבות בכל רגע.</p>
+      <div class="rc-details" id="rc-details">
+        <div class="rc-field"><span class="rc-field-label">באילו שעות נוח לך לקבל?</span>
+          <div class="rc-hours"><select id="rc-from" aria-label="משעה"></select><span class="rc-dash">עד</span><select id="rc-to" aria-label="עד שעה"></select></div>
+        </div>
+        <div class="rc-field"><span class="rc-field-label">באילו ימים?</span><div class="rc-days" id="rc-days"></div></div>
+        <button class="rc-save" id="rc-save" type="button">שמירת העדפות</button>
+        <div class="rc-status" id="rc-status" aria-live="polite"></div>
+      </div>
+    </div>
+
     <!-- AI Tutor section -->
     <section class="tutor-section" aria-label="מורה AI אישי">
       <div class="tutor-card">
@@ -296,7 +336,7 @@
             <h2 class="tutor-title">המורה האישי שלך 🎓</h2>
           </div>
           <p class="tutor-sub">
-            שאל כל שאלה על תוכן הקורס — המורה עונה רק על מה שנלמד בשיעורים, ומכוון אותך לצעד הבא.
+            שאל כל שאלה על תוכן הקורס, המורה עונה רק על מה שנלמד בשיעורים, ומכוון אותך לצעד הבא.
           </p>
         </div>
         <div class="tutor-body">
@@ -330,7 +370,71 @@
   <!-- ── Scripts (סדר שמור במלואו) ── -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-client.js"></script>
+  <script src="js/reminder-prefs.js"></script>
   <script src="js/access.js"></script>
+  <script>
+    // ── כרטיס תזכורות וואטסאפ (טעינה + שמירה) ──
+    (function () {
+      var dayNames = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'];
+      var selDays = [0, 1, 2, 3, 4];
+      function fillHours(sel) { for (var h = 8; h <= 20; h++) { var o = document.createElement('option'); o.value = h; o.textContent = h + ':00'; sel.appendChild(o); } }
+      function syncDetails() {
+        var on = document.getElementById('rc-optin').checked;
+        var d = document.getElementById('rc-details');
+        d.style.opacity = on ? '1' : '.4';
+        d.style.pointerEvents = on ? 'auto' : 'none';
+      }
+      function renderDays() {
+        var wrap = document.getElementById('rc-days'); wrap.innerHTML = '';
+        dayNames.forEach(function (nm, i) {
+          var b = document.createElement('button');
+          b.type = 'button'; b.className = 'rc-day' + (selDays.indexOf(i) > -1 ? ' on' : ''); b.textContent = nm;
+          b.addEventListener('click', function () {
+            var pos = selDays.indexOf(i);
+            if (pos > -1) { selDays.splice(pos, 1); b.classList.remove('on'); }
+            else { selDays.push(i); b.classList.add('on'); }
+          });
+          wrap.appendChild(b);
+        });
+      }
+      async function init() {
+        if (!window.SRReminders) return;
+        var from = document.getElementById('rc-from'), to = document.getElementById('rc-to');
+        fillHours(from); fillHours(to);
+        from.value = '9'; to.value = '20';
+        renderDays();
+        document.getElementById('rc-optin').addEventListener('change', syncDetails);
+        try {
+          var r = await window.SRReminders.get();
+          if (r && r.ok && r.pref) {
+            document.getElementById('rc-optin').checked = !!r.pref.opted_in && !r.pref.unsubscribed_at;
+            if (r.pref.send_hour_start != null) from.value = String(r.pref.send_hour_start);
+            if (r.pref.send_hour_end != null) to.value = String(r.pref.send_hour_end);
+            if (Array.isArray(r.pref.days_of_week) && r.pref.days_of_week.length) { selDays = r.pref.days_of_week.slice(); renderDays(); }
+          }
+        } catch (e) { /* ברירת מחדל */ }
+        syncDetails();
+        document.getElementById('rc-save').addEventListener('click', async function () {
+          var btn = this, status = document.getElementById('rc-status');
+          btn.disabled = true; status.style.color = '#0a7d2c'; status.textContent = 'שומר...';
+          var f = parseInt(from.value, 10), t = parseInt(to.value, 10);
+          if (t <= f) t = Math.min(20, f + 1);
+          try {
+            var res = await window.SRReminders.save({
+              opted_in: document.getElementById('rc-optin').checked,
+              send_hour_start: f, send_hour_end: t,
+              days_of_week: selDays.length ? selDays : [0, 1, 2, 3, 4],
+            });
+            status.textContent = (res && res.ok) ? 'נשמר ✓' : 'שמירה נכשלה, נסה שוב';
+            if (!(res && res.ok)) status.style.color = '#bf092f';
+          } catch (e) { status.style.color = '#bf092f'; status.textContent = 'שמירה נכשלה, נסה שוב'; }
+          btn.disabled = false;
+          setTimeout(function () { status.textContent = ''; }, 4000);
+        });
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+    })();
+  </script>
   <script src="features/ai-assistant/ai-assistant.js"></script>
   <script>
     // שלב 1: בדיקת גישה
@@ -338,7 +442,7 @@
 
     // שלב 2: הצגת מייל + ברכה אישית
     var viewer = window.access.getViewer();
-    document.getElementById('viewer-email').textContent = viewer || '—';
+    document.getElementById('viewer-email').textContent = viewer || ', ';
 
     // ברכה אישית: עדיף את השם הפרטי שנאסף בטופס (sr_user_name);
     // נפילה למה שלפני ה-@ במייל רק אם אין שם שמור.
@@ -397,7 +501,7 @@
           barEl.style.width = '0%';
           barWrap.setAttribute('aria-valuenow', 0);
           pctEl.textContent = '0%';
-          labelEl.textContent = 'עוד לא השלמת שיעורים — בוא נתחיל 🚀';
+          labelEl.textContent = 'עוד לא השלמת שיעורים, בוא נתחיל 🚀';
         }
       } catch (err) {
         errorEl.style.display = 'block';
