@@ -1101,13 +1101,21 @@
       const kitEyebrow = qs('#kit-eyebrow');
       if (kitEyebrow) kitEyebrow.textContent = 'שיעור ' + lessonOrder;
 
+      /* חוברת — רק אם קיים תוכן מעובד (נקודות מפתח) לשיעור; אחרת מסתירים את הכרטיס */
       const btnWorkbook = qs('#btn-workbook');
-      if (btnWorkbook) btnWorkbook.href = `workbooks/lesson-${lessonOrder}.pdf`;
+      if (btnWorkbook) {
+        if (lesson.has_workbook) { btnWorkbook.href = `workbooks/lesson-${lessonOrder}.pdf`; }
+        else { btnWorkbook.classList.add('is-hidden'); }
+      }
 
-      /* Practice button */
+      /* משחק תרגול — רק אם יש שאלות תרגול לשיעור */
       const btnPractice = qs('#btn-practice');
-      btnPractice.href = `features/game/index.html?order=${lessonOrder}`;
-      show(btnPractice);
+      if (lesson.has_questions) {
+        btnPractice.href = `features/game/index.html?order=${lessonOrder}`;
+        show(btnPractice);
+      } else if (btnPractice) {
+        btnPractice.classList.add('is-hidden');
+      }
 
       /* Next lesson button — check if next exists */
       const nextLesson = window.SRContent.getLesson(lessonOrder + 1);
@@ -1230,7 +1238,5 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) shut(); });
 })();
 </script>
-<!-- חותמת קרדיט (מקור-אמת: AtomicBusiness/CreditStamp) -->
-<script src="js/credit.js" data-credit-project="הפורטל של סקייל רווחי"></script>
 </body>
 </html>

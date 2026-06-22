@@ -6,8 +6,8 @@
 (function () {
   'use strict';
 
-  // מיפוי order → קובץ חבילת תוכן
-  const LESSON_COUNT = 7;
+  // כמה חבילות תוכן (lesson-NN.json) לנסות לטעון. חבילות חסרות מדולגות בחן.
+  const LESSON_COUNT = 16;
 
   // פונקציה שמנסה לטעון JSON מ-URL, מחזירה null בכישלון
   async function safeFetch(url) {
@@ -22,6 +22,8 @@
 
   // מפתח לאחסון השיעורים המאוחדים
   let _lessons = [];
+  // הגדרת הקורסים (קיבוץ השיעורים) — נטען מ-real-lessons.json
+  let _courses = [];
 
   // בסיס נתיב — נגזר ממיקום content.js עצמו, כדי שגם דפים בתת-תיקיות (features/game) יטענו נכון
   const BASE = (function () {
@@ -45,6 +47,9 @@
       return;
     }
 
+    // שמור את הגדרת הקורסים (קיבוץ) אם קיימת
+    _courses = (realRaw && Array.isArray(realRaw.courses)) ? realRaw.courses : [];
+
     // שלב 2: בנה מפה בסיסית מ-real-lessons.json
     const baseMap = {};
     for (const item of realLessons) {
@@ -53,6 +58,9 @@
         title: item.title || '',
         vimeo_id: item.vimeo_id || '',
         embed_url: item.embed_url || '',
+        course: item.course || null,
+        duration_minutes: (item.duration_minutes ?? null),
+        pending_video: !!item.pending_video,
         description: '',
         key_points: [],
         practice_questions: []
@@ -77,7 +85,14 @@
       baseMap[order].practice_questions = Array.isArray(pkg.practice_questions) ? pkg.practice_questions : [];
     }
 
-    // שלב 4: מיין לפי order ושמור
+    // שלב 4: גזירת דגלים — האם יש לשיעור חוברת (נקודות מפתח) ומשחק (שאלות תרגול)
+    for (const order in baseMap) {
+      const l = baseMap[order];
+      l.has_workbook = Array.isArray(l.key_points) && l.key_points.length > 0;
+      l.has_questions = Array.isArray(l.practice_questions) && l.practice_questions.length > 0;
+    }
+
+    // שלב 5: מיין לפי order ושמור
     _lessons = Object.values(baseMap).sort((a, b) => a.order - b.order);
   })();
 
@@ -89,6 +104,11 @@
     /** מערך מאוחד של כל השיעורים, ממוין לפי order */
     getLessons() {
       return _lessons;
+    },
+
+    /** הגדרת הקורסים (קיבוץ): [{ id, title, orders:[...] }] */
+    getCourses() {
+      return _courses;
     },
 
     /** שיעור בודד לפי order (מספר), או null אם לא נמצא */

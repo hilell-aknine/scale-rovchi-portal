@@ -1,13 +1,28 @@
 {
-  "_source": "Base44 — entity Lesson (המשפך החינמי). נשאב 18.06.2026. תוכן אמיתי — לא להמציא.",
-  "_note": "embed_url בפורמט player.vimeo.com עם hash הפרטיות. שיעור 7 ציבורי (בלי hash).",
+  "_source": "מבנה הפורטל החינמי הקיים (Base44 'פורטל תוכן') — 4 קורסים, 16 שיעורים, 1:1. שמות + סדר verbatim מהפורטל. וידאו מחשבון ה-Vimeo. תוכן אמיתי — לא להמציא.",
+  "_note": "order = מזהה גלובלי יציב (1-7 שמורים מהבנייה המקורית כדי לא לשבור workbooks/game/חבילות-תוכן; 8-16 נוספו 22.06). הקיבוץ לקורסים לפי courses[].orders (רשימת order מסודרת לכל קורס). pending_video=true → אין סרטון בחשבון ה-Vimeo שלנו (ממתין לרותם).",
+  "courses": [
+    { "id": "c1", "title": "פסיכולוגיה שיווקית של 100k", "orders": [8, 9, 10, 11, 4, 5, 12] },
+    { "id": "c2", "title": "Personal Brand",            "orders": [13, 3, 2] },
+    { "id": "c3", "title": "משפכי שיווק בממומן",        "orders": [1, 14, 6, 7, 15] },
+    { "id": "c4", "title": "כלי AI לבעלי עסקים",         "orders": [16] }
+  ],
   "lessons": [
-    { "order": 1, "title": "איזה משפך שיווקי מתאים לך?", "vimeo_id": "1195965488", "vimeo_hash": "94ebc6feec", "embed_url": "https://player.vimeo.com/video/1195965488?h=94ebc6feec", "source_url": "https://vimeo.com/1195965488/94ebc6feec" },
-    { "order": 2, "title": "איך ליישם personal brand בפועל", "vimeo_id": "1193568308", "vimeo_hash": "9c813bb67d", "embed_url": "https://player.vimeo.com/video/1193568308?h=9c813bb67d", "source_url": "https://vimeo.com/1193568308/9c813bb67d" },
-    { "order": 3, "title": "פורמטים להנגשת תוכן", "vimeo_id": "1192963645", "vimeo_hash": "b6a16e08bc", "embed_url": "https://player.vimeo.com/video/1192963645?h=b6a16e08bc", "source_url": "https://vimeo.com/1192963645/b6a16e08bc" },
-    { "order": 4, "title": "איך למצוא את ה-A וB טכני", "vimeo_id": "1190424686", "vimeo_hash": "bc28e24dca", "embed_url": "https://player.vimeo.com/video/1190424686?h=bc28e24dca", "source_url": "https://vimeo.com/1190424686/bc28e24dca" },
-    { "order": 5, "title": "הכלים הישנים", "vimeo_id": "1190412577", "vimeo_hash": "b065e8f310", "embed_url": "https://player.vimeo.com/video/1190412577?h=b065e8f310", "source_url": "https://vimeo.com/1190412577/b065e8f310" },
-    { "order": 6, "title": "איך ליצור מודעות ממומנות ל100k", "vimeo_id": "1190416923", "vimeo_hash": "8e1169cbea", "embed_url": "https://player.vimeo.com/video/1190416923?h=8e1169cbea", "source_url": "https://vimeo.com/1190416923/8e1169cbea" },
-    { "order": 7, "title": "מודעות לקהל קר", "vimeo_id": "1025943016", "vimeo_hash": null, "embed_url": "https://player.vimeo.com/video/1025943016?h=ae917ff7e1", "source_url": "https://vimeo.com/1025943016" }
+    { "order": 1, "course": "c3", "title": "איזה משפך שיווקי מתאים לך?", "duration_minutes": 20, "vimeo_id": "1195965488", "vimeo_hash": "94ebc6feec", "embed_url": "https://player.vimeo.com/video/1195965488?h=94ebc6feec", "source_url": "https://vimeo.com/1195965488/94ebc6feec" },
+    { "order": 2, "course": "c2", "title": "איך ליישם personal brand בפועל", "duration_minutes": 14, "vimeo_id": "1193568308", "vimeo_hash": "9c813bb67d", "embed_url": "https://player.vimeo.com/video/1193568308?h=9c813bb67d", "source_url": "https://vimeo.com/1193568308/9c813bb67d" },
+    { "order": 3, "course": "c2", "title": "פורמטים להנגשת תוכן", "duration_minutes": 4, "vimeo_id": "1192963645", "vimeo_hash": "b6a16e08bc", "embed_url": "https://player.vimeo.com/video/1192963645?h=b6a16e08bc", "source_url": "https://vimeo.com/1192963645/b6a16e08bc" },
+    { "order": 4, "course": "c1", "title": "איך למצוא את ה-A וB טכני", "duration_minutes": 18, "vimeo_id": "1190424686", "vimeo_hash": "bc28e24dca", "embed_url": "https://player.vimeo.com/video/1190424686?h=bc28e24dca", "source_url": "https://vimeo.com/1190424686/bc28e24dca" },
+    { "order": 5, "course": "c1", "title": "הכלים הישנים", "duration_minutes": 13, "vimeo_id": "1190412577", "vimeo_hash": "b065e8f310", "embed_url": "https://player.vimeo.com/video/1190412577?h=b065e8f310", "source_url": "https://vimeo.com/1190412577/b065e8f310" },
+    { "order": 6, "course": "c3", "title": "איך ליצור מודעות ממומנות ל100k", "duration_minutes": 32, "vimeo_id": "1190416923", "vimeo_hash": "8e1169cbea", "embed_url": "https://player.vimeo.com/video/1190416923?h=8e1169cbea", "source_url": "https://vimeo.com/1190416923/8e1169cbea" },
+    { "order": 7, "course": "c3", "title": "מודעות לקהל קר", "duration_minutes": 32, "vimeo_id": "1025943016", "vimeo_hash": null, "embed_url": "https://player.vimeo.com/video/1025943016?h=ae917ff7e1", "source_url": "https://vimeo.com/1025943016" },
+    { "order": 8, "course": "c1", "title": "למה אתם כאן?", "duration_minutes": 11, "vimeo_id": "1190184972", "vimeo_hash": "ac2d011e07", "embed_url": "https://player.vimeo.com/video/1190184972?h=ac2d011e07", "source_url": "https://vimeo.com/1190184972" },
+    { "order": 9, "course": "c1", "title": "למה הלידים שלי חצופים?!", "duration_minutes": 11, "vimeo_id": "1190159402", "vimeo_hash": "5b6b4f5429", "embed_url": "https://player.vimeo.com/video/1190159402?h=5b6b4f5429", "source_url": "https://vimeo.com/1190159402" },
+    { "order": 10, "course": "c1", "title": "איך לגרום לאנשים לקבל החלטות מהר (קונפליקט)", "duration_minutes": 17, "vimeo_id": "1190363652", "vimeo_hash": "65168726c6", "embed_url": "https://player.vimeo.com/video/1190363652?h=65168726c6", "source_url": "https://vimeo.com/1190363652" },
+    { "order": 11, "course": "c1", "title": "איזה לקוח תרצה לשכפל? (הלקוח המושלם)", "duration_minutes": 9, "vimeo_id": "1190374988", "vimeo_hash": "11a5a25f56", "embed_url": "https://player.vimeo.com/video/1190374988?h=11a5a25f56", "source_url": "https://vimeo.com/1190374988" },
+    { "order": 12, "course": "c1", "title": "איך לתשאל לקוחות", "duration_minutes": 26, "video_provider": "youtube", "vimeo_id": "", "embed_url": "https://www.youtube.com/watch?v=lX3WRFoTjLQ", "source_url": "https://www.youtube.com/watch?v=lX3WRFoTjLQ&t=15s" },
+    { "order": 13, "course": "c2", "title": "personal brand ב2026", "duration_minutes": 11, "vimeo_id": "1193178199", "vimeo_hash": "fff7b763e5", "embed_url": "https://player.vimeo.com/video/1193178199?h=fff7b763e5", "source_url": "https://vimeo.com/1193178199" },
+    { "order": 14, "course": "c3", "title": "איך יוצרים מיני וובינר של 100k", "duration_minutes": 39, "vimeo_id": "1092347344", "vimeo_hash": "809577364f", "embed_url": "https://player.vimeo.com/video/1092347344?h=809577364f", "source_url": "https://vimeo.com/1092347344/809577364f" },
+    { "order": 15, "course": "c3", "title": "מודעות לקהל חם", "duration_minutes": 16, "video_provider": "youtube", "vimeo_id": "", "embed_url": "https://youtu.be/NADmQvMg5U8", "source_url": "https://youtu.be/NADmQvMg5U8" },
+    { "order": 16, "course": "c4", "title": "יצירת טאמבנייל ליוטיוב", "duration_minutes": null, "video_provider": "prompt", "is_prompt": true, "vimeo_id": "", "embed_url": "prompt:youtube-thumbnail", "_note": "שיעור פרומפט מ-Base44 (PromptCopyTool). 'youtube-thumbnail' הוא מילת-מפתח; להחליף בטקסט הפרומפט המלא כשרותם תשלח." }
   ]
 }
